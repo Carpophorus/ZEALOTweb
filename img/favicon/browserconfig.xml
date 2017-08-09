@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <browserconfig>
     <msapplication>
-        <VisualElements ForegroundText="light"/>
         <tile>
             <square70x70logo src="img/favicon/mstile-70x70.png"/>
             <square150x150logo src="img/favicon/mstile-150x150.png"/>
