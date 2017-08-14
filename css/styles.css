@@ -17,6 +17,7 @@ body
     font-size: 2vh;
 
     color: #011;
+    background-color: #f9fdfd;
 }
 
 #main-content
@@ -33,6 +34,11 @@ body
 
     width: 100%;
     height: 100%;
+}
+
+.hidden
+{
+    visibility: hidden;
 }
 
 a,
@@ -74,6 +80,11 @@ button:hover
 
     border: 0;
     outline: 0;
+}
+
+.fa
+{
+    font-size: 2.5em;
 }
 
 /* FONTS */
@@ -210,6 +221,34 @@ button:hover
     width: 100%;
 
     text-align: center;
+}
+
+.main-screen > div
+{
+    /*position: absolute;
+
+    width: 9vh;*/
+    height: 100vh;
+}
+
+.sidebar
+{
+  background-color: #00b3b3;
+}
+
+.sidebar-popup
+{
+  background-color: black;
+}
+
+.sidebar-thumb
+{
+  background-color: grey;
+}
+
+.main-panel
+{
+  background-color: orange;
 }
 
 /* MEDIA */
