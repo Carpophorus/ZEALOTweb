@@ -225,9 +225,9 @@ button:hover
 
 .main-screen > div
 {
-    /*position: absolute;
+    float: left;
 
-    width: 9vh;*/
+    width: 9vh;
     height: 100vh;
 }
 
