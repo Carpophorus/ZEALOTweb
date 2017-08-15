@@ -1,9 +1,10 @@
 
 /*
 
-blue: #00b2b2
+blue: #00b3b3
 light blue: #7fd9d9
-dark blue: #005959
+menu light blue: #dfffff
+dark blue: #003d3d
 
 black: #001111
 white: #f9fdfd
@@ -15,6 +16,9 @@ white: #f9fdfd
 body
 {
     font-size: 2vh;
+
+    overflow-x: hidden;
+    overflow-y: hidden;
 
     color: #011;
     background-color: #f9fdfd;
@@ -202,16 +206,17 @@ button:hover
     margin-top: 4vh;
 
     color: #f9fdfd;
-    background: #005959;
+    background-color: #003d3d;
 }
 
 #login-form button:hover
 {
     color: #011;
-    background: #7fd9d9;
+    background-color: #7fd9d9;
 }
 
-.login-screen .copyright
+.login-screen .copyright,
+.sidebar-popup .copyright
 {
     font-size: 75%;
 
@@ -225,30 +230,167 @@ button:hover
 
 .main-screen > div
 {
+    position: relative;
+
     float: left;
 
-    width: 9vh;
     height: 100vh;
+}
+
+.main-loaded-helper
+{
+    position: absolute;
+    z-index: -1;
+
+    width: 1px;
+    height: 1px;
 }
 
 .sidebar
 {
-  background-color: #00b3b3;
+    z-index: 100;
+
+    width: 9vh;
+
+    border-right: 1px solid #dfffff;
+    background-color: #00b3b3;
 }
 
 .sidebar-popup
 {
-  background-color: black;
+    background-color: #dfffff;
 }
 
-.sidebar-thumb
+.main-screen .scrollable
 {
-  background-color: grey;
+    float: right;
+    overflow: auto;
 }
 
-.main-panel
+::-webkit-scrollbar-track
 {
-  background-color: orange;
+    padding-left: 5px;
+
+    background-color: #f9fdfd;
+}
+
+::-webkit-scrollbar
+{
+    width: 5px;
+    padding-left: 5px;
+}
+
+::-webkit-scrollbar-thumb
+{
+    padding-left: 5px;
+
+    background-color: #00b3b3;
+}
+
+.sidebar > div
+{
+    line-height: 9vh;
+
+    position: absolute;
+
+    width: 9vh;
+    height: 9vh;
+    padding-top: 1vh;
+
+    text-align: center;
+
+    color: #003d3d;
+    border-right: 1px solid #dfffff;
+}
+
+.sidebar > div:hover
+{
+    cursor: pointer;
+
+    color: #00b3b3;
+    background-color: #003d3d;
+}
+
+.contacts-button
+{
+    top: 9vh;
+}
+
+.statistics-button
+{
+    bottom: 0;
+}
+
+.account-settings-button
+{
+    bottom: 9vh;
+}
+
+.admin-settings-button
+{
+    bottom: 18vh;
+}
+
+.sidebar .active,
+.sidebar .active:hover
+{
+    color: #f9fdfd;
+    background-color: #003d3d;
+}
+
+.thumb
+{
+    line-height: 9vh;
+
+    position: relative;
+
+    width: 9vh;
+    height: 9vh;
+    padding-top: 1vh;
+
+    text-align: center;
+
+    color: #003d3d;
+    border-bottom-right-radius: 2vh;
+    background-color: #00b3b3;
+}
+
+.sidebar .thumb
+{
+    top: 45.5vh;
+
+    border-radius: 0;
+}
+
+.thumb-helper
+{
+    position: absolute;
+    z-index: 100;
+
+    width: 100%;
+    height: 100%;
+    margin-top: -1vh;
+
+    border-bottom-right-radius: 2vh;
+}
+
+.under-thumb-container
+{
+    width: 9vh;
+    height: 91vh;
+
+    background-color: #00b3b3;
+}
+
+.under-thumb
+{
+    float: right;
+
+    width: 8vh;
+    height: 91vh;
+
+    border-top-left-radius: 2vh;
+    background-color: #f9fdfd;
 }
 
 /* MEDIA */
