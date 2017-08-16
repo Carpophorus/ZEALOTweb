@@ -40,7 +40,7 @@
         thumb.removeClass("fa-chevron-left");
         thumb.addClass("fa-chevron-right");
         popup.css({
-          "margin-left": -ZEALOT.popupWidth,
+          "margin-left": -ZEALOT.popupWidth + 1,
           "transition": ".75s"
         });
         if (ZEALOT.mainWidthSmall == 0) {
@@ -94,6 +94,15 @@
       }
       $(e).remove();
     };
+
+    ZEALOT.categoryClicked = function (e) {
+      $(".category .fa-caret-right").addClass("hidden");
+      $(e).find(".fa-caret-right").removeClass("hidden");
+      if (ZEALOT.browserWidth < 992) {
+        setTimeout(ZEALOT.thumbClick, 750);
+      }
+      //make api call
+    }
 
     global.$ZEALOT = ZEALOT;
 
