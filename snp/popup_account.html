@@ -1,11 +1,13 @@
 <div class="popup-account">
-  <div class="popup-bar">
+  <div class="popup-bar unhoverable">
     <input type="password" class="open-sans-dark-normal bump" placeholder="Promena lozinke" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Promena lozinke'"></input>
     <button class="popup-button"><i class="fa fa-key"></i></button>
   </div>
   <h2 class="oswald-dark-blue-normal">Informacije</h2>
-  <div class="open-sans-dark-normal bump tabbed">IME<div class="num">ime i prezime</div></div>
-  <div class="open-sans-dark-normal bump tabbed">SEKTOR<div class="num">imesektora</div></div>
-  <div class="open-sans-dark-normal bump tabbed">E-MAIL<div class="num">i.prezime@dbs.rs</div></div>
-  <div class="open-sans-dark-normal bump tabbed">TELEFON<div class="num">555/555-55-55</div></div>
+  <div class="open-sans-dark-normal bump tabbed unhoverable">IME<div class="num user-name">ime i prezime</div></div>
+  <div class="open-sans-dark-normal bump tabbed unhoverable">SEKTOR<div class="num user-sector">imesektora</div></div>
+  <div class="open-sans-dark-normal bump tabbed unhoverable user-email">E-MAIL<div class="num">i.prezime@dbs.rs</div></div>
+  <div class="open-sans-dark-normal bump tabbed unhoverable user-phone">TELEFON<div class="num">555/555-55-55</div></div>
+  <h2 class="oswald-dark-blue-normal visible-admin">Admin privilegije</h2>
+  <div class="open-sans-dark-normal bump tabbed unhoverable visible-admin"><div class="admin-privileges-status">UKLJUČENO</div><div class="num"><label class="switch"><input class="admin-privileges" type="checkbox" onclick="$ZEALOT.adminPrivileges(this);"></input><span class="slider"></span></label></div></div>
 </div>

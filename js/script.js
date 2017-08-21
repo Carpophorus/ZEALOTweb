@@ -8,6 +8,7 @@
     ZEALOT.mainWidthSmall;
     ZEALOT.mainWidthLarge;
     ZEALOT.x = 3;
+    ZEALOT.adminPrivilegesGranted;
 
     var insertHtml = function (selector, html) {
         var targetElem = document.querySelector(selector);
@@ -102,6 +103,17 @@
         setTimeout(ZEALOT.thumbClick, 750);
       }
       //make api call
+    }
+
+    ZEALOT.adminPrivileges = function (e) {
+      if ($(e).prop("checked") == true) {
+        $(".admin-privileges-status").text("UKLJUČENO");
+        ZEALOT.adminPrivilegesGranted = 1;
+      } else {
+        $(".admin-privileges-status").text("ISKLJUČENO");
+        ZEALOT.adminPrivilegesGranted = 0;
+      }
+      $(".main-panel").text("");
     }
 
     global.$ZEALOT = ZEALOT;
