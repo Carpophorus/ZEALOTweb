@@ -483,7 +483,7 @@ h3
 
     width: 25%;
     height: 5vh;
-    margin-top: 3.5vh;
+    margin-top: 3.35vh;
     padding-top: .4vh;
 
     color: #003d3d;
@@ -569,6 +569,11 @@ input:checked + .slider:before {
 .admin-privileges-status
 {
   display: inline-block;
+}
+
+.mce-branding-powered-by
+{
+  display: none;
 }
 
 /* MEDIA */

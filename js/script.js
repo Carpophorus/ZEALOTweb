@@ -106,6 +106,7 @@
     }
 
     ZEALOT.adminPrivileges = function (e) {
+      //maybe all if hasadminprivileges in user info
       if ($(e).prop("checked") == true) {
         $(".admin-privileges-status").text("UKLJUČENO");
         ZEALOT.adminPrivilegesGranted = 1;
