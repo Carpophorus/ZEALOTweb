@@ -7,7 +7,7 @@
     ZEALOT.popupWidth;
     ZEALOT.mainWidthSmall;
     ZEALOT.mainWidthLarge;
-    ZEALOT.x = 3;
+    ZEALOT.x = 1;
     ZEALOT.adminPrivilegesGranted;
     ZEALOT.idSectorForStats = 0;
     ZEALOT.idOperatorForStats = 0;
@@ -106,6 +106,11 @@
       } else {
         $(".main-panel").css({"width": ZEALOT.mainWidthSmall});
       }
+      $(e).remove();
+    };
+
+    ZEALOT.statsLoaded = function (e) {
+      $(".stats-progress-bar").addClass("stats-progress-bar-loaded");
       $(e).remove();
     };
 
