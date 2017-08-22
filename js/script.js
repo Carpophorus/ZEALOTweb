@@ -9,6 +9,8 @@
     ZEALOT.mainWidthLarge;
     ZEALOT.x = 3;
     ZEALOT.adminPrivilegesGranted;
+    ZEALOT.idSectorForStats = 0;
+    ZEALOT.idOperatorForStats = 0;
 
     var insertHtml = function (selector, html) {
         var targetElem = document.querySelector(selector);
@@ -103,7 +105,7 @@
         setTimeout(ZEALOT.thumbClick, 750);
       }
       //make api call
-    }
+    };
 
     ZEALOT.adminPrivileges = function (e) {
       //maybe all if hasadminprivileges in user info
@@ -115,7 +117,30 @@
         ZEALOT.adminPrivilegesGranted = 0;
       }
       $(".main-panel").text("");
-    }
+    };
+
+    ZEALOT.statsSectorSelect = function (e, idS) {
+      $(".popup-stats div .num").removeClass("fa-check-circle");
+      $(".popup-stats div .num").addClass("fa-circle-o");
+      $(e).find(".num").removeClass("fa-circle-o");
+      $(e).find(".num").addClass("fa-check-circle");
+      ZEALOT.idSectorForStats = idS;
+      //change datalist in combobox and clear it, ZEALOT.idOperatorForStats = 0
+    };
+
+    ZEALOT.operatorSelect = function (e) {
+      var val = e.value;
+      if (val === "")
+        ZEALOT.idOperatorForStats = 0;
+      else
+        $('#select-operator option').each(function () {
+            if (this.value.toUpperCase() === val.toUpperCase()) {
+                ZEALOT.idOperatorForStats = $(this).find("#val").attr("value");
+            }
+        });
+    };
+
+    //stats button onclick = load main-panel snp after api call, call itself every 5 minutes unless other tab selected
 
     global.$ZEALOT = ZEALOT;
 

@@ -469,9 +469,9 @@ h3
     width: 70%;
     margin-top: 3.5vh;
     margin-bottom: 1vh;
+    padding-left: 1vh;
 
     border: 1px solid #00b3b3;
-    padding-left: 1vh;
 }
 
 .sidebar-popup-content > div > .popup-bar > button
@@ -518,62 +518,107 @@ h3
     color: #00b3b3;
 }
 
-.popup-contacts
+.popup-contacts,
+.popup-stats
 {
     padding-top: 9.3vh;
 }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 7vh;
-  height: 4vh;
+.switch
+{
+    position: relative;
+
+    display: inline-block;
+
+    width: 7vh;
+    height: 4vh;
 }
 
-.switch input {display:none;}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #a9ddd6;
-  -webkit-transition: .4s;
-  transition: .4s;
+.switch input
+{
+    display: none;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 3vh;
-  width: 3vh;
-  left: .5vh;
-  bottom: .5vh;
-  background-color: #dfffff;
-  -webkit-transition: .4s;
-  transition: .4s;
+.slider
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    cursor: pointer;
+    -webkit-transition: .4s;
+            transition: .4s;
+
+    background-color: #a9ddd6;
 }
 
-input:checked + .slider {
-  background-color: #00b3b3;
+.slider:before
+{
+    position: absolute;
+    bottom: .5vh;
+    left: .5vh;
+
+    width: 3vh;
+    height: 3vh;
+
+    content: '';
+    -webkit-transition: .4s;
+            transition: .4s;
+
+    background-color: #dfffff;
 }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(3vh);
-  -ms-transform: translateX(3vh);
-  transform: translateX(3vh);
+input:checked + .slider
+{
+    background-color: #00b3b3;
+}
+
+input:checked + .slider:before
+{
+    -webkit-transform: translateX(3vh);
+        -ms-transform: translateX(3vh);
+            transform: translateX(3vh);
 }
 
 .admin-privileges-status
 {
-  display: inline-block;
+    display: inline-block;
 }
 
 .mce-branding-powered-by
 {
-  display: none;
+    display: none;
+}
+
+.sidebar-popup-content > .popup-stats > .popup-bar > button
+{
+    margin-top: -5.95vh;
+}
+
+.sidebar-popup-content > .popup-stats > div > .stats-radio
+{
+    font-size: 1.3em;
+
+    float: left;
+
+    margin-left: -5vh;
+    padding-top: .3vh;
+
+    color: #00b3b3;
+}
+
+.operator-select-container > input
+{
+    font-family: inherit;
+    line-height: 4.5vh;
+
+    width: 100%;
+    height: 4.5vh;
+    margin-top: 1vh;
+
+    border: 1px solid #00b3b3;
 }
 
 /* MEDIA */
