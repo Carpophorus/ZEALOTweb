@@ -73,6 +73,17 @@
       }
     };
 
+    ZEALOT.sidebarButtonClick = function (e) {
+      if ($(e).hasClass("active")) return;
+      $(".sidebar .sidebar-button").removeClass("active");
+      $(e).addClass("active");
+      if ($(e).hasClass("inbox-button")) {}
+      else if ($(e).hasClass("contacts-button")) {}
+      else if ($(e).hasClass("admin-settings-button")) {}
+      else if ($(e).hasClass("account-settings-button")) {}
+      else if ($(e).hasClass("statistics-button")) {}
+    };
+
     ZEALOT.mainLoaded = function (e) {
       ZEALOT.browserWidth = window.innerWidth;
       ZEALOT.browserHeight = window.innerHeight;
