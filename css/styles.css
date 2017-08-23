@@ -45,6 +45,11 @@ body
     visibility: hidden;
 }
 
+.gone
+{
+  display: none;
+}
+
 a,
 a:hover,
 a:focus,
@@ -692,6 +697,8 @@ input:checked + .slider:before
     padding-right: 3vh;
 
     text-align: right;
+
+    background-color: #f9fdfd;
 }
 
 .title-fixed > div
@@ -707,40 +714,97 @@ input:checked + .slider:before
 
 .stat-title
 {
-  text-align: center;
-  height: 10vh;
-  padding-top: 7vh;
+    height: 10vh;
+    padding-top: 7vh;
+
+    text-align: center;
 }
 
 .stat-numbers
 {
-  height: 30vh;
+    height: 30vh;
 }
 
 .large-number
 {
-  font-size: 9vh;
-  line-height: 13vh;
-  text-align: center;
+    font-size: 9vh;
+    line-height: 13vh;
+
+    text-align: center;
 }
 
 .small-numbers-container
 {
-  text-align: center;
-  line-height: 2.3vh;
+    line-height: 2.3vh;
+
+    text-align: center;
 }
 
 .stat:nth-child(1) > .stat-title,
 .stat:nth-child(1) > .stat-numbers > .small-numbers-container
 {
-  font-size: 130%;
-  line-height: 3vh;
+    font-size: 130%;
+    line-height: 3vh;
 }
 
 .stat:nth-child(1) > .stat-numbers > .large-number
 {
-  font-size: 14vh;
-  line-height: 19.5vh;
+    font-size: 14vh;
+    line-height: 19.5vh;
+}
+
+.main-panel-contacts
+{
+  padding: 5vh;
+}
+
+.company-container
+{
+  margin-bottom: 3vh;
+}
+
+.company-header
+{
+  width: 100%;
+  height: 6vh;
+  line-height: 5.5vh;
+  font-size: 2.5vh;
+  padding-left: 2vh;
+  border: 1px solid #00b3b3;
+  position: relative;
+}
+
+.company-expand
+{
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 6vh;
+  width: 7vh;
+  line-height: 5.5vh;
+  font-size: 1.5em;
+  color: #00b3b3!important;
+  text-align: center;
+  background: transparent;
+}
+
+.company-expand:hover
+{
+  color: #003d3d!important;
+  cursor: pointer;
+}
+
+.company-contact
+{
+  float: right;
+  right: 0;
+  width: 90%;
+  height: 4.5vh;
+  line-height: 4.5vh;
+  border: 1px solid #00b3b3;
+  border-top: 0;
+  text-align: center;
 }
 
 /* MEDIA */
@@ -754,13 +818,13 @@ input:checked + .slider:before
 
     .stat-title
     {
-      height: 20vh;
-      padding-top: 14vh;
+        height: 20vh;
+        padding-top: 14vh;
     }
 
     .stat-numbers
     {
-      height: 60vh;
+        height: 60vh;
     }
 }
 

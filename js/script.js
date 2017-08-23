@@ -156,6 +156,22 @@
         });
     };
 
+    ZEALOT.contactExpand = function (e) {
+      if ($(e).hasClass("fa-chevron-down")) {
+        $(e).removeClass("fa-chevron-down");
+        $(e).addClass("fa-chevron-up");
+        // $(e).parent().parent().find(".company-contacts-container").removeClass("gone");
+        // $(e).parent().parent().find(".company-contacts-container").removeClass("ccc-hidden");
+        // $(e).parent().parent().find(".company-contacts-container").addClass("ccc-expanded");
+      } else if ($(e).hasClass("fa-chevron-up")) {
+        $(e).removeClass("fa-chevron-up");
+        $(e).addClass("fa-chevron-down");
+        // $(e).parent().parent().find(".company-contacts-container").addClass("gone");
+        // $(e).parent().parent().find(".company-contacts-container").removeClass("ccc-expanded");
+        // $(e).parent().parent().find(".company-contacts-container").addClass("ccc-hidden");
+      }
+    };
+
     //stats button onclick = load main-panel snp after api call, call itself every 5 minutes unless other tab selected
 
     global.$ZEALOT = ZEALOT;
