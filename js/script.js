@@ -114,6 +114,11 @@
       $(e).remove();
     };
 
+    ZEALOT.ticketsLoaded = function (e) {
+      $('[data-toggle="tooltip"]').tooltip();
+      $(e).remove();
+    };
+
     ZEALOT.categoryClicked = function (e) {
       $(".category .fa-caret-right").addClass("hidden");
       $(e).find(".fa-caret-right").removeClass("hidden");

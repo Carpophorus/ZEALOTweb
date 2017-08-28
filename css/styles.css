@@ -47,7 +47,7 @@ body
 
 .gone
 {
-  display: none;
+    display: none;
 }
 
 a,
@@ -755,61 +755,148 @@ input:checked + .slider:before
 
 .main-panel-contacts
 {
-  padding: 5vh;
+    padding: 5vh;
 }
 
 .company-container
 {
-  margin-bottom: 3vh;
+    margin-bottom: 3vh;
 }
 
 .company-header
 {
-  width: 100%;
-  height: 6vh;
-  line-height: 5.5vh;
-  font-size: 2.5vh;
-  padding-left: 2vh;
-  border: 1px solid #00b3b3;
-  position: relative;
+    font-size: 2.5vh;
+    line-height: 5.5vh;
+
+    position: relative;
+
+    width: 100%;
+    height: 6vh;
+    padding-left: 2vh;
+
+    border: 1px solid #00b3b3;
 }
 
 .company-expand
 {
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 6vh;
-  width: 7vh;
-  line-height: 5.5vh;
-  font-size: 1.5em;
-  color: #00b3b3!important;
-  text-align: center;
-  background: transparent;
+    font-size: 1.5em;
+    line-height: 5.5vh;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    display: block;
+
+    width: 7vh;
+    height: 6vh;
+
+    text-align: center;
+
+    color: #00b3b3!important;
+    background: transparent;
 }
 
 .company-expand:hover
 {
-  color: #003d3d!important;
-  cursor: pointer;
+    cursor: pointer;
+
+    color: #003d3d!important;
 }
 
 .company-contact
 {
-  float: right;
-  right: 0;
-  width: 90%;
-  height: 4.5vh;
-  line-height: 4.5vh;
-  border: 1px solid #00b3b3;
-  border-top: 0;
+    line-height: 4.5vh;
+
+    right: 0;
+
+    float: right;
+
+    width: 90%;
+    height: 4.5vh;
+
+    text-align: center;
+
+    border: 1px solid #00b3b3;
+    border-top: 0;
+}
+
+.main-panel-tickets
+{
+    padding: 5vh;
+}
+
+.ticket-container
+{
+    border-top: 1px solid #00b3b3;
+    padding: 1vh;
+}
+
+.ticket-container:nth-child(1) {
+    border: none;
+}
+
+.tooltip > .tooltip-inner
+{
+    color: #f9fdfd;
+}
+
+.ticket-container > .col-1
+{
+  cursor: pointer;
+  color: #003d3d;
+}
+
+.ticket-container > .tc-status,
+.ticket-container > .tc-type,
+.ticket-container > .tc-hide
+{
   text-align: center;
+}
+
+.ticket-container > .tc-hide
+{
+  color: #b30000;
+}
+
+.ticket-container > .tc-priority-1
+{
+  color: #62F611;
+}
+
+.ticket-container > .tc-priority-2
+{
+  color: #00afff;
+}
+
+.ticket-container > .tc-priority-3
+{
+  color: #efbb1b;
+}
+
+.ticket-container > .tc-priority-4
+{
+  color: #b30000;
+}
+
+.ticket-container > .tc-sender
+{
+  cursor: pointer;
+}
+
+.ticket-container > .tc-status
+{
+  font-size: 115%;
+}
+
+.ticket-container > .fa {
+  font-size: 1.5em;
+  padding-top: 0.4vh;
 }
 
 /* MEDIA */
 
-@media (max-width: 991.5px)
+@media (max-width: 991.5px;
 {
     .stat
     {
