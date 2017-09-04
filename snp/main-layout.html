@@ -1,22 +1,23 @@
+<img class="main-loaded-helper" src="img/Z white.svg" onload="$ZEALOT.mainLoaded(this);">
 <div class="main-screen">
   <div class="sidebar">
-    <div class="inbox-button active">
+    <div class="sidebar-button inbox-button active" onclick="$ZEALOT.sidebarButtonClick(this);">
       <i class="fa fa-ticket"></i>
     </div>
-    <div class="contacts-button">
+    <div class="sidebar-button contacts-button" onclick="$ZEALOT.sidebarButtonClick(this);">
       <i class="fa fa-address-book"></i>
     </div>
     <div class="thumb hidden-md-up">
       <div class="thumb-helper" onmouseenter="$ZEALOT.thumbEnter();" onmouseout="$ZEALOT.thumbLeave();" onclick="$ZEALOT.thumbClick();"></div>
       <i class="fa fa-chevron-left"></i>
     </div>
-    <div class="admin-settings-button">
+    <div class="sidebar-button admin-settings-button hidden" onclick="$ZEALOT.sidebarButtonClick(this);">
       <i class="fa fa-cog"></i>
     </div>
-    <div class="account-settings-button">
+    <div class="sidebar-button account-settings-button" onclick="$ZEALOT.sidebarButtonClick(this);">
       <i class="fa fa-user"></i>
     </div>
-    <div class="statistics-button">
+    <div class="sidebar-button statistics-button" onclick="$ZEALOT.sidebarButtonClick(this);">
       <i class="fa fa-pie-chart"></i>
     </div>
   </div>
@@ -37,8 +38,6 @@
       <div class="under-thumb"></div>
     </div>
   </div>
-  <div class="main-panel scrollable">
-
+  <div class="main-panel">
   </div>
-  <img class="main-loaded-helper" src="img/Z white.svg" onload="$ZEALOT.mainLoaded(this);">
 </div>
