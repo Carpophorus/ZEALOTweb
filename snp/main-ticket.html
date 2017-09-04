@@ -1,0 +1,149 @@
+<div class="title-fixed oswald-blue-semibold">
+  (869585434940)
+  <div class="title-bar"></div>
+  <img class="ticket-loaded-helper" src="img/Z white.svg" onload="$ZEALOT.ticketLoaded(this);">
+  <div class="ticket-options-container">
+    <div class="toc-selection">
+      <input id="selection-select-ticket" type="search" list="select-selection-ticket" placeholder="Podešavanje" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Podešavanje'" oninput="$ZEALOT.ticketSelectionSelect(this)">
+      <datalist id="select-selection-ticket">
+          <option value="Status i tip"><div value="1" id="val"></div></option>
+          <option value="Kompanija i klijent"><div value="2" id="val"></div></option>
+          <!-- don't add these two programatically if not admin or supp, don-t add elements either -->
+          <option value="Sektor i operater"><div value="3" id="val"></div></option>
+          <option value="Prioritet"><div value="4" id="val"></div></option>
+      </datalist>
+    </div>
+    <div class="to-status gone">
+      <input id="status-select-ticket" type="search" list="select-status-ticket" placeholder="Status" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Status'" oninput="$ZEALOT.ticketStatusSelect(this)">
+      <datalist id="select-status-ticket">
+          <option value="STATUS 1"><div value="1" id="val"></div></option>
+          <option value="STATUS 2"><div value="2" id="val"></div></option>
+          <option value="STATUS 3"><div value="3" id="val"></div></option>
+          <option value="STATUS 4"><div value="4" id="val"></div></option>
+      </datalist>
+    </div>
+    <div class="to-type gone">
+      <input id="type-select-ticket" type="search" list="select-type-ticket" placeholder="Tip" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Tip'" oninput="$ZEALOT.ticketTypeSelect(this)">
+      <datalist id="select-type-ticket">
+          <option value="TIP 1"><div value="1" id="val"></div></option>
+          <option value="TIP 2"><div value="2" id="val"></div></option>
+          <option value="TIP 3"><div value="3" id="val"></div></option>
+          <option value="TIP 4"><div value="4" id="val"></div></option>
+      </datalist>
+    </div>
+    <div class="to-company gone">
+      <input id="company-select-ticket" type="search" list="select-company-ticket" placeholder="Kompanija" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Kompanija'" oninput="$ZEALOT.ticketCompanySelect(this)">
+      <datalist id="select-company-ticket">
+          <option value="Kompanija 1"><div value="1" id="val"></div></option>
+          <option value="Kompanija 2"><div value="2" id="val"></div></option>
+          <option value="Kompanija 3"><div value="3" id="val"></div></option>
+          <option value="Kompanija 4"><div value="4" id="val"></div></option>
+      </datalist>
+    </div>
+    <div class="to-button-container to-add-company-button gone">
+      <button class="to-button"><i class="fa fa-plus"></i></button>
+    </div>
+    <div class="to-client-name gone">
+      <input type="text" placeholder="Ime klijenta" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ime klijenta'"></input>
+    </div>
+    <div class="to-client-phone gone">
+      <input type="text" placeholder="Telefon klijenta" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Telefon klijenta'"></input>
+    </div>
+    <div class="to-sector gone">
+      <input id="sector-select-ticket" type="search" list="select-sector-ticket" placeholder="Sektor" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Sektor'" oninput="$ZEALOT.ticketSectorSelect(this)">
+      <datalist id="select-sector-ticket">
+          <option value="Sektor 1"><div value="1" id="val"></div></option>
+          <option value="Sektor 2"><div value="2" id="val"></div></option>
+          <option value="Sektor 3"><div value="3" id="val"></div></option>
+          <option value="Sektor 4"><div value="4" id="val"></div></option>
+      </datalist>
+    </div>
+    <div class="to-operator gone">
+      <input id="operator-select-ticket" type="search" list="select-operator-ticket" placeholder="Operater" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Operater'" oninput="$ZEALOT.ticketOperatorSelect(this)">
+      <datalist id="select-operator-ticket">
+          <option value="Ime Prezime 1"><div value="1" id="val"></div></option>
+          <option value="Ime Prezime 2"><div value="2" id="val"></div></option>
+          <option value="Ime Prezime 3"><div value="3" id="val"></div></option>
+          <option value="Ime Prezime 4"><div value="4" id="val"></div></option>
+      </datalist>
+    </div>
+    <div class="to-priority gone">
+      <input id="priority-select-ticket" type="search" list="select-priority-ticket" placeholder="Prioritet" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Prioritet'" oninput="$ZEALOT.ticketPrioritySelect(this)">
+      <datalist id="select-priority-ticket">
+          <option value="PRIORITET 1"><div value="1" id="val"></div></option>
+          <option value="PRIORITET 2"><div value="2" id="val"></div></option>
+          <option value="PRIORITET 3"><div value="3" id="val"></div></option>
+          <option value="PRIORITET 4"><div value="4" id="val"></div></option>
+      </datalist>
+    </div>
+    <div class="to-button-container to-save-button gone">
+      <button class="to-button"><i class="fa fa-check"></i></button>
+    </div>
+  </div>
+</div>
+<div class="main-panel-ticket scrollable-hotfix container">
+  <div class="client-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam magni dolore architecto numquam molestias distinctio delectus, quia, voluptatibus suscipit, quis vero ut sapiente. Velit veniam dolorum, rem necessitatibus incidunt nihil.
+    <div class="unselectable">◤</div>
+  </div>
+  <div class="operator-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia non, dolorum deserunt ullam ipsum dolores sunt labore quidem nesciunt similique, enim nostrum provident commodi neque delectus, eligendi doloribus asperiores, iste.
+    <div class="unselectable">◥</div>
+  </div>
+  <div class="internal-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore quibusdam nobis consequatur eveniet aperiam praesentium dicta aliquam ratione autem ab, veniam molestias nisi corporis officiis quae incidunt, beatae, doloribus culpa.
+  </div>
+  <div class="client-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam magni dolore architecto numquam molestias distinctio delectus, quia, voluptatibus suscipit, quis vero ut sapiente. Velit veniam dolorum, rem necessitatibus incidunt nihil.
+    <div class="unselectable">◤</div>
+  </div>
+  <div class="operator-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia non, dolorum deserunt ullam ipsum dolores sunt labore quidem nesciunt similique, enim nostrum provident commodi neque delectus, eligendi doloribus asperiores, iste.
+    <div class="unselectable">◥</div>
+  </div>
+  <div class="internal-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore quibusdam nobis consequatur eveniet aperiam praesentium dicta aliquam ratione autem ab, veniam molestias nisi corporis officiis quae incidunt, beatae, doloribus culpa.
+  </div>
+  <div class="client-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam magni dolore architecto numquam molestias distinctio delectus, quia, voluptatibus suscipit, quis vero ut sapiente. Velit veniam dolorum, rem necessitatibus incidunt nihil.
+    <div class="unselectable">◤</div>
+  </div>
+  <div class="operator-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia non, dolorum deserunt ullam ipsum dolores sunt labore quidem nesciunt similique, enim nostrum provident commodi neque delectus, eligendi doloribus asperiores, iste.
+    <div class="unselectable">◥</div>
+  </div>
+  <div class="internal-message">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore quibusdam nobis consequatur eveniet aperiam praesentium dicta aliquam ratione autem ab, veniam molestias nisi corporis officiis quae incidunt, beatae, doloribus culpa.
+  </div>
+</div>
+<div class="mail-editor-container">
+  <div class="mec-menu">
+    <div class="mec-editor-toggle fa fa-chevron-up"></div>
+    <div class="mec-send fa fa-send gone"></div>
+    <div class="mec-internal fa fa-info-circle gone"></div>
+  </div>
+  <div class="mec-editor">
+    <textarea id="tinymce-editor">
+      <div id="mail-body" style="color: #011">
+        <br>
+        <br>
+        <br>
+        <div id="mail-signature" style="margin-left: 5px">
+          <!-- the two images need to have absolute path after migration to web -->
+          <img id="mail-signature-logo" src="img/dbs logo.png" alt="logo" style="width: 150px; height: auto; display: block"></img>
+          <span id="mail-signature-name" style="font-size: 18px; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">Marko Mrkonjić</span>
+          <br><span style="font-style: italic; display: inline-block; min-width: 70px; line-height: 22px">sektor:</span><span id="mail-signature-sector">IKT</span>
+          <br><span style="font-style: italic; display: inline-block; min-width: 70px; line-height: 22px">e-mail:</span><span id="mail-signature-email">markomrkonjic9@gmail.com</span>
+          <br><span style="font-style: italic; display: inline-block; min-width: 70px; line-height: 22px">telefon:</span><span id="mail-signature-phone">+38163394999</span>
+          <div id="mail-signature-eco" style="margin-top: 15px">
+            <img id="mail-signature-leaf" src="img/green leaf.png" alt="leaf" style="width: 20px; height: auto; display: inline-block"></img>
+            <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 9px; display:inline-block; margin-left: 10px">
+              Molimo Vas sa odštampate ovu poruku samo ukoliko je to neophodno.
+              <br>Please print this e-mail only if necessary.
+            </div>
+          </div>
+        </div>
+      </div>
+    </textarea>
+  </div>
+</div>
