@@ -1,16 +1,3 @@
-/*
-
-blue: #00b3b3
-light blue: #7fd9d9
-menu light blue: #dfffff
-dark blue: #003d3d
-
-black: #001111
-white: #f9fdfd
-
-*/
-
-
 /* GENERAL */
 
 body {
@@ -212,9 +199,13 @@ h3 {
 .login-screen .copyright, .sidebar-popup .copyright {
   font-size: 75%;
   position: absolute;
-  bottom: 2vh;
+  bottom: 1vh;
   width: 100%;
   text-align: center;
+}
+
+#login-form>#login-button>.fa {
+  font-size: 1.4em;
 }
 
 .main-screen>div {
@@ -475,7 +466,7 @@ input:checked+.slider:before {
   transform: translateX(3vh);
 }
 
-.admin-privileges-status {
+.admin-privileges-status, .search-nc-status {
   display: inline-block;
 }
 
@@ -627,6 +618,7 @@ input:checked+.slider:before {
   text-align: center;
   border: 1px solid #00b3b3;
   border-top: 0;
+  margin-right: 0.1vh;
 }
 
 .main-panel-tickets {
@@ -636,6 +628,11 @@ input:checked+.slider:before {
 .ticket-container {
   padding: 1vh;
   border-top: 1px solid #00b3b3;
+}
+
+.ticket-container:hover {
+  background-color: #dfffff;
+  cursor: pointer;
 }
 
 .ticket-container:nth-child(1) {
@@ -657,6 +654,10 @@ input:checked+.slider:before {
 
 .ticket-container>.tc-hide {
   color: #b30000;
+}
+
+.ticket-container>.tc-show {
+  color: #62f611;
 }
 
 .ticket-container>.tc-priority-1 {
@@ -681,6 +682,8 @@ input:checked+.slider:before {
 
 .ticket-container>.tc-status {
   font-size: 115%;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
 }
 
 .ticket-container>.fa {
@@ -818,6 +821,10 @@ input:checked+.slider:before {
 .mec-internal {
   right: 50px;
   font-size: 20px;
+}
+
+.trumbowyg-box {
+  margin: 0;
 }
 
 
