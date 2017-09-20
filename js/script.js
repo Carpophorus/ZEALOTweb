@@ -20,7 +20,7 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  ZEALOT.apiRoot = "http://localhost:50358/api/";
+  ZEALOT.apiRoot = "https://localhost:50358/api/";
   ZEALOT.userInfo = "";
   ZEALOT.allOperators = "";
   ZEALOT.allSectors = "";
