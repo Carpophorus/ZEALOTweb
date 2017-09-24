@@ -9,6 +9,7 @@
   ZEALOT.mainWidthLarge;
   ZEALOT.x = 1;
   ZEALOT.adminPrivilegesGranted = false;
+  ZEALOT.hideClicked = false;
   ZEALOT.idSectorForStats = 0;
   ZEALOT.idOperatorForStats = 0;
   ZEALOT.idStatusForTicket = 0;
@@ -27,6 +28,7 @@
   ZEALOT.allTicketTypes = "";
   ZEALOT.allTicketStatuses = "";
   ZEALOT.allTicketPriorities = "";
+  ZEALOT.allCompanies = "";
   ZEALOT.s0 = "";
   ZEALOT.s1 = "";
   ZEALOT.s2 = "";
@@ -266,6 +268,7 @@
 
   ZEALOT.hideOrShowTicket = function(e, idT, u) {
     if (u) return;
+    ZEALOT.hideClicked = true;
     $.confirm({
       theme: "material",
       title: "Potvrda akcije",
@@ -273,11 +276,11 @@
       type: ($(e).hasClass("tc-hide") ? "red" : "green"),
       typeAnimated: true,
       buttons: {
-        close: {
+        no: {
           text: "NE",
           action: function() {}
         },
-        tryAgain: {
+        yes: {
           text: "DA",
           btnClass: ($(e).hasClass("tc-hide") ? "btn-red" : "btn-green"),
           action: function() {
@@ -302,6 +305,11 @@
   };
 
   ZEALOT.ticketClicked = function(idT) {
+    if (ZEALOT.hideClicked) {
+      ZEALOT.hideClicked = false;
+      return;
+    }
+    $(".tooltip").addClass("gone");
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "getConversation" + "?idT=" + idT,
       function(responseArray) {
@@ -312,7 +320,7 @@
             <img class="ticket-loaded-helper" src="img/Z white.svg" onload="$ZEALOT.ticketLoaded(this);">
             <div class="ticket-options-container">
               <div class="toc-selection">
-                <input id="selection-select-ticket" type="search" list="select-selection-ticket" placeholder="Podešavanje" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Podešavanje'" oninput="$ZEALOT.ticketSelectionSelect(this)">
+                <input id="selection-select-ticket" type="search" list="select-selection-ticket" placeholder="Podešavanje" onfocus="this.placeholder=''" onblur="this.placeholder='Podešavanje'" oninput="$ZEALOT.ticketSelectionSelect(this)">
                 <datalist id="select-selection-ticket">
                     <option value="Status i tip"><div value="1" id="val"></div></option>
                     <option value="Kompanija i klijent"><div value="2" id="val"></div></option>
@@ -325,32 +333,32 @@
               <div class="to-status gone">
                 <input id="status-select-ticket" type="search" list="select-status-ticket" placeholder="Status" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Status'" oninput="$ZEALOT.ticketStatusSelect(this)">
                 <datalist id="select-status-ticket">
-                    <option value="STATUS 1"><div value="1" id="val"></div></option>
-                    <option value="STATUS 2"><div value="2" id="val"></div></option>
-                    <option value="STATUS 3"><div value="3" id="val"></div></option>
-                    <option value="STATUS 4"><div value="4" id="val"></div></option>
+        `;
+        for (var i = 0; i < ZEALOT.allTicketStatuses.length; i++)
+          ticketHtml += `<option value="` + ZEALOT.allTicketStatuses[i].stn + `"><div value="` + ZEALOT.allTicketStatuses[i].idSt + `" id="val"></div></option>`;
+        ticketHtml += `
                 </datalist>
               </div>
               <div class="to-type gone">
                 <input id="type-select-ticket" type="search" list="select-type-ticket" placeholder="Tip" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Tip'" oninput="$ZEALOT.ticketTypeSelect(this)">
                 <datalist id="select-type-ticket">
-                    <option value="TIP 1"><div value="1" id="val"></div></option>
-                    <option value="TIP 2"><div value="2" id="val"></div></option>
-                    <option value="TIP 3"><div value="3" id="val"></div></option>
-                    <option value="TIP 4"><div value="4" id="val"></div></option>
+        `;
+        for (var i = 0; i < ZEALOT.allTicketTypes.length; i++)
+          ticketHtml += `<option value="` + ZEALOT.allTicketTypes[i].ttpn + `"><div value="` + ZEALOT.allTicketTypes[i].idTtp + `" id="val"></div></option>`;
+        ticketHtml += `
                 </datalist>
               </div>
               <div class="to-company gone">
                 <input id="company-select-ticket" type="search" list="select-company-ticket" placeholder="Kompanija" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Kompanija'" oninput="$ZEALOT.ticketCompanySelect(this)">
                 <datalist id="select-company-ticket">
-                    <option value="Kompanija 1"><div value="1" id="val"></div></option>
-                    <option value="Kompanija 2"><div value="2" id="val"></div></option>
-                    <option value="Kompanija 3"><div value="3" id="val"></div></option>
-                    <option value="Kompanija 4"><div value="4" id="val"></div></option>
+        `;
+        for (var i = 0; i < ZEALOT.allCompanies.length; i++)
+          ticketHtml += `<option value="` + ZEALOT.allCompanies[i].companyName + `"><div value="` + ZEALOT.allCompanies[i].idCompany + `" id="val"></div></option>`;
+        ticketHtml += `
                 </datalist>
               </div>
               <div class="to-button-container to-add-company-button gone">
-                <button class="to-button"><i class="fa fa-plus"></i></button>
+                <button class="to-button" onclick="ZEALOT.addCompany();"><i class="fa fa-plus"></i></button>
               </div>
               <div class="to-client-name gone">
                 <input type="text" placeholder="Ime klijenta" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ime klijenta'"></input>
@@ -361,32 +369,33 @@
               <div class="to-sector gone">
                 <input id="sector-select-ticket" type="search" list="select-sector-ticket" placeholder="Sektor" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Sektor'" oninput="$ZEALOT.ticketSectorSelect(this)">
                 <datalist id="select-sector-ticket">
-                    <option value="Sektor 1"><div value="1" id="val"></div></option>
-                    <option value="Sektor 2"><div value="2" id="val"></div></option>
-                    <option value="Sektor 3"><div value="3" id="val"></div></option>
-                    <option value="Sektor 4"><div value="4" id="val"></div></option>
+        `;
+        for (var i = 0; i < ZEALOT.allSectors.length; i++)
+          ticketHtml += `<option value="` + ZEALOT.allSectors[i].scn + `"><div value="` + ZEALOT.allSectors[i].idSc + `" id="val"></div></option>`;
+        ticketHtml += `
                 </datalist>
               </div>
               <div class="to-operator gone">
                 <input id="operator-select-ticket" type="search" list="select-operator-ticket" placeholder="Operater" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Operater'" oninput="$ZEALOT.ticketOperatorSelect(this)">
                 <datalist id="select-operator-ticket">
-                    <option value="Ime Prezime 1"><div value="1" id="val"></div></option>
-                    <option value="Ime Prezime 2"><div value="2" id="val"></div></option>
-                    <option value="Ime Prezime 3"><div value="3" id="val"></div></option>
-                    <option value="Ime Prezime 4"><div value="4" id="val"></div></option>
+        `;
+        for (var i = 0; i < ZEALOT.allOperators.length; i++)
+          if (ZEALOT.allOperators[i].idSc != null)
+            ticketHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
+        ticketHtml += `
                 </datalist>
               </div>
               <div class="to-priority gone">
                 <input id="priority-select-ticket" type="search" list="select-priority-ticket" placeholder="Prioritet" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Prioritet'" oninput="$ZEALOT.ticketPrioritySelect(this)">
                 <datalist id="select-priority-ticket">
-                    <option value="PRIORITET 1"><div value="1" id="val"></div></option>
-                    <option value="PRIORITET 2"><div value="2" id="val"></div></option>
-                    <option value="PRIORITET 3"><div value="3" id="val"></div></option>
-                    <option value="PRIORITET 4"><div value="4" id="val"></div></option>
+        `;
+        for (var i = 0; i < ZEALOT.allTicketPriorities.length; i++)
+          ticketHtml += `<option value="` + ZEALOT.allTicketPriorities[i].pn + `"><div value="` + ZEALOT.allTicketPriorities[i].idP + `" id="val"></div></option>`;
+        ticketHtml += `
                 </datalist>
               </div>
               <div class="to-button-container to-save-button gone">
-                <button class="to-button"><i class="fa fa-check"></i></button>
+                <button class="to-button" onclick="ZEALOT.saveTicketInfo();"><i class="fa fa-check"></i></button>
               </div>
             </div>
           </div>
@@ -405,8 +414,8 @@
           <div class="mail-editor-container">
             <div class="mec-menu">
               <div class="mec-editor-toggle fa fa-chevron-up"></div>
-              <div class="mec-send fa fa-send gone"></div>
-              <div class="mec-internal fa fa-info-circle gone"></div>
+              <div class="mec-send fa fa-send gone" onclick="ZEALOT.sendMail();"></div>
+              <div class="mec-internal fa fa-info-circle gone" onclick="ZEALOT.sendInternal();"></div>
             </div>
             <div class="mec-editor">
               <div id="trumbowyg-icons">
@@ -698,6 +707,14 @@
       $('#select-sector-ticket option').each(function() {
         if (this.value.toUpperCase() === val.toUpperCase()) {
           ZEALOT.idSectorForTicket = $(this).find("#val").attr("value");
+          ZEALOT.idOperatorForTicket = 0;
+          $("#operator-select-ticket").val("");
+          var datalistHtml = "";
+          for (var i = 0; i < ZEALOT.allOperators.length; i++) {
+            if ((ZEALOT.allOperators[i].idSc == ZEALOT.idSectorForTicket || ZEALOT.idSectorForTicket == 0) && ZEALOT.allOperators[i].idSc != null)
+              datalistHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
+          }
+          $("#select-operator-ticket").html(datalistHtml);
         }
       });
   };
@@ -714,6 +731,95 @@
       });
   };
 
+  ZEALOT.ticketStatusSelect = function(e) {
+    var val = e.value;
+    if (val === "")
+      ZEALOT.idStatusForTicket = 0;
+    else
+      $('#select-status-ticket option').each(function() {
+        if (this.value.toUpperCase() === val.toUpperCase()) {
+          ZEALOT.idStatusForTicket = $(this).find("#val").attr("value");
+        }
+      });
+  };
+
+  ZEALOT.ticketTypeSelect = function(e) {
+    var val = e.value;
+    if (val === "")
+      ZEALOT.idTypeForTicket = 0;
+    else
+      $('#select-type-ticket option').each(function() {
+        if (this.value.toUpperCase() === val.toUpperCase()) {
+          ZEALOT.idTypeForTicket = $(this).find("#val").attr("value");
+        }
+      });
+  };
+
+  ZEALOT.ticketPrioritySelect = function(e) {
+    var val = e.value;
+    if (val === "")
+      ZEALOT.idPriorityForTicket = 0;
+    else
+      $('#select-priority-ticket option').each(function() {
+        if (this.value.toUpperCase() === val.toUpperCase()) {
+          ZEALOT.idPriorityForTicket = $(this).find("#val").attr("value");
+        }
+      });
+  };
+
+  ZEALOT.ticketCompanySelect = function(e) {
+    var val = e.value;
+    if (val === "")
+      ZEALOT.idCompanyForTicket = 0;
+    else
+      $('#select-company-ticket option').each(function() {
+        if (this.value.toUpperCase() === val.toUpperCase()) {
+          ZEALOT.idCompanyForTicket = $(this).find("#val").attr("value");
+        }
+      });
+  };
+
+  ZEALOT.addCompany = function() {
+    if ($("#company-select-ticket").val() == "" || $("#company-select-ticket").val() == null) return;
+    $.confirm({
+      theme: "material",
+      title: "Potvrda akcije",
+      content: "Da li želite da dodate kompaniju " + $("#company-select-ticket").val().toUpperCase() + " u sistem?",
+      type: "green",
+      typeAnimated: true,
+      buttons: {
+        no: {
+          text: "NE",
+          action: function() {}
+        },
+        yes: {
+          text: "DA",
+          btnClass: "btn-green",
+          action: function() {
+            $ajaxUtils.sendPostRequest(
+              ZEALOT.apiRoot + "addNewCompany" + "?name=" + encodeURIComponent($("#company-select-ticket").val().toUpperCase()),
+              function(responseArray) {
+                $ajaxUtils.sendGetRequest(
+                  ZEALOT.apiRoot + "getCompanies",
+                  function(companiesArray) {
+                    ZEALOT.allCompanies = companiesArray;
+                    $("#company-select-ticket").val("");
+                    var companyDatalistOptionsHtml = "";
+                    for (var i = 0; i < companiesArray.length; i++)
+                      companyDatalistOptionsHtml += `<option value="` + ZEALOT.allCompanies[i].companyName + `"><div value="` + ZEALOT.allCompanies[i].idCompany + `" id="val"></div></option>`;
+                    insertHtml("#select-company-ticket", companyDatalistOptionsHtml);
+                  },
+                  true /*, ZEALOT.bearer*/
+                );
+              },
+              true /*, ZEALOT.bearer*/
+            );
+          }
+        }
+      }
+    });
+  };
+
   ZEALOT.contactExpand = function(e) {
     if ($(e).hasClass("fa-chevron-down")) {
       $(e).removeClass("fa-chevron-down");
@@ -723,8 +829,6 @@
       $(e).addClass("fa-chevron-down");
     }
   };
-
-  //stats button onclick = load main-panel snp after api call, call itself every 5 minutes unless other tab selected
 
   ZEALOT.siAux = function() {
     insertHtml("#main-content", `
@@ -789,7 +893,7 @@
             function(responseArray) {
               ZEALOT.allOperators = responseArray;
               sync = sync + 1;
-              if (sync == 5) ZEALOT.loadSidebarTickets();
+              if (sync == 6) ZEALOT.loadSidebarTickets();
             },
             true /*, ZEALOT.bearer*/
           );
@@ -798,7 +902,7 @@
             function(responseArray) {
               ZEALOT.allSectors = responseArray;
               sync = sync + 1;
-              if (sync == 5) ZEALOT.loadSidebarTickets();
+              if (sync == 6) ZEALOT.loadSidebarTickets();
             },
             true /*, ZEALOT.bearer*/
           );
@@ -807,7 +911,7 @@
             function(responseArray) {
               ZEALOT.allTicketTypes = responseArray;
               sync = sync + 1;
-              if (sync == 5) ZEALOT.loadSidebarTickets();
+              if (sync == 6) ZEALOT.loadSidebarTickets();
             },
             true /*, ZEALOT.bearer*/
           );
@@ -816,7 +920,7 @@
             function(responseArray) {
               ZEALOT.allTicketStatuses = responseArray;
               sync = sync + 1;
-              if (sync == 5) ZEALOT.loadSidebarTickets();
+              if (sync == 6) ZEALOT.loadSidebarTickets();
             },
             true /*, ZEALOT.bearer*/
           );
@@ -825,7 +929,16 @@
             function(responseArray) {
               ZEALOT.allTicketPriorities = responseArray;
               sync = sync + 1;
-              if (sync == 5) ZEALOT.loadSidebarTickets();
+              if (sync == 6) ZEALOT.loadSidebarTickets();
+            },
+            true /*, ZEALOT.bearer*/
+          );
+          $ajaxUtils.sendGetRequest(
+            ZEALOT.apiRoot + "getCompanies",
+            function(responseArray) {
+              ZEALOT.allCompanies = responseArray;
+              sync = sync + 1;
+              if (sync == 6) ZEALOT.loadSidebarTickets();
             },
             true /*, ZEALOT.bearer*/
           );
