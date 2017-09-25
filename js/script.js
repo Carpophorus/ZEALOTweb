@@ -10,6 +10,7 @@
   ZEALOT.x = 1;
   ZEALOT.adminPrivilegesGranted = false;
   ZEALOT.hideClicked = false;
+  ZEALOT.idTicketCurrent = 0;
   ZEALOT.idSectorForStats = 0;
   ZEALOT.idOperatorForStats = 0;
   ZEALOT.idStatusForTicket = 0;
@@ -304,6 +305,138 @@
     });
   };
 
+  ZEALOT.sendMail = function() {
+    $.confirm({
+      theme: "material",
+      title: "Potvrda akcije",
+      content: "Da li želite da pošaljete ovaj mail klijentu?",
+      type: "red",
+      typeAnimated: true,
+      buttons: {
+        no: {
+          text: "NE",
+          action: function() {}
+        },
+        yes: {
+          text: "DA",
+          btnClass: "btn-red",
+          action: function() {
+            $ajaxUtils.sendPostRequest(
+              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator,
+              function(responseArray) {
+                $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
+                  <div class="operator-message">
+                    ` + $(".trumbowyg-editor").html() + `
+                    <div class="unselectable speechdart">◥</div>
+                  </div>
+                `);
+                $(".trumbowyg-editor").html(`
+                  <br>
+                  <br>
+                  <br>
+                  <div id="mail-signature" style="margin-left: 5px">
+                    <!-- the two images need to have absolute path after migration to web -->
+                    <img id="mail-signature-logo" src="img/dbs logo.png" alt="logo" style="width: 20vh; height: auto; display: block"></img>
+                    <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
+                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
+                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
+                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone">` + ZEALOT.userInfo.phone + `</span>
+                    <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh; position: relative">
+                      <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.png') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
+                      <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; position: absolute; left: 4vh">
+                        Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
+                        <br>Please print this e-mail only if necessary.
+                      </div>
+                    </div>
+                  </div>
+                `);
+                if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
+                  $(".mec-editor-toggle").removeClass("fa-chevron-down");
+                  $(".mec-editor-toggle").addClass("fa-chevron-up");
+                  $(".mec-send").addClass("gone");
+                  $(".mec-internal").addClass("gone");
+                  $(".mail-editor-container").css({
+                    "height": 33
+                  });
+                  $(".main-panel-ticket").css({
+                    "height": Math.round(ZEALOT.browserHeight * 0.91 - 33)
+                  });
+                }
+              },
+              true /*, ZEALOT.bearer*/
+            );
+          }
+        }
+      }
+    });
+  };
+
+  ZEALOT.sendInternal = function() {
+    $.confirm({
+      theme: "material",
+      title: "Potvrda akcije",
+      content: "Da li želite da pošaljete ovu poruku kao internu?",
+      type: "blue",
+      typeAnimated: true,
+      buttons: {
+        no: {
+          text: "NE",
+          action: function() {}
+        },
+        yes: {
+          text: "DA",
+          btnClass: "btn-blue",
+          action: function() {
+            $(".trumbowyg-editor #mail-signature").remove();
+            $ajaxUtils.sendPostRequest(
+              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=true" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator,
+              function(responseArray) {
+                $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
+                  <div class="internal-message">
+                    ` + $(".trumbowyg-editor").html() + `
+                  </div>
+                `);
+                $(".trumbowyg-editor").html(`
+                  <br>
+                  <br>
+                  <br>
+                  <div id="mail-signature" style="margin-left: 5px">
+                    <!-- the two images need to have absolute path after migration to web -->
+                    <img id="mail-signature-logo" src="img/dbs logo.png" alt="logo" style="width: 20vh; height: auto; display: block"></img>
+                    <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
+                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
+                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
+                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone">` + ZEALOT.userInfo.phone + `</span>
+                    <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh; position: relative">
+                      <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.png') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
+                      <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; position: absolute; left: 4vh">
+                        Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
+                        <br>Please print this e-mail only if necessary.
+                      </div>
+                    </div>
+                  </div>
+                `);
+                if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
+                  $(".mec-editor-toggle").removeClass("fa-chevron-down");
+                  $(".mec-editor-toggle").addClass("fa-chevron-up");
+                  $(".mec-send").addClass("gone");
+                  $(".mec-internal").addClass("gone");
+                  $(".mail-editor-container").css({
+                    "height": 33
+                  });
+                  $(".main-panel-ticket").css({
+                    "height": Math.round(ZEALOT.browserHeight * 0.91 - 33)
+                  });
+                }
+              },
+              true /*, ZEALOT.bearer*/
+            );
+          }
+        }
+      }
+    });
+  };
+
   ZEALOT.ticketClicked = function(idT) {
     if (ZEALOT.hideClicked) {
       ZEALOT.hideClicked = false;
@@ -313,6 +446,7 @@
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "getConversation" + "?idT=" + idT,
       function(responseArray) {
+        ZEALOT.idTicketCurrent = idT;
         var ticketHtml = `
           <div class="title-fixed oswald-blue-semibold">
             Tiket ` + idT + `
@@ -405,7 +539,7 @@
           ticketHtml += `
             <div class="` + ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `internal-message` : `operator-message`) : `client-message`) + `">
               ` + responseArray[i].body +
-            ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `` : `<div class="unselectable">◥</div>`) : `<div class="unselectable">◤</div>`) + `
+            ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `` : `<div class="unselectable speechdart">◥</div>`) : `<div class="unselectable speechdart">◤</div>`) + `
             </div>
           `;
         }

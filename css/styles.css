@@ -735,7 +735,7 @@ input:checked+.slider:before {
   margin-top: 3vh;
 }
 
-.main-panel-ticket>div>div {
+.main-panel-ticket>div>.speechdart {
   line-height: 2vh;
   position: absolute;
   cursor: default;
@@ -750,13 +750,13 @@ input:checked+.slider:before {
   -khtml-user-select: none;
 }
 
-.client-message>div {
+.client-message>.speechdart {
   bottom: -1.4vh;
   left: -.2vh;
   color: #e7e7e7;
 }
 
-.operator-message>div {
+.operator-message>.speechdart {
   right: -.2vh;
   bottom: -1.4vh;
   color: #7fd9d9;
