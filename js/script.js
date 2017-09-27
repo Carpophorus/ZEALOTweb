@@ -199,8 +199,28 @@
       <br>
       <br>
       <div id="mail-signature" style="margin-left: 5px">
-        <!-- the two images need to have absolute path after migration to web -->
-        <img id="mail-signature-logo" src="img/dbs logo.png" alt="logo" style="width: 20vh; height: auto; display: block"></img>
+        <!-- the leaf image needs to have absolute path after migration to web -->
+        <svg version="1.1" id="mail-signature-logo" width="20vh" height="100%" display="block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4;" xml:space="preserve">
+          <style type="text/css">
+          	.st0{fill:#E62022;}
+          	.st1{fill:#918F93;}
+          </style>
+          <g>
+          	<rect x="344.9" y="489.4" class="st0" width="91.8" height="90.7"/>
+          	<path class="st1" d="M344.9,211.8h259.9l-0.1,0.1c45.8,0,82.9,37.1,82.9,82.9l0.1-0.1v202.6l-0.1,0.1c0,45.8-37.1,82.9-82.9,82.9
+          		l0.1-0.1H455.4V476.6H558l-0.1,0.1c8.3,0,15.1-6.7,15.1-15.1l0.1-0.1V325.6l-0.1,0.1c0-8.3-6.7-15.1-15.1-15.1h0.1H444.5V469h-99.6
+          		"/>
+          	<rect x="730.3" y="489.4" class="st1" width="91.7" height="90.7"/>
+          	<path class="st1" d="M974.8,211.9l0.1-0.1H730.2V469h99.6v-29.9h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.3L944,470
+          		c0,4.1-3.4,7.5-7.5,7.5l0.1-0.1h-95.9V580h134l-0.1,0.1c45.8,0,82.9-37.1,82.9-82.9v-0.1v-63l-0.1,0.1c-1-20.1-13.6-37.7-32.2-45.2
+          		l0,0c18.6-7.5,31.2-25.2,32.2-45.2h0.1v-49.1C1057.7,249,1020.5,211.9,974.8,211.9z M944.3,346.2l-0.1,0.1c0,4.1-3.4,7.5-7.5,7.5
+          		h0.1h-0.1H829.8v-38.3h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.2H944.3z"/>
+          	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
+          	<path class="st1" d="M1426.1,497.3v-60.7l-0.1,0.1c0-45.8-37.1-82.9-82.9-82.9h0.1h-146.8v-38.3h212.6V211.8h-239.1l-0.1,0.1
+          		c-45.8,0-82.9,37.1-82.9,82.9v-0.1v61.6v0.1c0,45.8,37.1,82.9,82.9,82.9l0.1-0.1h145v37.4h-117.4V580h145.7l-0.1,0.1
+          		c45.8,0,82.9-37.1,82.9-82.9"/>
+          </g>
+        </svg>
         <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
         <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
         <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
@@ -324,10 +344,12 @@
             $ajaxUtils.sendPostRequest(
               ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator,
               function(responseArray) {
+                ZEALOT.loadSidebarTickets();
                 $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
                   <div class="operator-message">
                     ` + $(".trumbowyg-editor").html() + `
                     <div class="unselectable speechdart">◥</div>
+                    <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
                   </div>
                 `);
                 $(".trumbowyg-editor").html(`
@@ -335,8 +357,28 @@
                   <br>
                   <br>
                   <div id="mail-signature" style="margin-left: 5px">
-                    <!-- the two images need to have absolute path after migration to web -->
-                    <img id="mail-signature-logo" src="img/dbs logo.png" alt="logo" style="width: 20vh; height: auto; display: block"></img>
+                    <!-- the leaf image needs to have absolute path after migration to web -->
+                    <svg version="1.1" id="mail-signature-logo" width="20vh" height="100%" display="block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4;" xml:space="preserve">
+                      <style type="text/css">
+                      	.st0{fill:#E62022;}
+                      	.st1{fill:#918F93;}
+                      </style>
+                      <g>
+                      	<rect x="344.9" y="489.4" class="st0" width="91.8" height="90.7"/>
+                      	<path class="st1" d="M344.9,211.8h259.9l-0.1,0.1c45.8,0,82.9,37.1,82.9,82.9l0.1-0.1v202.6l-0.1,0.1c0,45.8-37.1,82.9-82.9,82.9
+                      		l0.1-0.1H455.4V476.6H558l-0.1,0.1c8.3,0,15.1-6.7,15.1-15.1l0.1-0.1V325.6l-0.1,0.1c0-8.3-6.7-15.1-15.1-15.1h0.1H444.5V469h-99.6
+                      		"/>
+                      	<rect x="730.3" y="489.4" class="st1" width="91.7" height="90.7"/>
+                      	<path class="st1" d="M974.8,211.9l0.1-0.1H730.2V469h99.6v-29.9h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.3L944,470
+                      		c0,4.1-3.4,7.5-7.5,7.5l0.1-0.1h-95.9V580h134l-0.1,0.1c45.8,0,82.9-37.1,82.9-82.9v-0.1v-63l-0.1,0.1c-1-20.1-13.6-37.7-32.2-45.2
+                      		l0,0c18.6-7.5,31.2-25.2,32.2-45.2h0.1v-49.1C1057.7,249,1020.5,211.9,974.8,211.9z M944.3,346.2l-0.1,0.1c0,4.1-3.4,7.5-7.5,7.5
+                      		h0.1h-0.1H829.8v-38.3h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.2H944.3z"/>
+                      	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
+                      	<path class="st1" d="M1426.1,497.3v-60.7l-0.1,0.1c0-45.8-37.1-82.9-82.9-82.9h0.1h-146.8v-38.3h212.6V211.8h-239.1l-0.1,0.1
+                      		c-45.8,0-82.9,37.1-82.9,82.9v-0.1v61.6v0.1c0,45.8,37.1,82.9,82.9,82.9l0.1-0.1h145v37.4h-117.4V580h145.7l-0.1,0.1
+                      		c45.8,0,82.9-37.1,82.9-82.9"/>
+                      </g>
+                    </svg>
                     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
@@ -394,6 +436,7 @@
                 $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
                   <div class="internal-message">
                     ` + $(".trumbowyg-editor").html() + `
+                    <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
                   </div>
                 `);
                 $(".trumbowyg-editor").html(`
@@ -401,8 +444,28 @@
                   <br>
                   <br>
                   <div id="mail-signature" style="margin-left: 5px">
-                    <!-- the two images need to have absolute path after migration to web -->
-                    <img id="mail-signature-logo" src="img/dbs logo.png" alt="logo" style="width: 20vh; height: auto; display: block"></img>
+                    <!-- the leaf image needs to have absolute path after migration to web -->
+                    <svg version="1.1" id="mail-signature-logo" width="20vh" height="100%" display="block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4;" xml:space="preserve">
+                      <style type="text/css">
+                      	.st0{fill:#E62022;}
+                      	.st1{fill:#918F93;}
+                      </style>
+                      <g>
+                      	<rect x="344.9" y="489.4" class="st0" width="91.8" height="90.7"/>
+                      	<path class="st1" d="M344.9,211.8h259.9l-0.1,0.1c45.8,0,82.9,37.1,82.9,82.9l0.1-0.1v202.6l-0.1,0.1c0,45.8-37.1,82.9-82.9,82.9
+                      		l0.1-0.1H455.4V476.6H558l-0.1,0.1c8.3,0,15.1-6.7,15.1-15.1l0.1-0.1V325.6l-0.1,0.1c0-8.3-6.7-15.1-15.1-15.1h0.1H444.5V469h-99.6
+                      		"/>
+                      	<rect x="730.3" y="489.4" class="st1" width="91.7" height="90.7"/>
+                      	<path class="st1" d="M974.8,211.9l0.1-0.1H730.2V469h99.6v-29.9h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.3L944,470
+                      		c0,4.1-3.4,7.5-7.5,7.5l0.1-0.1h-95.9V580h134l-0.1,0.1c45.8,0,82.9-37.1,82.9-82.9v-0.1v-63l-0.1,0.1c-1-20.1-13.6-37.7-32.2-45.2
+                      		l0,0c18.6-7.5,31.2-25.2,32.2-45.2h0.1v-49.1C1057.7,249,1020.5,211.9,974.8,211.9z M944.3,346.2l-0.1,0.1c0,4.1-3.4,7.5-7.5,7.5
+                      		h0.1h-0.1H829.8v-38.3h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.2H944.3z"/>
+                      	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
+                      	<path class="st1" d="M1426.1,497.3v-60.7l-0.1,0.1c0-45.8-37.1-82.9-82.9-82.9h0.1h-146.8v-38.3h212.6V211.8h-239.1l-0.1,0.1
+                      		c-45.8,0-82.9,37.1-82.9,82.9v-0.1v61.6v0.1c0,45.8,37.1,82.9,82.9,82.9l0.1-0.1h145v37.4h-117.4V580h145.7l-0.1,0.1
+                      		c45.8,0,82.9-37.1,82.9-82.9"/>
+                      </g>
+                    </svg>
                     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
@@ -437,6 +500,161 @@
     });
   };
 
+  ZEALOT.saveTicketInfo = function() {
+    switch (ZEALOT.idSelectionForTicket) {
+      case 1, "1": //status & type
+        $ajaxUtils.sendPostRequest(
+          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
+          "&idTs=" + ZEALOT.idStatusForTicket +
+          "&idTt=" + ZEALOT.idTypeForTicket,
+          function(responseArray) {
+            $.confirm({
+              theme: "material",
+              title: "Potvrda akcije",
+              content: "Podaci sačuvani.",
+              type: "green",
+              typeAnimated: true,
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-green",
+                  action: function() {}
+                }
+              }
+            });
+          },
+          true /*, ZEALOT.bearer*/
+        );
+        break;
+      case 2, "2": //company & client
+        $ajaxUtils.sendPostRequest(
+          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
+          "&idCo=" + ZEALOT.idCompanyForTicket +
+          "&cn=" + encodeURIComponent(ZEALOT.clientNameForTicket) +
+          "&cp=" + encodeURIComponent(ZEALOT.clientPhoneForTicket),
+          function(responseArray) {
+            $.confirm({
+              theme: "material",
+              title: "Potvrda akcije",
+              content: "Podaci sačuvani.",
+              type: "green",
+              typeAnimated: true,
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-green",
+                  action: function() {}
+                }
+              }
+            });
+          },
+          true /*, ZEALOT.bearer*/
+        );
+        break;
+      case 3, "3": //sector & operator
+        $ajaxUtils.sendPostRequest(
+          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
+          "&idS=" + ZEALOT.idSectorForTicket +
+          "&idO=" + ZEALOT.idOperatorForTicket,
+          function(responseArray) {
+            $.confirm({
+              theme: "material",
+              title: "Potvrda akcije",
+              content: "Podaci sačuvani.",
+              type: "green",
+              typeAnimated: true,
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-green",
+                  action: function() {}
+                }
+              }
+            });
+          },
+          true /*, ZEALOT.bearer*/
+        );
+        break;
+      case 4, "4": //priority
+        $ajaxUtils.sendPostRequest(
+          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
+          "&idTp=" + ZEALOT.idPriorityForTicket,
+          function(responseArray) {
+            $.confirm({
+              theme: "material",
+              title: "Potvrda akcije",
+              content: "Podaci sačuvani.",
+              type: "green",
+              typeAnimated: true,
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-green",
+                  action: function() {}
+                }
+              }
+            });
+          },
+          true /*, ZEALOT.bearer*/
+        );
+        break;
+      case 5, "5": //tags
+        $ajaxUtils.sendGetRequest(
+          ZEALOT.apiRoot + "clearTags" + "?idT=" + ZEALOT.idTicketCurrent,
+          function(responseArray) {
+            var sync = 0;
+            var array = $(".to-tags").tagsinput("items");
+            var syncmax = array.length;
+            for (var i = 0; i < syncmax; i++)
+              $ajaxUtils.sendGetRequest(
+                ZEALOT.apiRoot + "addTag" + "?idT=" + ZEALOT.idTicketCurrent + "&tag=" + encodeURIComponent(array[i]),
+                function(responseArray) {
+                  sync = sync + 1;
+                  if (sync == syncmax)
+                    $.confirm({
+                      theme: "material",
+                      title: "Potvrda akcije",
+                      content: "Podaci sačuvani.",
+                      type: "green",
+                      typeAnimated: true,
+                      buttons: {
+                        ok: {
+                          text: "OK",
+                          btnClass: "btn-green",
+                          action: function() {}
+                        }
+                      }
+                    });
+                },
+                true /*, ZEALOT.bearer*/
+              );
+          },
+          true /*, ZEALOT.bearer*/
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  ZEALOT.cnChanged = function(e) {
+    ZEALOT.clientNameForTicket = $(e).val();
+  };
+
+  ZEALOT.cpChanged = function(e) {
+    ZEALOT.clientPhoneForTicket = $(e).val();
+  };
+
+  ZEALOT.formatDate = function(dateString) {
+    var year = dateString.substring(0, 4);
+    var month = dateString.substring(5, 7);
+    var day = dateString.substring(8, 10);
+    var hour = dateString.substring(11, 13);
+    var minute = dateString.substring(14, 16);
+    var second = dateString.substring(17, 19);
+    return ("" + day + "." + month + "." + year + ". " + hour + ":" + minute + ":" + second);
+  };
+
   ZEALOT.ticketClicked = function(idT) {
     if (ZEALOT.hideClicked) {
       ZEALOT.hideClicked = false;
@@ -458,6 +676,7 @@
                 <datalist id="select-selection-ticket">
                     <option value="Status i tip"><div value="1" id="val"></div></option>
                     <option value="Kompanija i klijent"><div value="2" id="val"></div></option>
+                    <option value="Tagovi"><div value="5" id="val"></div></option>
                     ` + (ZEALOT.adminPrivilegesGranted ? `
                     <option value="Sektor i operater"><div value="3" id="val"></div></option>
                     <option value="Prioritet"><div value="4" id="val"></div></option>
@@ -495,10 +714,10 @@
                 <button class="to-button" onclick="ZEALOT.addCompany();"><i class="fa fa-plus"></i></button>
               </div>
               <div class="to-client-name gone">
-                <input type="text" placeholder="Ime klijenta" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ime klijenta'"></input>
+                <input type="text" placeholder="Ime klijenta" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ime klijenta'" oninput="ZEALOT.cnChanged(this);"></input>
               </div>
               <div class="to-client-phone gone">
-                <input type="text" placeholder="Telefon klijenta" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Telefon klijenta'"></input>
+                <input type="text" placeholder="Telefon klijenta" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Telefon klijenta'" oninput="ZEALOT.cpChanged(this);"></input>
               </div>
               <div class="to-sector gone">
                 <input id="sector-select-ticket" type="search" list="select-sector-ticket" placeholder="Sektor" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Sektor'" oninput="$ZEALOT.ticketSectorSelect(this)">
@@ -533,6 +752,7 @@
               </div>
             </div>
           </div>
+          <input class="to-tags gone">
           <div class="main-panel-ticket scrollable-hotfix container">
         `;
         for (var i = 0; i < responseArray.length; i++) {
@@ -540,6 +760,7 @@
             <div class="` + ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `internal-message` : `operator-message`) : `client-message`) + `">
               ` + responseArray[i].body +
             ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `` : `<div class="unselectable speechdart">◥</div>`) : `<div class="unselectable speechdart">◤</div>`) + `
+              <div class="timestamp">` + ((responseArray[i].side) ? responseArray[i].onm + ` &bull; ` : "") + ZEALOT.formatDate(responseArray[i].messageCreated) + `</div>
             </div>
           `;
         }
@@ -781,7 +1002,7 @@
       if ((ZEALOT.allOperators[i].idSc == idS || idS == 0) && ZEALOT.allOperators[i].idSc != null)
         datalistHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
     }
-    $("#select-operator").html(datalistHtml);
+    insertHtml("#select-operator", datalistHtml);
   };
 
   ZEALOT.statsOperatorSelect = function(e) {
@@ -802,11 +1023,13 @@
     if (val === "") {
       ZEALOT.idSelectionForTicket = 0;
       $("div[class^='to-']").addClass("gone");
+      $(".bootstrap-tagsinput").addClass("gone");
     } else
       $('#select-selection-ticket option').each(function() {
         if (this.value.toUpperCase() === val.toUpperCase()) {
           ZEALOT.idSelectionForTicket = $(this).find("#val").attr("value");
           $("div[class^='to-']").addClass("gone");
+          $(".bootstrap-tagsinput").addClass("gone");
           switch ($(this).find("#val").attr("value")) {
             case 1, "1":
               $(".to-status").removeClass("gone");
@@ -825,6 +1048,23 @@
             case 4, "4":
               $(".to-priority").removeClass("gone");
               break;
+            case 5, "5":
+              $ajaxUtils.sendGetRequest(
+                ZEALOT.apiRoot + "getTags" + "?idT=" + ZEALOT.idTicketCurrent,
+                function(responseArray) {
+                  $(".to-tags").tagsinput("removeAll");
+                  $(".to-tags").tagsinput({
+                    trimValue: true
+                  });
+                  for (var i = 0; i < responseArray.length; i++) {
+                    $(".to-tags").tagsinput("add", responseArray[i].tagName);
+                  }
+                  $(".to-tags").removeClass("gone");
+                  $(".bootstrap-tagsinput").removeClass("gone");
+                },
+                true /*, ZEALOT.bearer*/
+              );
+              break;
             default:
               break;
           }
@@ -835,9 +1075,17 @@
 
   ZEALOT.ticketSectorSelect = function(e) {
     var val = e.value;
-    if (val === "")
+    if (val === "") {
       ZEALOT.idSectorForTicket = 0;
-    else
+      $("#operator-select-ticket").val("");
+      var datalistHtmlSectorCleared = "";
+      for (var i = 0; i < ZEALOT.allOperators.length; i++) {
+        if (ZEALOT.allOperators[i].idSc != null)
+          datalistHtmlSectorCleared += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
+      }
+      console.log(datalistHtmlSectorCleared);
+      insertHtml("#select-operator-ticket", datalistHtmlSectorCleared);
+    } else
       $('#select-sector-ticket option').each(function() {
         if (this.value.toUpperCase() === val.toUpperCase()) {
           ZEALOT.idSectorForTicket = $(this).find("#val").attr("value");
@@ -848,7 +1096,8 @@
             if ((ZEALOT.allOperators[i].idSc == ZEALOT.idSectorForTicket || ZEALOT.idSectorForTicket == 0) && ZEALOT.allOperators[i].idSc != null)
               datalistHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
           }
-          $("#select-operator-ticket").html(datalistHtml);
+          console.log(datalistHtml);
+          insertHtml("#select-operator-ticket", datalistHtml);
         }
       });
   };

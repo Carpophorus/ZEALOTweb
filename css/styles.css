@@ -723,6 +723,31 @@ input:checked+.slider:before {
   background-color: #003d3d;
 }
 
+.bootstrap-tagsinput {
+  position: absolute;
+  top: 9vh;
+  width: 99%;
+  z-index: 100;
+  max-height: 15vh;
+  overflow-y: scroll;
+  line-height: inherit;
+  padding: 1vh;
+}
+
+.bootstrap-tagsinput>span {
+  padding: 0.5vh;
+  display: inline-block;
+  margin: 0.3vh;
+}
+
+.label-info {
+  background-color: #00b3b3;
+}
+
+.bootstrap-tagsinput .tag {
+  color: #f9fdfd;
+}
+
 .main-panel-ticket>div {
   position: relative;
   margin-right: 1.5vh;
@@ -760,6 +785,16 @@ input:checked+.slider:before {
   right: -.2vh;
   bottom: -1.4vh;
   color: #7fd9d9;
+}
+
+.timestamp {
+  font-size: 1.5vh;
+  padding-top: 2vh;
+  color: #00b3b3;
+}
+
+.operator-message>.timestamp {
+  color: #f9fdfd;
 }
 
 .main-panel-ticket>.client-message {
@@ -825,6 +860,10 @@ input:checked+.slider:before {
 
 .trumbowyg-box {
   margin: 0;
+}
+
+.trumbowyg-box #mail-signature-logo {
+  width: 20vh;
 }
 
 .trumbowyg-editor {
