@@ -648,7 +648,7 @@ input:checked+.slider:before {
   color: #003d3d;
 }
 
-.ticket-container>.tc-status, .ticket-container>.tc-type, .ticket-container>.tc-hide {
+.ticket-container>.tc-status, .ticket-container>.tc-type, .ticket-container>.tc-hide, .ticket-container>.tc-assign {
   text-align: center;
 }
 
@@ -680,10 +680,16 @@ input:checked+.slider:before {
   cursor: pointer;
 }
 
-.ticket-container>.tc-status {
+.ticket-container>.tc-status, .ticket-container>.tc-assign {
   font-size: 115%;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
+}
+
+.ticket-container>.tc-assign {
+  font-size: 170%;
+  line-height: 3vh;
+  padding-top: 0.2vh;
 }
 
 .ticket-container>.fa {

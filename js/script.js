@@ -678,7 +678,7 @@
                     <option value="Kompanija i klijent"><div value="2" id="val"></div></option>
                     <option value="Tagovi"><div value="5" id="val"></div></option>
                     ` + (ZEALOT.adminPrivilegesGranted ? `
-                    <option value="Sektor i operater"><div value="3" id="val"></div></option>
+                    <option value="Preraspodela"><div value="3" id="val"></div></option>
                     <option value="Prioritet"><div value="4" id="val"></div></option>
                     ` : ``) + `
                 </datalist>
@@ -688,7 +688,8 @@
                 <datalist id="select-status-ticket">
         `;
         for (var i = 0; i < ZEALOT.allTicketStatuses.length; i++)
-          ticketHtml += `<option value="` + ZEALOT.allTicketStatuses[i].stn + `"><div value="` + ZEALOT.allTicketStatuses[i].idSt + `" id="val"></div></option>`;
+          if (Number(ZEALOT.allTicketStatuses[i].idSt) <= 4 || Number(ZEALOT.allTicketStatuses[i].idSt) > 4 && ZEALOT.adminPrivilegesGranted)
+            ticketHtml += `<option value="` + ZEALOT.allTicketStatuses[i].stn + `"><div value="` + ZEALOT.allTicketStatuses[i].idSt + `" id="val"></div></option>`;
         ticketHtml += `
                 </datalist>
               </div>
@@ -813,6 +814,34 @@
         default:
           break;
       }
+      var assignedOperator = Number(messagesArray[i].idOperator);
+      var assignedSector = Number(messagesArray[i].idSector);
+      var sectorSign = "";
+      var sectorName = "";
+      switch (assignedSector) {
+        case 1:
+          sectorSign = "🅞";
+          sectorName = "OPERATIVA";
+          break;
+        case 2:
+          sectorSign = "🅧";
+          sectorName = "PODRŠKA";
+          break;
+        case 3:
+          sectorSign = "🅟";
+          sectorName = "PRODAJA";
+          break;
+        case 4:
+          sectorSign = "🅣";
+          sectorName = "TEHNIKA";
+          break;
+        case 5:
+          sectorSign = "🅕";
+          sectorName = "FINANSIJE";
+          break;
+        default:
+          break;
+      }
       mainTicketsHtml += `
         <div class="ticket-container row` + ((messagesArray[i].isUnread) ? ` open-sans-dark-bold` : ``) + `" onclick="$ZEALOT.ticketClicked(` + messagesArray[i].idTicket + `);">
           <div class="tc-priority-` + messagesArray[i].idPriority + ` col-1 fa fa-circle" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
@@ -821,9 +850,12 @@
           <div class="tc-subject col-3">` + messagesArray[i].eMailSubject + `</div>
           <div class="tc-status col-1" data-toggle="tooltip" data-placement="left" title="` + messagesArray[i].statusName + `">&#` + (10101 + messagesArray[i].idStatus) + `;</div>
           <div class="tc-type col-1 fa ` + statusIcon + `" data-toggle="tooltip" data-placement="left" title="` + messagesArray[i].typeName + `"></div>
-          <div class="` + ((messagesArray[i].isHidden) ? `tc-show` : `tc-hide`) + ` col-1 fa fa-trash ` + ((messagesArray[i].isUnread) ? `hidden` : ``) + `" data-toggle="tooltip" data-placement="left" title="` + ((messagesArray[i].isHidden) ? `OTKRIJ TIKET` : `SAKRIJ TIKET`) + `" onclick="$ZEALOT.hideOrShowTicket(this, ` + messagesArray[i].idTicket + `, ` + messagesArray[i].isUnread + `)"></div>
+          <div class="tc-assign col-1" data-toggle="tooltip" data-placement="left" title="` + ((sectorName != "") ? sectorName : "NEDODELJEN") + `">` + sectorSign + `</div>
         </div>
       `;
+      /*
+      <div class="` + ((messagesArray[i].isHidden) ? `tc-show` : `tc-hide`) + ` col-1 fa fa-trash ` + ((messagesArray[i].isUnread) ? `hidden` : ``) + `" data-toggle="tooltip" data-placement="left" title="` + ((messagesArray[i].isHidden) ? `OTKRIJ TIKET` : `SAKRIJ TIKET`) + `" onclick="$ZEALOT.hideOrShowTicket(this, ` + messagesArray[i].idTicket + `, ` + messagesArray[i].isUnread + `)"></div>
+      */
     }
     mainTicketsHtml += `
       </div>
@@ -841,7 +873,11 @@
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=false",
         function(responseArray) {
-          ZEALOT.ccAux(responseArray);
+          var responseArrayModified = [];
+          for (var i = 0; i < responseArray.length; i++)
+            if (Number(responseArray[i].idStatus) < 4)
+              responseArrayModified.push(responseArray[i]);
+          ZEALOT.ccAux(responseArrayModified);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -850,6 +886,18 @@
         ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=true",
         function(responseArray) {
           ZEALOT.ccAux(responseArray);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+    } else if ($(e).hasClass("t-unassigned")) {
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=false",
+        function(responseArray) {
+          var responseArrayModified = [];
+          for (var i = 0; i < responseArray.length; i++)
+            if ((Number(responseArray[i].idOperator) == 0 || Number(responseArray[i].idSector) == 0) && Number(responseArray[i].idStatus) < 4)
+              responseArrayModified.push(responseArray[i]);
+          ZEALOT.ccAux(responseArrayModified);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1410,9 +1458,12 @@
           <button class="popup-button" onclick="$ZEALOT.searchTickets();"><i class="fa fa-search"></i></button>
         </div>
         <h2 class="oswald-dark-blue-normal">Svi tiketi</h2>
-        <div class="` + ((ZEALOT.allUnreadTicketsCount > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-visible" onclick="$ZEALOT.categoryClicked(this);">NESAKRIVENI<div class="num">` + ((ZEALOT.allUnreadTicketsCount > 0) ? ZEALOT.allUnreadTicketsCount : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
-        <div class="open-sans-dark-normal bump tabbed category t-hidden" onclick="$ZEALOT.categoryClicked(this);">SAKRIVENI<div class="fa fa-caret-right hidden"></div></div>
+        <div class="` + ((ZEALOT.allUnreadTicketsCount > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-visible" onclick="$ZEALOT.categoryClicked(this);">NEKOMPLETIRANI<div class="num">` + ((ZEALOT.allUnreadTicketsCount > 0) ? ZEALOT.allUnreadTicketsCount : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
+        <div class="open-sans-dark-normal bump tabbed category t-unassigned" onclick="$ZEALOT.categoryClicked(this);">NEDODELJENI<div class="num"></div><div class="fa fa-caret-right hidden"></div></div>
     `;
+    /*
+    <div class="open-sans-dark-normal bump tabbed category t-hidden" onclick="$ZEALOT.categoryClicked(this);">SAKRIVENI<div class="fa fa-caret-right hidden"></div></div>
+    */
     popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po prioritetu</h2>`;
     for (var i = 0; i < ZEALOT.allTicketPriorities.length; i++) {
       popupTicketsHtml += `
