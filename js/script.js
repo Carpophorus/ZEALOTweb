@@ -1458,8 +1458,10 @@
           <button class="popup-button" onclick="$ZEALOT.searchTickets();"><i class="fa fa-search"></i></button>
         </div>
         <h2 class="oswald-dark-blue-normal">Svi tiketi</h2>
-        <div class="` + ((ZEALOT.allUnreadTicketsCount > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-visible" onclick="$ZEALOT.categoryClicked(this);">NEKOMPLETIRANI<div class="num">` + ((ZEALOT.allUnreadTicketsCount > 0) ? ZEALOT.allUnreadTicketsCount : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
+        <div class="` + ((ZEALOT.allUnreadTicketsCount > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-visible" onclick="$ZEALOT.categoryClicked(this);">NEKOMPLETIRANI<div class="num">` + ((ZEALOT.allUnreadTicketsCount > 0) ? ZEALOT.allUnreadTicketsCount : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>` +
+      ((ZEALOT.adminPrivilegesGranted == true) ? `
         <div class="open-sans-dark-normal bump tabbed category t-unassigned" onclick="$ZEALOT.categoryClicked(this);">NEDODELJENI<div class="num"></div><div class="fa fa-caret-right hidden"></div></div>
+        ` : ``) + `
     `;
     /*
     <div class="open-sans-dark-normal bump tabbed category t-hidden" onclick="$ZEALOT.categoryClicked(this);">SAKRIVENI<div class="fa fa-caret-right hidden"></div></div>
