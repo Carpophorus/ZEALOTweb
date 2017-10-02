@@ -1466,16 +1466,16 @@
     /*
     <div class="open-sans-dark-normal bump tabbed category t-hidden" onclick="$ZEALOT.categoryClicked(this);">SAKRIVENI<div class="fa fa-caret-right hidden"></div></div>
     */
-    popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po prioritetu</h2>`;
-    for (var i = 0; i < ZEALOT.allTicketPriorities.length; i++) {
-      popupTicketsHtml += `
-        <div class="` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-priority" value=` + ZEALOT.allTicketPriorities[i].idP + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketPriorities[i].pn + `<div class="num">` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? ZEALOT.allTicketPriorities[i].unread : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
-      `;
-    }
     popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po statusu</h2>`;
     for (var i = 0; i < ZEALOT.allTicketStatuses.length; i++) {
       popupTicketsHtml += `
         <div class="` + ((ZEALOT.allTicketStatuses[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-status" value=` + ZEALOT.allTicketStatuses[i].idSt + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketStatuses[i].stn + `<div class="num">` + ((ZEALOT.allTicketStatuses[i].unread > 0) ? ZEALOT.allTicketStatuses[i].unread : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
+      `;
+    }
+    popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po prioritetu</h2>`;
+    for (var i = 0; i < ZEALOT.allTicketPriorities.length; i++) {
+      popupTicketsHtml += `
+        <div class="` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-priority" value=` + ZEALOT.allTicketPriorities[i].idP + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketPriorities[i].pn + `<div class="num">` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? ZEALOT.allTicketPriorities[i].unread : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
       `;
     }
     popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po tipu</h2>`;
