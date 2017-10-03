@@ -512,13 +512,7 @@ input:checked+.slider:before {
 .stats-progress-bar {
   width: 0;
   height: 1vh;
-  -webkit-transition: width 3s linear;
-  transition: width 3s linear;
   background-color: #00b3b3;
-}
-
-.stats-progress-bar-loaded {
-  width: 100%;
 }
 
 .title-fixed {
@@ -562,14 +556,19 @@ input:checked+.slider:before {
   text-align: center;
 }
 
-.stat:nth-child(1)>.stat-title, .stat:nth-child(1)>.stat-numbers>.small-numbers-container {
+.stat:nth-child(1)>.stat-title, .stat:nth-child(1)>.stat-numbers>.small-numbers-container, .special-stat>.stat-title, .special-stat>.stat-numbers>.small-numbers-container {
   font-size: 130%;
   line-height: 3vh;
 }
 
-.stat:nth-child(1)>.stat-numbers>.large-number {
+.stat:nth-child(1)>.stat-numbers>.large-number, .special-stat>.stat-numbers>.large-number {
   font-size: 14vh;
   line-height: 19.5vh;
+}
+
+.special-stat {
+  height: 100%;
+  padding-top: 20vh;
 }
 
 .main-panel-contacts {
@@ -648,7 +647,7 @@ input:checked+.slider:before {
   color: #003d3d;
 }
 
-.ticket-container>.tc-status, .ticket-container>.tc-type, .ticket-container>.tc-hide, .ticket-container>.tc-assign {
+.ticket-container>.tc- us, .ticket-container>.tc-type, .ticket-container>.tc-hide, .ticket-container>.tc-assign {
   text-align: center;
 }
 
@@ -868,8 +867,9 @@ input:checked+.slider:before {
   margin: 0;
 }
 
-.trumbowyg-box #mail-signature-logo {
+.trumbowyg-box #mail-signature-logo, .operator-message. #mail-signature-logo {
   width: 20vh;
+  height: 10vh;
 }
 
 .trumbowyg-editor {

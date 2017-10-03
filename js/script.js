@@ -34,6 +34,7 @@
   ZEALOT.s1 = "";
   ZEALOT.s2 = "";
   ZEALOT.s3 = "";
+  var specialCounters = {};
   ZEALOT.nc = false;
 
   $.trumbowyg.svgPath = 'wyg/ui/icons.svg';
@@ -155,7 +156,12 @@
   };
 
   ZEALOT.statsLoaded = function(e) {
-    $(".stats-progress-bar").addClass("stats-progress-bar-loaded");
+    $(".stats-progress-bar").animate({
+        width: $(".stats-progress-bar").parent().width() + 15
+      }, 10 * 1000, "linear",
+      function() {
+        if ($(".statistics-button").hasClass("active")) ZEALOT.statsSearch();
+      });
     $(e).remove();
   };
 
@@ -199,34 +205,13 @@
       <br>
       <br>
       <div id="mail-signature" style="margin-left: 5px">
-        <!-- the leaf image needs to have absolute path after migration to web -->
-        <svg version="1.1" id="mail-signature-logo" width="20vh" height="100%" display="block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4;" xml:space="preserve">
-          <style type="text/css">
-          	.st0{fill:#E62022;}
-          	.st1{fill:#918F93;}
-          </style>
-          <g>
-          	<rect x="344.9" y="489.4" class="st0" width="91.8" height="90.7"/>
-          	<path class="st1" d="M344.9,211.8h259.9l-0.1,0.1c45.8,0,82.9,37.1,82.9,82.9l0.1-0.1v202.6l-0.1,0.1c0,45.8-37.1,82.9-82.9,82.9
-          		l0.1-0.1H455.4V476.6H558l-0.1,0.1c8.3,0,15.1-6.7,15.1-15.1l0.1-0.1V325.6l-0.1,0.1c0-8.3-6.7-15.1-15.1-15.1h0.1H444.5V469h-99.6
-          		"/>
-          	<rect x="730.3" y="489.4" class="st1" width="91.7" height="90.7"/>
-          	<path class="st1" d="M974.8,211.9l0.1-0.1H730.2V469h99.6v-29.9h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.3L944,470
-          		c0,4.1-3.4,7.5-7.5,7.5l0.1-0.1h-95.9V580h134l-0.1,0.1c45.8,0,82.9-37.1,82.9-82.9v-0.1v-63l-0.1,0.1c-1-20.1-13.6-37.7-32.2-45.2
-          		l0,0c18.6-7.5,31.2-25.2,32.2-45.2h0.1v-49.1C1057.7,249,1020.5,211.9,974.8,211.9z M944.3,346.2l-0.1,0.1c0,4.1-3.4,7.5-7.5,7.5
-          		h0.1h-0.1H829.8v-38.3h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.2H944.3z"/>
-          	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
-          	<path class="st1" d="M1426.1,497.3v-60.7l-0.1,0.1c0-45.8-37.1-82.9-82.9-82.9h0.1h-146.8v-38.3h212.6V211.8h-239.1l-0.1,0.1
-          		c-45.8,0-82.9,37.1-82.9,82.9v-0.1v61.6v0.1c0,45.8,37.1,82.9,82.9,82.9l0.1-0.1h145v37.4h-117.4V580h145.7l-0.1,0.1
-          		c45.8,0,82.9-37.1,82.9-82.9"/>
-          </g>
-        </svg>
+        <div id="mail-signature-logo" width="20vh" height="10vh" display="block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; background-size: auto 100%"></div>
         <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
         <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
         <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
         <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone">` + ZEALOT.userInfo.phone + `</span>
         <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh; position: relative">
-          <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.png') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
+          <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
           <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; position: absolute; left: 4vh">
             Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
             <br>Please print this e-mail only if necessary.
@@ -357,34 +342,13 @@
                   <br>
                   <br>
                   <div id="mail-signature" style="margin-left: 5px">
-                    <!-- the leaf image needs to have absolute path after migration to web -->
-                    <svg version="1.1" id="mail-signature-logo" width="20vh" height="100%" display="block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4;" xml:space="preserve">
-                      <style type="text/css">
-                      	.st0{fill:#E62022;}
-                      	.st1{fill:#918F93;}
-                      </style>
-                      <g>
-                      	<rect x="344.9" y="489.4" class="st0" width="91.8" height="90.7"/>
-                      	<path class="st1" d="M344.9,211.8h259.9l-0.1,0.1c45.8,0,82.9,37.1,82.9,82.9l0.1-0.1v202.6l-0.1,0.1c0,45.8-37.1,82.9-82.9,82.9
-                      		l0.1-0.1H455.4V476.6H558l-0.1,0.1c8.3,0,15.1-6.7,15.1-15.1l0.1-0.1V325.6l-0.1,0.1c0-8.3-6.7-15.1-15.1-15.1h0.1H444.5V469h-99.6
-                      		"/>
-                      	<rect x="730.3" y="489.4" class="st1" width="91.7" height="90.7"/>
-                      	<path class="st1" d="M974.8,211.9l0.1-0.1H730.2V469h99.6v-29.9h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.3L944,470
-                      		c0,4.1-3.4,7.5-7.5,7.5l0.1-0.1h-95.9V580h134l-0.1,0.1c45.8,0,82.9-37.1,82.9-82.9v-0.1v-63l-0.1,0.1c-1-20.1-13.6-37.7-32.2-45.2
-                      		l0,0c18.6-7.5,31.2-25.2,32.2-45.2h0.1v-49.1C1057.7,249,1020.5,211.9,974.8,211.9z M944.3,346.2l-0.1,0.1c0,4.1-3.4,7.5-7.5,7.5
-                      		h0.1h-0.1H829.8v-38.3h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.2H944.3z"/>
-                      	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
-                      	<path class="st1" d="M1426.1,497.3v-60.7l-0.1,0.1c0-45.8-37.1-82.9-82.9-82.9h0.1h-146.8v-38.3h212.6V211.8h-239.1l-0.1,0.1
-                      		c-45.8,0-82.9,37.1-82.9,82.9v-0.1v61.6v0.1c0,45.8,37.1,82.9,82.9,82.9l0.1-0.1h145v37.4h-117.4V580h145.7l-0.1,0.1
-                      		c45.8,0,82.9-37.1,82.9-82.9"/>
-                      </g>
-                    </svg>
+                    <div id="mail-signature-logo" width="20vh" height="10vh" display="block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; background-size: auto 100%"></div>
                     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone">` + ZEALOT.userInfo.phone + `</span>
                     <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh; position: relative">
-                      <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.png') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
+                      <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
                       <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; position: absolute; left: 4vh">
                         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
                         <br>Please print this e-mail only if necessary.
@@ -444,34 +408,13 @@
                   <br>
                   <br>
                   <div id="mail-signature" style="margin-left: 5px">
-                    <!-- the leaf image needs to have absolute path after migration to web -->
-                    <svg version="1.1" id="mail-signature-logo" width="20vh" height="100%" display="block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4;" xml:space="preserve">
-                      <style type="text/css">
-                      	.st0{fill:#E62022;}
-                      	.st1{fill:#918F93;}
-                      </style>
-                      <g>
-                      	<rect x="344.9" y="489.4" class="st0" width="91.8" height="90.7"/>
-                      	<path class="st1" d="M344.9,211.8h259.9l-0.1,0.1c45.8,0,82.9,37.1,82.9,82.9l0.1-0.1v202.6l-0.1,0.1c0,45.8-37.1,82.9-82.9,82.9
-                      		l0.1-0.1H455.4V476.6H558l-0.1,0.1c8.3,0,15.1-6.7,15.1-15.1l0.1-0.1V325.6l-0.1,0.1c0-8.3-6.7-15.1-15.1-15.1h0.1H444.5V469h-99.6
-                      		"/>
-                      	<rect x="730.3" y="489.4" class="st1" width="91.7" height="90.7"/>
-                      	<path class="st1" d="M974.8,211.9l0.1-0.1H730.2V469h99.6v-29.9h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.3L944,470
-                      		c0,4.1-3.4,7.5-7.5,7.5l0.1-0.1h-95.9V580h134l-0.1,0.1c45.8,0,82.9-37.1,82.9-82.9v-0.1v-63l-0.1,0.1c-1-20.1-13.6-37.7-32.2-45.2
-                      		l0,0c18.6-7.5,31.2-25.2,32.2-45.2h0.1v-49.1C1057.7,249,1020.5,211.9,974.8,211.9z M944.3,346.2l-0.1,0.1c0,4.1-3.4,7.5-7.5,7.5
-                      		h0.1h-0.1H829.8v-38.3h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.2H944.3z"/>
-                      	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
-                      	<path class="st1" d="M1426.1,497.3v-60.7l-0.1,0.1c0-45.8-37.1-82.9-82.9-82.9h0.1h-146.8v-38.3h212.6V211.8h-239.1l-0.1,0.1
-                      		c-45.8,0-82.9,37.1-82.9,82.9v-0.1v61.6v0.1c0,45.8,37.1,82.9,82.9,82.9l0.1-0.1h145v37.4h-117.4V580h145.7l-0.1,0.1
-                      		c45.8,0,82.9-37.1,82.9-82.9"/>
-                      </g>
-                    </svg>
+                    <div id="mail-signature-logo" width="20vh" height="10vh" display="block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; background-size: auto 100%"></div>
                     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
                     <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone">` + ZEALOT.userInfo.phone + `</span>
                     <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh; position: relative">
-                      <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.png') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
+                      <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
                       <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; position: absolute; left: 4vh">
                         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
                         <br>Please print this e-mail only if necessary.
@@ -1131,7 +1074,6 @@
         if (ZEALOT.allOperators[i].idSc != null)
           datalistHtmlSectorCleared += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
       }
-      console.log(datalistHtmlSectorCleared);
       insertHtml("#select-operator-ticket", datalistHtmlSectorCleared);
     } else
       $('#select-sector-ticket option').each(function() {
@@ -1144,7 +1086,6 @@
             if ((ZEALOT.allOperators[i].idSc == ZEALOT.idSectorForTicket || ZEALOT.idSectorForTicket == 0) && ZEALOT.allOperators[i].idSc != null)
               datalistHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
           }
-          console.log(datalistHtml);
           insertHtml("#select-operator-ticket", datalistHtml);
         }
       });
@@ -1525,7 +1466,7 @@
     `);
   };
 
-  ZEALOT.ssAux = function() {
+  ZEALOT.ssAux = function(all) {
     var statsSearchHtml = `
       <div class="title-fixed oswald-blue-semibold">
         Statistika
@@ -1535,72 +1476,94 @@
       </div>
       <div class="main-panel-stats scrollable row">
     `;
-    var s0sum = 0;
-    var s1sum = 0;
-    var s2sum = 0;
-    var s3sum = 0;
-    for (var i = 0; i < ZEALOT.s0.length; i++) {
-      s0sum += ZEALOT.s0[i].cnt;
-      s1sum += ZEALOT.s1[i].cnt;
-      s2sum += ZEALOT.s2[i].cnt;
-      s3sum += ZEALOT.s3[i].cnt;
-    }
-    statsSearchHtml += `
+    if (all == false) {
+      var s0sum = 0;
+      var s1sum = 0;
+      var s2sum = 0;
+      var s3sum = 0;
+      for (var i = 0; i < ZEALOT.s0.length; i++) {
+        s0sum += ZEALOT.s0[i].cnt;
+        s1sum += ZEALOT.s1[i].cnt;
+        s2sum += ZEALOT.s2[i].cnt;
+        s3sum += ZEALOT.s3[i].cnt;
+      }
+      statsSearchHtml += `
         <div class="stat col-12 col-md-6">
           <div class="stat-title oswald-blue-normal">Za poslednja 24h:</div>
           <div class="stat-numbers">
             <div class="large-number oswald-dark-blue-normal">` + s1sum + `</div>
             <div class="small-numbers-container">
-    `;
-    for (var i = 0; i < ZEALOT.s1.length; i++)
-      statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s1[i].cnt + ` ` + ZEALOT.s1[i].pn + `</div>`;
-    statsSearchHtml += `
+      `;
+      for (var i = 0; i < ZEALOT.s1.length; i++)
+        statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s1[i].cnt + ` ` + ZEALOT.s1[i].pn + `</div>`;
+      statsSearchHtml += `
             </div>
           </div>
         </div>
-    `;
-    statsSearchHtml += `
+      `;
+      statsSearchHtml += `
         <div class="stat col-12 col-md-6">
           <div class="stat-title oswald-blue-normal">Za poslednjih 7 dana:</div>
           <div class="stat-numbers">
             <div class="large-number oswald-dark-blue-normal">` + s2sum + `</div>
             <div class="small-numbers-container">
-    `;
-    for (var i = 0; i < ZEALOT.s2.length; i++)
-      statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s2[i].cnt + ` ` + ZEALOT.s2[i].pn + `</div>`;
-    statsSearchHtml += `
+      `;
+      for (var i = 0; i < ZEALOT.s2.length; i++)
+        statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s2[i].cnt + ` ` + ZEALOT.s2[i].pn + `</div>`;
+      statsSearchHtml += `
             </div>
           </div>
         </div>
-    `;
-    statsSearchHtml += `
+      `;
+      statsSearchHtml += `
         <div class="stat col-12 col-md-6">
           <div class="stat-title oswald-blue-normal">Za poslednjih 30 dana:</div>
           <div class="stat-numbers">
             <div class="large-number oswald-dark-blue-normal">` + s3sum + `</div>
             <div class="small-numbers-container">
-    `;
-    for (var i = 0; i < ZEALOT.s3.length; i++)
-      statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s3[i].cnt + ` ` + ZEALOT.s3[i].pn + `</div>`;
-    statsSearchHtml += `
+      `;
+      for (var i = 0; i < ZEALOT.s3.length; i++)
+        statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s3[i].cnt + ` ` + ZEALOT.s3[i].pn + `</div>`;
+      statsSearchHtml += `
             </div>
           </div>
         </div>
-    `;
-    statsSearchHtml += `
+      `;
+      statsSearchHtml += `
         <div class="stat col-12 col-md-6">
           <div class="stat-title oswald-blue-normal">Od početka evidentiranja:</div>
           <div class="stat-numbers">
             <div class="large-number oswald-dark-blue-normal">` + s0sum + `</div>
             <div class="small-numbers-container">
-    `;
-    for (var i = 0; i < ZEALOT.s0.length; i++)
-      statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s0[i].cnt + ` ` + ZEALOT.s0[i].pn + `</div>`;
-    statsSearchHtml += `
+      `;
+      for (var i = 0; i < ZEALOT.s0.length; i++)
+        statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s0[i].cnt + ` ` + ZEALOT.s0[i].pn + `</div>`;
+      statsSearchHtml += `
             </div>
           </div>
         </div>
-    `;
+      `;
+    } else {
+      statsSearchHtml += `<div class="special-stat col-md-1 hidden-sm-down"></div>`;
+      for (var i = 0; i < ZEALOT.allSectors.length; i++) {
+        var sum = 0;
+        for (var j = 0; j < specialCounters['s' + i].length; j++) sum += specialCounters['s' + i][j].cnt;
+        statsSearchHtml += `
+          <div class="special-stat stat col-12 col-md-2">
+            <div class="stat-title oswald-blue-normal">` + ZEALOT.allSectors[i].scn + `:</div>
+            <div class="stat-numbers">
+              <div class="large-number oswald-dark-blue-normal">` + sum + `</div>
+              <div class="small-numbers-container">
+        `;
+        for (var j = 0; j < specialCounters['s' + i].length; j++)
+          statsSearchHtml += `<div class="small-number-` + (j + 1) + `">` + specialCounters['s' + i][j].cnt + ` ` + specialCounters['s' + i][j].pn + `</div>`;
+        statsSearchHtml += `
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
     statsSearchHtml += `
       </div>
     `;
@@ -1609,42 +1572,90 @@
 
   ZEALOT.statsSearch = function() {
     var sync = 0;
-    $ajaxUtils.sendGetRequest(
-      ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
-      function(responseArray) {
-        ZEALOT.s0 = responseArray;
-        sync = sync + 1;
-        if (sync == 4) ZEALOT.ssAux();
-      },
-      true /*, ZEALOT.bearer*/
-    );
-    $ajaxUtils.sendGetRequest(
-      ZEALOT.apiRoot + "countTickets" + "?t=1" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
-      function(responseArray) {
-        ZEALOT.s1 = responseArray;
-        sync = sync + 1;
-        if (sync == 4) ZEALOT.ssAux();
-      },
-      true /*, ZEALOT.bearer*/
-    );
-    $ajaxUtils.sendGetRequest(
-      ZEALOT.apiRoot + "countTickets" + "?t=2" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
-      function(responseArray) {
-        ZEALOT.s2 = responseArray;
-        sync = sync + 1;
-        if (sync == 4) ZEALOT.ssAux();
-      },
-      true /*, ZEALOT.bearer*/
-    );
-    $ajaxUtils.sendGetRequest(
-      ZEALOT.apiRoot + "countTickets" + "?t=3" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
-      function(responseArray) {
-        ZEALOT.s3 = responseArray;
-        sync = sync + 1;
-        if (sync == 4) ZEALOT.ssAux();
-      },
-      true /*, ZEALOT.bearer*/
-    );
+    if (Number(ZEALOT.idOperatorForStats) == 0 && Number(ZEALOT.idSectorForStats) == 0) {
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[0].idSc + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          specialCounters['s' + 0] = responseArray;
+          sync = sync + 1;
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[1].idSc + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          specialCounters['s' + 1] = responseArray;
+          sync = sync + 1;
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[2].idSc + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          specialCounters['s' + 2] = responseArray;
+          sync = sync + 1;
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[3].idSc + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          specialCounters['s' + 3] = responseArray;
+          sync = sync + 1;
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[4].idSc + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          specialCounters['s' + 4] = responseArray;
+          sync = sync + 1;
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+    } else {
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          ZEALOT.s0 = responseArray;
+          sync = sync + 1;
+          if (sync == 4) ZEALOT.ssAux(false);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=1" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          ZEALOT.s1 = responseArray;
+          sync = sync + 1;
+          if (sync == 4) ZEALOT.ssAux(false);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=2" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          ZEALOT.s2 = responseArray;
+          sync = sync + 1;
+          if (sync == 4) ZEALOT.ssAux(false);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=3" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
+        function(responseArray) {
+          ZEALOT.s3 = responseArray;
+          sync = sync + 1;
+          if (sync == 4) ZEALOT.ssAux(false);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+    }
   };
 
   ZEALOT.searchNC = function(e) {
