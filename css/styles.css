@@ -867,7 +867,7 @@ input:checked+.slider:before {
   margin: 0;
 }
 
-.trumbowyg-box #mail-signature-logo, .operator-message. #mail-signature-logo {
+.trumbowyg-editor>#mail-signature>#mail-signature-logo, .operator-message.>#mail-signature>#mail-signature-logo {
   width: 20vh;
   height: 10vh;
 }

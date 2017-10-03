@@ -205,14 +205,14 @@
       <br>
       <br>
       <div id="mail-signature" style="margin-left: 5px">
-        <div id="mail-signature-logo" width="20vh" height="10vh" display="block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; background-size: auto 100%"></div>
+        <div id="mail-signature-logo" display="inline-block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
         <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-        <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
-        <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
-        <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone">` + ZEALOT.userInfo.phone + `</span>
-        <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh; position: relative">
-          <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
-          <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; position: absolute; left: 4vh">
+        <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh">` + ZEALOT.userInfo.sectorName + `</span>
+        <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh">` + ZEALOT.userInfo.username + `</span>
+        <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh">` + ZEALOT.userInfo.phone + `</span>
+        <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
+          <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
+          <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; left: 4vh">
             Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
             <br>Please print this e-mail only if necessary.
           </div>
@@ -342,14 +342,14 @@
                   <br>
                   <br>
                   <div id="mail-signature" style="margin-left: 5px">
-                    <div id="mail-signature-logo" width="20vh" height="10vh" display="block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; background-size: auto 100%"></div>
+                    <div id="mail-signature-logo" display="inline-block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
                     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
-                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
-                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone">` + ZEALOT.userInfo.phone + `</span>
-                    <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh; position: relative">
-                      <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
-                      <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; position: absolute; left: 4vh">
+                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh">` + ZEALOT.userInfo.sectorName + `</span>
+                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh">` + ZEALOT.userInfo.username + `</span>
+                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh">` + ZEALOT.userInfo.phone + `</span>
+                    <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
+                      <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
+                      <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; left: 4vh">
                         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
                         <br>Please print this e-mail only if necessary.
                       </div>
@@ -408,14 +408,14 @@
                   <br>
                   <br>
                   <div id="mail-signature" style="margin-left: 5px">
-                    <div id="mail-signature-logo" width="20vh" height="10vh" display="block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; background-size: auto 100%"></div>
+                    <div id="mail-signature-logo" display="inline-block" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
                     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector">` + ZEALOT.userInfo.sectorName + `</span>
-                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email">` + ZEALOT.userInfo.username + `</span>
-                    <br><span style="font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone">` + ZEALOT.userInfo.phone + `</span>
-                    <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh; position: relative">
-                      <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: auto 3vh; position: absolute"></div>
-                      <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; position: absolute; left: 4vh">
+                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh">` + ZEALOT.userInfo.sectorName + `</span>
+                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh">` + ZEALOT.userInfo.username + `</span>
+                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh">` + ZEALOT.userInfo.phone + `</span>
+                    <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
+                      <div id="mail-signature-leaf" alt="leaf" style="background: url('https://carpophorus.github.io/ZEALOTweb/img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
+                      <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; left: 4vh">
                         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
                         <br>Please print this e-mail only if necessary.
                       </div>
