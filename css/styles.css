@@ -854,12 +854,12 @@ input:checked+.slider:before {
 }
 
 .mec-send {
-  right: 0;
+  left: 0;
   font-size: 18px;
 }
 
 .mec-internal {
-  right: 50px;
+  right: 0px;
   font-size: 20px;
 }
 
