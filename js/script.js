@@ -167,6 +167,15 @@
 
   ZEALOT.ticketsLoaded = function(e) {
     $('[data-toggle="tooltip"]').tooltip();
+    /*$(".pulse").pulsate({
+      color: "#b30000",
+      reach: 5,
+      speed: 666,
+      pause: 0,
+      glow: true,
+      repeat: true,
+      onHover: false
+    });*/
     $(e).remove();
   };
 
@@ -600,7 +609,7 @@
     return ("" + day + "." + month + "." + year + ". " + hour + ":" + minute + ":" + second);
   };
 
-  ZEALOT.ticketClicked = function(idT) {
+  ZEALOT.ticketClicked = function(idT, completed) {
     if (ZEALOT.hideClicked) {
       ZEALOT.hideClicked = false;
       return;
@@ -619,13 +628,13 @@
               <div class="toc-selection">
                 <input id="selection-select-ticket" type="search" list="select-selection-ticket" placeholder="Podešavanje" onfocus="this.placeholder=''" onblur="this.placeholder='Podešavanje'" oninput="$ZEALOT.ticketSelectionSelect(this)">
                 <datalist id="select-selection-ticket">
-                    <option value="Status i tip"><div value="1" id="val"></div></option>
+                    ` + ((completed == false) ? `<option value="Status i tip"><div value="1" id="val"></div></option>` : ``) + `
                     <option value="Kompanija i klijent"><div value="2" id="val"></div></option>
                     <option value="Tagovi"><div value="5" id="val"></div></option>
-                    ` + (ZEALOT.adminPrivilegesGranted ? `
-                    <option value="Preraspodela"><div value="3" id="val"></div></option>
+                    ` + ((ZEALOT.adminPrivilegesGranted) ? (`
+                    ` + ((completed == false) ? `<option value="Preraspodela"><div value="3" id="val"></div></option>` : ``) + `
                     <option value="Prioritet"><div value="4" id="val"></div></option>
-                    ` : ``) + `
+                    `) : ``) + `
                 </datalist>
               </div>
               <div class="to-status gone">
@@ -787,9 +796,11 @@
         default:
           break;
       }
+      var now = new Date();
+      var lcmt = new Date(messagesArray[i].lcmt);
       mainTicketsHtml += `
-        <div class="ticket-container row` + ((messagesArray[i].isUnread) ? ` open-sans-dark-bold` : ``) + `" onclick="$ZEALOT.ticketClicked(` + messagesArray[i].idTicket + `);">
-          <div class="tc-priority-` + messagesArray[i].idPriority + ` col-1 fa fa-circle" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
+        <div class="ticket-container row` + ((messagesArray[i].isUnread) ? ` open-sans-dark-bold` : ``) + `" onclick="$ZEALOT.ticketClicked(` + messagesArray[i].idTicket + `, ` + ((Number(messagesArray[i].idStatus) < 4) ? `false` : `true`) + `);">
+          <div class="tc-priority-` + messagesArray[i].idPriority + ` col-1 fa fa-circle ` + ((lcmt.getTime() < now.getTime() - 48 * 60 * 60 * 1000 && Number(messagesArray[i].idPriority) == 2) ? `pulse` : ``) + `" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
           <div class="tc-id-len col-2">` + messagesArray[i].idTicket + ` (` + messagesArray[i].conversationLength + `)</div>
           <div class="tc-sender col-3" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].clientName + `, ` + messagesArray[i].companyName + `">` + messagesArray[i].clientMail + `</div>
           <div class="tc-subject col-3">` + messagesArray[i].eMailSubject + `</div>
@@ -1416,12 +1427,14 @@
         <div class="` + ((ZEALOT.allTicketStatuses[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-status" value=` + ZEALOT.allTicketStatuses[i].idSt + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketStatuses[i].stn + `<div class="num">` + ((ZEALOT.allTicketStatuses[i].unread > 0) ? ZEALOT.allTicketStatuses[i].unread : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
       `;
     }
+    /*
     popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po prioritetu</h2>`;
     for (var i = 0; i < ZEALOT.allTicketPriorities.length; i++) {
       popupTicketsHtml += `
         <div class="` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-priority" value=` + ZEALOT.allTicketPriorities[i].idP + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketPriorities[i].pn + `<div class="num">` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? ZEALOT.allTicketPriorities[i].unread : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
       `;
     }
+    */
     popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po tipu</h2>`;
     for (var i = 0; i < ZEALOT.allTicketTypes.length; i++) {
       popupTicketsHtml += `
@@ -1469,7 +1482,7 @@
     `);
   };
 
-  ZEALOT.ssAux = function(all) {
+  ZEALOT.ssAux = function(all, nc) {
     var statsSearchHtml = `
       <div class="title-fixed oswald-blue-semibold">
         Statistika
@@ -1495,12 +1508,18 @@
           <div class="stat-title oswald-blue-normal">Za poslednja 24h:</div>
           <div class="stat-numbers">
             <div class="large-number oswald-dark-blue-normal">` + s1sum + `</div>
-            <div class="small-numbers-container">
       `;
-      for (var i = 0; i < ZEALOT.s1.length; i++)
-        statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s1[i].cnt + ` ` + ZEALOT.s1[i].pn + `</div>`;
-      statsSearchHtml += `
+      if (nc == true) {
+        statsSearchHtml += `
+            <div class="small-numbers-container">
+        `;
+        for (var i = 0; i < ZEALOT.s1.length; i++)
+          statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s1[i].cnt + ` ` + ZEALOT.s1[i].pn + `</div>`;
+        statsSearchHtml += `
             </div>
+        `;
+      }
+      statsSearchHtml += `
           </div>
         </div>
       `;
@@ -1509,12 +1528,18 @@
           <div class="stat-title oswald-blue-normal">Za poslednjih 7 dana:</div>
           <div class="stat-numbers">
             <div class="large-number oswald-dark-blue-normal">` + s2sum + `</div>
-            <div class="small-numbers-container">
       `;
-      for (var i = 0; i < ZEALOT.s2.length; i++)
-        statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s2[i].cnt + ` ` + ZEALOT.s2[i].pn + `</div>`;
-      statsSearchHtml += `
+      if (nc == true) {
+        statsSearchHtml += `
+            <div class="small-numbers-container">
+        `;
+        for (var i = 0; i < ZEALOT.s2.length; i++)
+          statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s2[i].cnt + ` ` + ZEALOT.s2[i].pn + `</div>`;
+        statsSearchHtml += `
             </div>
+        `;
+      }
+      statsSearchHtml += `
           </div>
         </div>
       `;
@@ -1523,12 +1548,18 @@
           <div class="stat-title oswald-blue-normal">Za poslednjih 30 dana:</div>
           <div class="stat-numbers">
             <div class="large-number oswald-dark-blue-normal">` + s3sum + `</div>
-            <div class="small-numbers-container">
       `;
-      for (var i = 0; i < ZEALOT.s3.length; i++)
-        statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s3[i].cnt + ` ` + ZEALOT.s3[i].pn + `</div>`;
-      statsSearchHtml += `
+      if (nc == true) {
+        statsSearchHtml += `
+            <div class="small-numbers-container">
+        `;
+        for (var i = 0; i < ZEALOT.s3.length; i++)
+          statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s3[i].cnt + ` ` + ZEALOT.s3[i].pn + `</div>`;
+        statsSearchHtml += `
             </div>
+        `;
+      }
+      statsSearchHtml += `
           </div>
         </div>
       `;
@@ -1537,12 +1568,18 @@
           <div class="stat-title oswald-blue-normal">Ukupno:</div>
           <div class="stat-numbers">
             <div class="large-number oswald-dark-blue-normal">` + s0sum + `</div>
-            <div class="small-numbers-container">
       `;
-      for (var i = 0; i < ZEALOT.s0.length; i++)
-        statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s0[i].cnt + ` ` + ZEALOT.s0[i].pn + `</div>`;
-      statsSearchHtml += `
+      if (nc == true) {
+        statsSearchHtml += `
+            <div class="small-numbers-container">
+        `;
+        for (var i = 0; i < ZEALOT.s0.length; i++)
+          statsSearchHtml += `<div class="small-number-` + (i + 1) + `">` + ZEALOT.s0[i].cnt + ` ` + ZEALOT.s0[i].pn + `</div>`;
+        statsSearchHtml += `
             </div>
+        `;
+      }
+      statsSearchHtml += `
           </div>
         </div>
       `;
@@ -1556,12 +1593,18 @@
             <div class="stat-title oswald-blue-normal">` + ZEALOT.allSectors[i].scn + `:</div>
             <div class="stat-numbers">
               <div class="large-number oswald-dark-blue-normal">` + sum + `</div>
-              <div class="small-numbers-container">
         `;
-        for (var j = 0; j < specialCounters['s' + i].length; j++)
-          statsSearchHtml += `<div class="small-number-` + (j + 1) + `">` + specialCounters['s' + i][j].cnt + ` ` + specialCounters['s' + i][j].pn + `</div>`;
-        statsSearchHtml += `
+        if (nc == true) {
+          statsSearchHtml += `
+              <div class="small-numbers-container">
+          `;
+          for (var j = 0; j < specialCounters['s' + i].length; j++)
+            statsSearchHtml += `<div class="small-number-` + (j + 1) + `">` + specialCounters['s' + i][j].cnt + ` ` + specialCounters['s' + i][j].pn + `</div>`;
+          statsSearchHtml += `
               </div>
+          `;
+        }
+        statsSearchHtml += `
             </div>
           </div>
         `;
@@ -1581,7 +1624,7 @@
         function(responseArray) {
           specialCounters['s' + 0] = responseArray;
           sync = sync + 1;
-          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1590,7 +1633,7 @@
         function(responseArray) {
           specialCounters['s' + 1] = responseArray;
           sync = sync + 1;
-          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1599,7 +1642,7 @@
         function(responseArray) {
           specialCounters['s' + 2] = responseArray;
           sync = sync + 1;
-          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1608,7 +1651,7 @@
         function(responseArray) {
           specialCounters['s' + 3] = responseArray;
           sync = sync + 1;
-          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1617,7 +1660,7 @@
         function(responseArray) {
           specialCounters['s' + 4] = responseArray;
           sync = sync + 1;
-          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true);
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1627,7 +1670,7 @@
         function(responseArray) {
           ZEALOT.s0 = responseArray;
           sync = sync + 1;
-          if (sync == 4) ZEALOT.ssAux(false);
+          if (sync == 4) ZEALOT.ssAux(false, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1636,7 +1679,7 @@
         function(responseArray) {
           ZEALOT.s1 = responseArray;
           sync = sync + 1;
-          if (sync == 4) ZEALOT.ssAux(false);
+          if (sync == 4) ZEALOT.ssAux(false, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1645,7 +1688,7 @@
         function(responseArray) {
           ZEALOT.s2 = responseArray;
           sync = sync + 1;
-          if (sync == 4) ZEALOT.ssAux(false);
+          if (sync == 4) ZEALOT.ssAux(false, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );
@@ -1654,7 +1697,7 @@
         function(responseArray) {
           ZEALOT.s3 = responseArray;
           sync = sync + 1;
-          if (sync == 4) ZEALOT.ssAux(false);
+          if (sync == 4) ZEALOT.ssAux(false, ZEALOT.nc);
         },
         true /*, ZEALOT.bearer*/
       );

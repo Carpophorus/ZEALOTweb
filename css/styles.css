@@ -660,13 +660,40 @@ input:checked+.slider:before {
 }
 
 .ticket-container>.tc-priority-1 {
-  color: #62f611;
+  /*color: #62f611;*/
+  color: #00b3b3;
 }
 
 .ticket-container>.tc-priority-2 {
-  color: #00afff;
+  /*color: #00afff;*/
+  color: #b30000;
 }
 
+.pulse {
+  animation: pulsing 1s alternate infinite;
+  -webkit-animation: pulsing 1s alternate infinite;
+}
+
+@keyframes pulsing {
+  from {
+    opacity: 1
+  }
+  to {
+    opacity: 0
+  }
+}
+
+@-webkit-keyframes pulsing {
+  from {
+    opacity: 1
+  }
+  to {
+    opacity: 0
+  }
+}
+
+
+/*
 .ticket-container>.tc-priority-3 {
   color: #efbb1b;
 }
@@ -674,6 +701,7 @@ input:checked+.slider:before {
 .ticket-container>.tc-priority-4 {
   color: #b30000;
 }
+*/
 
 .ticket-container>.tc-sender {
   cursor: pointer;
