@@ -397,7 +397,7 @@
                   text: "NEOBRAĐEN",
                   btnClass: "btn-red",
                   action: function() {
-                    $ajaxUtils.sendGetRequest(
+                    $ajaxUtils.sendPostRequest(
                       ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=1",
                       function(responseArray) {},
                       true /*, ZEALOT.bearer*/
@@ -408,7 +408,7 @@
                   text: "OBRADA U TOKU",
                   btnClass: "btn-red",
                   action: function() {
-                    $ajaxUtils.sendGetRequest(
+                    $ajaxUtils.sendPostRequest(
                       ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=3",
                       function(responseArray) {},
                       true /*, ZEALOT.bearer*/
@@ -419,7 +419,7 @@
                   text: "USPEŠNO KOMPLETIRAN",
                   btnClass: "btn-red",
                   action: function() {
-                    $ajaxUtils.sendGetRequest(
+                    $ajaxUtils.sendPostRequest(
                       ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=4",
                       function(responseArray) {},
                       true /*, ZEALOT.bearer*/
