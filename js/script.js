@@ -382,6 +382,52 @@
               },
               true /*, ZEALOT.bearer*/
             );
+            $.confirm({
+              theme: "material",
+              title: "Promena statusa",
+              content: "Koji je novi status za tekući tiket?",
+              type: "red",
+              typeAnimated: true,
+              buttons: {
+                cancel: {
+                  text: "NE MENJAJ STATUS",
+                  action: function() {}
+                },
+                one: {
+                  text: "NEOBRAĐEN",
+                  btnClass: "btn-red",
+                  action: function() {
+                    $ajaxUtils.sendGetRequest(
+                      ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=1",
+                      function(responseArray) {},
+                      true /*, ZEALOT.bearer*/
+                    );
+                  }
+                },
+                three: {
+                  text: "OBRADA U TOKU",
+                  btnClass: "btn-red",
+                  action: function() {
+                    $ajaxUtils.sendGetRequest(
+                      ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=3",
+                      function(responseArray) {},
+                      true /*, ZEALOT.bearer*/
+                    );
+                  }
+                },
+                four: {
+                  text: "USPEŠNO KOMPLETIRAN",
+                  btnClass: "btn-red",
+                  action: function() {
+                    $ajaxUtils.sendGetRequest(
+                      ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=4",
+                      function(responseArray) {},
+                      true /*, ZEALOT.bearer*/
+                    );
+                  }
+                }
+              }
+            });
           }
         }
       }
@@ -1344,6 +1390,8 @@
       ZEALOT.apiRoot + "allUnreadTicketsCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator),
       function(responseArray) {
         ZEALOT.allUnreadTicketsCount = responseArray[0].allUnreadTicketsCount;
+        ZEALOT.allUncompletedTicketsCount = responseArray[0].allUncompletedTicketsCount;
+        ZEALOT.allUnassignedTicketsCount = responseArray[0].allUnassignedTicketsCount;
         sync = sync + 1;
         if (sync == 4) ZEALOT.lstAux();
       },
@@ -1354,6 +1402,7 @@
         ZEALOT.apiRoot + "allUnreadTicketsByPriorityCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idP=" + ZEALOT.allTicketPriorities[i].idP + "&i=" + i,
         function(responseArray) {
           ZEALOT.allTicketPriorities[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByPriorityCount;
+          ZEALOT.allTicketPriorities[responseArray[0].i].all = responseArray[0].allTicketsByPriorityCount;
           syncp = syncp + 1;
           if (syncp == ZEALOT.allTicketPriorities.length) {
             sync = sync + 1;
@@ -1368,6 +1417,7 @@
         ZEALOT.apiRoot + "allUnreadTicketsByStatusCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idS=" + ZEALOT.allTicketStatuses[i].idSt + "&i=" + i,
         function(responseArray) {
           ZEALOT.allTicketStatuses[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByStatusCount;
+          ZEALOT.allTicketStatuses[responseArray[0].i].all = responseArray[0].allTicketsByStatusCount;
           syncs = syncs + 1;
           if (syncs == ZEALOT.allTicketStatuses.length) {
             sync = sync + 1;
@@ -1382,6 +1432,7 @@
         ZEALOT.apiRoot + "allUnreadTicketsByTypeCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idT=" + ZEALOT.allTicketTypes[i].idTtp + "&i=" + i,
         function(responseArray) {
           ZEALOT.allTicketTypes[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByTypeCount;
+          ZEALOT.allTicketTypes[responseArray[0].i].all = responseArray[0].allTicketsByTypeCount;
           synct = synct + 1;
           if (synct == ZEALOT.allTicketTypes.length) {
             sync = sync + 1;
@@ -1414,9 +1465,9 @@
           <button class="popup-button" onclick="$ZEALOT.searchTickets();"><i class="fa fa-search"></i></button>
         </div>
         <h2 class="oswald-dark-blue-normal">Svi tiketi</h2>
-        <div class="` + ((ZEALOT.allUnreadTicketsCount > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-visible" onclick="$ZEALOT.categoryClicked(this);">NEKOMPLETIRANI<div class="num">` + ((ZEALOT.allUnreadTicketsCount > 0) ? ZEALOT.allUnreadTicketsCount : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>` +
+        <div class="` + ((ZEALOT.allUnreadTicketsCount > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-visible" onclick="$ZEALOT.categoryClicked(this);">NEKOMPLETIRANI<div class="num">` + ((ZEALOT.allUnreadTicketsCount > 0) ? ZEALOT.allUnreadTicketsCount : `0`) + `/` + ZEALOT.allUncompletedTicketsCount + `</div><div class="fa fa-caret-right hidden"></div></div>` +
       ((ZEALOT.adminPrivilegesGranted == true) ? `
-        <div class="open-sans-dark-normal bump tabbed category t-unassigned" onclick="$ZEALOT.categoryClicked(this);">NEDODELJENI<div class="num"></div><div class="fa fa-caret-right hidden"></div></div>
+        <div class="` + ((ZEALOT.allUnassignedTicketsCount > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-unassigned" onclick="$ZEALOT.categoryClicked(this);">NEDODELJENI<div class="num">` + ZEALOT.allUnassignedTicketsCount + `</div><div class="fa fa-caret-right hidden"></div></div>
         ` : ``) + `
     `;
     /*
@@ -1425,21 +1476,21 @@
     popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po statusu</h2>`;
     for (var i = 0; i < ZEALOT.allTicketStatuses.length; i++) {
       popupTicketsHtml += `
-        <div class="` + ((ZEALOT.allTicketStatuses[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-status" value=` + ZEALOT.allTicketStatuses[i].idSt + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketStatuses[i].stn + `<div class="num">` + ((ZEALOT.allTicketStatuses[i].unread > 0) ? ZEALOT.allTicketStatuses[i].unread : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
+        <div class="` + ((ZEALOT.allTicketStatuses[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-status" value=` + ZEALOT.allTicketStatuses[i].idSt + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketStatuses[i].stn + `<div class="num">` + ((ZEALOT.allTicketStatuses[i].unread > 0) ? ZEALOT.allTicketStatuses[i].unread : `0`) + `/` + ZEALOT.allTicketStatuses[i].all + `</div><div class="fa fa-caret-right hidden"></div></div>
       `;
     }
     /*
     popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po prioritetu</h2>`;
     for (var i = 0; i < ZEALOT.allTicketPriorities.length; i++) {
       popupTicketsHtml += `
-        <div class="` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-priority" value=` + ZEALOT.allTicketPriorities[i].idP + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketPriorities[i].pn + `<div class="num">` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? ZEALOT.allTicketPriorities[i].unread : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
+        <div class="` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-priority" value=` + ZEALOT.allTicketPriorities[i].idP + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketPriorities[i].pn + `<div class="num">` + ((ZEALOT.allTicketPriorities[i].unread > 0) ? ZEALOT.allTicketPriorities[i].unread : `0`) + `/` + ZEALOT.allTicketPriorities[i].all + `</div><div class="fa fa-caret-right hidden"></div></div>
       `;
     }
     */
     popupTicketsHtml += `<h2 class="oswald-dark-blue-normal">Po tipu</h2>`;
     for (var i = 0; i < ZEALOT.allTicketTypes.length; i++) {
       popupTicketsHtml += `
-        <div class="` + ((ZEALOT.allTicketTypes[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-type" value=` + ZEALOT.allTicketTypes[i].idTtp + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketTypes[i].ttpn + `<div class="num">` + ((ZEALOT.allTicketTypes[i].unread > 0) ? ZEALOT.allTicketTypes[i].unread : ``) + `</div><div class="fa fa-caret-right hidden"></div></div>
+        <div class="` + ((ZEALOT.allTicketTypes[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-type" value=` + ZEALOT.allTicketTypes[i].idTtp + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketTypes[i].ttpn + `<div class="num">` + ((ZEALOT.allTicketTypes[i].unread > 0) ? ZEALOT.allTicketTypes[i].unread : `0`) + `/` + ZEALOT.allTicketTypes[i].all + `</div><div class="fa fa-caret-right hidden"></div></div>
       `;
     }
     popupTicketsHtml += `</div>`;
