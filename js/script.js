@@ -1351,24 +1351,6 @@
           });
           return;
         } else {
-          if (responseArray[0].ERROR != undefined || responseArray[0].Message != undefined) {
-            $("#login-button").html("Sign In");
-            $.confirm({
-              theme: "material",
-              title: "Greška",
-              content: "Desila se nepredviđena greška u sistemu, pokušajte ponovo kasnije.<br><br>Kontaktirajte sistemske administratore ukoliko se problem ponovo pojavi.",
-              type: "red",
-              typeAnimated: true,
-              buttons: {
-                ok: {
-                  text: "OK",
-                  btnClass: "btn-red",
-                  action: function() {}
-                }
-              }
-            });
-            return;
-          }
           ZEALOT.userInfo = responseArray[0];
           ZEALOT.adminPrivilegesGranted = ZEALOT.userInfo.isAdmin;
           ZEALOT.siAux();
