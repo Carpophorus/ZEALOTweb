@@ -411,11 +411,12 @@ h3 {
 
 .sidebar-popup-content>div>.tabbed {
   position: relative;
-  padding-left: 10vh;
+  padding-left: 10vh !important;
 }
 
 .sidebar-popup-content>div>div>.num {
   float: right;
+  font-family: 'Open Sans', sans-serif !important;
 }
 
 .sidebar-popup-content>div>div>.fa-caret-right {
