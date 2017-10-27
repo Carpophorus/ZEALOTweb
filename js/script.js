@@ -1333,7 +1333,7 @@
           });
           return;
         } else {
-          if (responseArray[0].ERROR != undefined) {
+          if (responseArray[0].ERROR != undefined || responseArray[0].Message != undefined) {
             $("#login-button").html("Sign In");
             $.confirm({
               theme: "material",
