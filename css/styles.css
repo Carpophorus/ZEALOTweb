@@ -703,8 +703,10 @@ input:checked+.slider:before {
 }
 */
 
-.ticket-container>.tc-sender {
-  cursor: pointer;
+.ticket-container>.tc-sender, .ticket-container>.tc-subject, .ticket-container>.tc-id-len {
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
 }
 
 .ticket-container>.tc-status, .ticket-container>.tc-assign {
