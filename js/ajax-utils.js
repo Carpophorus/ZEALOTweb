@@ -43,6 +43,7 @@
           responseHandler(request.responseText, request.status);
       } else {
         $("#login-button").html("Sign In");
+        $("#username, #password").prop("disabled", false);
         $.confirm({
           theme: "material",
           title: "Greška",

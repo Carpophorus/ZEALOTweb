@@ -1312,8 +1312,10 @@
 
   ZEALOT.signIn = function() {
     $("#login-button").html("<i class='fa fa-circle-o-notch fa-spin'></i>");
+    $("#username, #password").prop("disabled", true);
     if ($("#username").val() == "" || $("#password").val() == "") {
       $("#login-button").html("Sign In");
+      $("#username, #password").prop("disabled", false);
       $.confirm({
         theme: "material",
         title: "Greška",
@@ -1335,6 +1337,7 @@
       function(responseArray, status) {
         if (responseArray.length == 0) {
           $("#login-button").html("Sign In");
+          $("#username, #password").prop("disabled", false);
           $.confirm({
             theme: "material",
             title: "Greška",
