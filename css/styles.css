@@ -1,7 +1,11 @@
 /* GENERAL */
 
+* {
+  font-family: 'Open Sans', sans-serif !important;
+}
+
 body {
-  font-size: 2vh;
+  font-size: 2vh !important;
   overflow-x: hidden;
   overflow-y: hidden;
   color: #011;
@@ -42,7 +46,7 @@ input, button {
 }
 
 button {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 600;
   border-radius: 100vh;
 }
@@ -56,98 +60,98 @@ button:hover {
 }
 
 .fa {
-  font-size: 2.5em;
+  font-size: 2.5em !important;
 }
 
 h1 {
-  font-size: 4.5vh;
+  font-size: 4.5vh !important;
 }
 
 h2 {
-  font-size: 3.5vh;
+  font-size: 3.5vh !important;
 }
 
 h3 {
-  font-size: 2.5vh;
+  font-size: 2.5vh !important;
 }
 
 
 /* FONTS */
 
 .oswald-dark-normal {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 400;
   color: #011;
 }
 
 .oswald-dark-semibold {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 600;
   color: #011;
 }
 
 .oswald-blue-normal {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 400;
   color: #00b3b3;
 }
 
 .oswald-blue-semibold {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 600;
   color: #00b3b3;
 }
 
 .oswald-dark-blue-normal {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 400;
   color: #003d3d;
 }
 
 .oswald-dark-blue-semibold {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 600;
   color: #003d3d;
 }
 
 .oswald-light-normal {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 400;
   color: #f9fdfd;
 }
 
 .oswald-light-semibold {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif !important;
   font-weight: 600;
   color: #f9fdfd;
 }
 
 .open-sans-dark-normal {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif !important;
   font-weight: 400;
   color: #011;
 }
 
 .open-sans-dark-bold {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif !important;
   font-weight: 700;
   color: #011;
 }
 
 .open-sans-light-normal {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif !important;
   font-weight: 400;
   color: #f9fdfd;
 }
 
 .open-sans-light-bold {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif !important;
   font-weight: 700;
   color: #f9fdfd;
 }
 
 .bump {
-  font-size: 125%;
+  font-size: 125% !important;
 }
 
 
@@ -175,7 +179,7 @@ h3 {
 }
 
 #login-form input {
-  font-size: 3vh;
+  font-size: 3vh !important;
   line-height: 6vh;
   width: 100%;
   margin-bottom: 5vh;
@@ -183,7 +187,7 @@ h3 {
 }
 
 #login-form button {
-  font-size: 3vh;
+  font-size: 3vh !important;
   line-height: 7vh;
   width: 100%;
   margin-top: 4vh;
@@ -197,7 +201,7 @@ h3 {
 }
 
 .login-screen .copyright, .sidebar-popup .copyright {
-  font-size: 75%;
+  font-size: 75% !important;
   position: absolute;
   bottom: 1vh;
   width: 100%;
@@ -205,7 +209,7 @@ h3 {
 }
 
 #login-form>#login-button>.fa {
-  font-size: 1.4em;
+  font-size: 1.4em !important;
 }
 
 .main-screen>div {
@@ -385,7 +389,7 @@ h3 {
 }
 
 .sidebar-popup-content>div>.popup-bar>button {
-  font-size: 60%;
+  font-size: 60% !important;
   line-height: 5vh;
   float: right;
   width: 25%;
@@ -475,7 +479,7 @@ input:checked+.slider:before {
 }
 
 .sidebar-popup-content>.popup-stats>div>.stats-radio {
-  font-size: 1.3em;
+  font-size: 1.3em !important;
   float: left;
   margin-left: -5vh;
   padding-top: .3vh;
@@ -516,7 +520,7 @@ input:checked+.slider:before {
 }
 
 .title-fixed {
-  font-size: 3vh;
+  font-size: 3vh !important;
   line-height: 8vh;
   position: fixed;
   top: 0;
@@ -546,7 +550,7 @@ input:checked+.slider:before {
 }
 
 .large-number {
-  font-size: 9vh;
+  font-size: 9vh !important;
   line-height: 13vh;
   text-align: center;
 }
@@ -557,12 +561,12 @@ input:checked+.slider:before {
 }
 
 .stat:nth-child(1)>.stat-title, .stat:nth-child(1)>.stat-numbers>.small-numbers-container, .special-stat>.stat-title, .special-stat>.stat-numbers>.small-numbers-container {
-  font-size: 130%;
+  font-size: 130% !important;
   line-height: 3vh;
 }
 
 .stat:nth-child(1)>.stat-numbers>.large-number, .special-stat>.stat-numbers>.large-number {
-  font-size: 14vh;
+  font-size: 14vh !important;
   line-height: 19.5vh;
 }
 
@@ -580,7 +584,7 @@ input:checked+.slider:before {
 }
 
 .company-header {
-  font-size: 2.5vh;
+  font-size: 2.5vh !important;
   line-height: 5.5vh;
   position: relative;
   width: 100%;
@@ -590,7 +594,7 @@ input:checked+.slider:before {
 }
 
 .company-expand {
-  font-size: 1.5em;
+  font-size: 1.5em !important;
   line-height: 5.5vh;
   position: absolute;
   top: 0;
@@ -599,13 +603,13 @@ input:checked+.slider:before {
   width: 7vh;
   height: 6vh;
   text-align: center;
-  color: #00b3b3!important;
+  color: #00b3b3 !important;
   background: transparent;
 }
 
 .company-expand:hover {
   cursor: pointer;
-  color: #003d3d!important;
+  color: #003d3d !important;
 }
 
 .company-contact {
@@ -710,19 +714,19 @@ input:checked+.slider:before {
 }
 
 .ticket-container>.tc-status, .ticket-container>.tc-assign {
-  font-size: 115%;
+  font-size: 115% !important;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
 }
 
 .ticket-container>.tc-assign {
-  font-size: 170%;
+  font-size: 170% !important;
   line-height: 3vh;
   padding-top: 0.2vh;
 }
 
 .ticket-container>.fa {
-  font-size: 1.5em;
+  font-size: 1.5em !important;
   padding-top: .4vh;
 }
 
@@ -732,7 +736,7 @@ input:checked+.slider:before {
 }
 
 .ticket-options-container>div>input {
-  font-size: 2vh;
+  font-size: 2vh !important;
   width: 100%;
 }
 
@@ -741,7 +745,7 @@ input:checked+.slider:before {
 }
 
 .to-button {
-  font-size: 40%;
+  font-size: 40% !important;
   line-height: 5vh;
   width: 9vh;
   height: 5vh;
@@ -823,7 +827,7 @@ input:checked+.slider:before {
 }
 
 .timestamp {
-  font-size: 1.5vh;
+  font-size: 1.5vh !important;
   padding-top: 2vh;
   color: #00b3b3;
 }
@@ -865,7 +869,7 @@ input:checked+.slider:before {
   height: 33px;
   width: 50px;
   line-height: 33px;
-  font-size: 23px;
+  font-size: 23px !important;
   color: #003d3d;
 }
 
@@ -885,12 +889,12 @@ input:checked+.slider:before {
 
 .mec-send {
   left: 0;
-  font-size: 18px;
+  font-size: 18px !important;
 }
 
 .mec-internal {
   right: 0px;
-  font-size: 20px;
+  font-size: 20px !important;
 }
 
 .trumbowyg-box {
