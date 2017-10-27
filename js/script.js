@@ -303,13 +303,13 @@
             if ($(e).hasClass("tc-hide")) {
               $ajaxUtils.sendGetRequest(
                 ZEALOT.apiRoot + "hideTicket" + "?idT=" + idT,
-                function(responseArray) {},
+                function(responseArray, status) {},
                 true /*, ZEALOT.bearer*/
               );
             } else {
               $ajaxUtils.sendGetRequest(
                 ZEALOT.apiRoot + "showTicket" + "?idT=" + idT,
-                function(responseArray) {},
+                function(responseArray, status) {},
                 true /*, ZEALOT.bearer*/
               );
             }
@@ -339,7 +339,7 @@
           action: function() {
             $ajaxUtils.sendPostRequest(
               ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator,
-              function(responseArray) {
+              function(responseArray, status) {
                 ZEALOT.loadSidebarTickets();
                 $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
                   <div class="operator-message">
@@ -399,7 +399,7 @@
                   action: function() {
                     $ajaxUtils.sendPostRequest(
                       ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=1",
-                      function(responseArray) {},
+                      function(responseArray, status) {},
                       true /*, ZEALOT.bearer*/
                     );
                   }
@@ -410,7 +410,7 @@
                   action: function() {
                     $ajaxUtils.sendPostRequest(
                       ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=3",
-                      function(responseArray) {},
+                      function(responseArray, status) {},
                       true /*, ZEALOT.bearer*/
                     );
                   }
@@ -421,7 +421,7 @@
                   action: function() {
                     $ajaxUtils.sendPostRequest(
                       ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=4",
-                      function(responseArray) {},
+                      function(responseArray, status) {},
                       true /*, ZEALOT.bearer*/
                     );
                   }
@@ -454,7 +454,7 @@
             $(".trumbowyg-editor #mail-signature").remove();
             $ajaxUtils.sendPostRequest(
               ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=true" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator,
-              function(responseArray) {
+              function(responseArray, status) {
                 $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
                   <div class="internal-message">
                     ` + $(".trumbowyg-editor").html() + `
@@ -508,7 +508,7 @@
           ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
           "&idTs=" + ZEALOT.idStatusForTicket +
           "&idTt=" + ZEALOT.idTypeForTicket,
-          function(responseArray) {
+          function(responseArray, status) {
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
@@ -533,7 +533,7 @@
           "&idCo=" + ZEALOT.idCompanyForTicket +
           "&cn=" + encodeURIComponent(ZEALOT.clientNameForTicket) +
           "&cp=" + encodeURIComponent(ZEALOT.clientPhoneForTicket),
-          function(responseArray) {
+          function(responseArray, status) {
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
@@ -557,7 +557,7 @@
           ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
           "&idS=" + ZEALOT.idSectorForTicket +
           "&idO=" + ZEALOT.idOperatorForTicket,
-          function(responseArray) {
+          function(responseArray, status) {
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
@@ -580,7 +580,7 @@
         $ajaxUtils.sendPostRequest(
           ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
           "&idTp=" + ZEALOT.idPriorityForTicket,
-          function(responseArray) {
+          function(responseArray, status) {
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
@@ -602,14 +602,14 @@
       case 5, "5": //tags
         $ajaxUtils.sendGetRequest(
           ZEALOT.apiRoot + "clearTags" + "?idT=" + ZEALOT.idTicketCurrent,
-          function(responseArray) {
+          function(responseArray, status) {
             var sync = 0;
             var array = $(".to-tags").tagsinput("items");
             var syncmax = array.length;
             for (var i = 0; i < syncmax; i++)
               $ajaxUtils.sendGetRequest(
                 ZEALOT.apiRoot + "addTag" + "?idT=" + ZEALOT.idTicketCurrent + "&tag=" + encodeURIComponent(array[i]),
-                function(responseArray) {
+                function(responseArray, status) {
                   sync = sync + 1;
                   if (sync == syncmax)
                     $.confirm({
@@ -664,7 +664,7 @@
     $(".tooltip").addClass("gone");
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "getConversation" + "?idT=" + idT,
-      function(responseArray) {
+      function(responseArray, status) {
         ZEALOT.idTicketCurrent = idT;
         var ticketHtml = `
           <div class="title-fixed oswald-blue-semibold">
@@ -875,7 +875,7 @@
     if ($(e).hasClass("t-visible")) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=false",
-        function(responseArray) {
+        function(responseArray, status) {
           var responseArrayModified = [];
           for (var i = 0; i < responseArray.length; i++)
             if (Number(responseArray[i].idStatus) < 4)
@@ -887,7 +887,7 @@
     } else if ($(e).hasClass("t-hidden")) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=true",
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.ccAux(responseArray);
         },
         true /*, ZEALOT.bearer*/
@@ -895,7 +895,7 @@
     } else if ($(e).hasClass("t-unassigned")) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=false",
-        function(responseArray) {
+        function(responseArray, status) {
           var responseArrayModified = [];
           for (var i = 0; i < responseArray.length; i++)
             if ((Number(responseArray[i].idOperator) == 0 || Number(responseArray[i].idSector) == 0) && Number(responseArray[i].idStatus) < 4)
@@ -907,7 +907,7 @@
     } else if ($(e).hasClass("t-priority")) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allTicketsByPriority" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idP=" + $(e).attr("value"),
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.ccAux(responseArray);
         },
         true /*, ZEALOT.bearer*/
@@ -915,7 +915,7 @@
     } else if ($(e).hasClass("t-status")) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allTicketsByStatus" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idS=" + $(e).attr("value"),
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.ccAux(responseArray);
         },
         true /*, ZEALOT.bearer*/
@@ -923,7 +923,7 @@
     } else if ($(e).hasClass("t-type")) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allTicketsByType" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idT=" + $(e).attr("value"),
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.ccAux(responseArray);
         },
         true /*, ZEALOT.bearer*/
@@ -970,7 +970,7 @@
       insertHtml(".main-panel", otherContactsHtml);
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "contacts",
-        function(responseArray) {
+        function(responseArray, status) {
           if (responseArray.length > 0) {
             otherContactsHtml = `
               <div class="title-fixed oswald-blue-semibold">
@@ -1103,7 +1103,7 @@
             case 5, "5":
               $ajaxUtils.sendGetRequest(
                 ZEALOT.apiRoot + "getTags" + "?idT=" + ZEALOT.idTicketCurrent,
-                function(responseArray) {
+                function(responseArray, status) {
                   $(".to-tags").tagsinput("removeAll");
                   $(".to-tags").tagsinput({
                     trimValue: true
@@ -1231,10 +1231,10 @@
           action: function() {
             $ajaxUtils.sendPostRequest(
               ZEALOT.apiRoot + "addNewCompany" + "?name=" + encodeURIComponent($("#company-select-ticket").val().toUpperCase()),
-              function(responseArray) {
+              function(responseArray, status) {
                 $ajaxUtils.sendGetRequest(
                   ZEALOT.apiRoot + "getCompanies",
-                  function(companiesArray) {
+                  function(companiesArray, status) {
                     ZEALOT.allCompanies = companiesArray;
                     $("#company-select-ticket").val("");
                     var companyDatalistOptionsHtml = "";
@@ -1317,7 +1317,7 @@
       $.confirm({
         theme: "material",
         title: "Greška",
-        content: "Morate upisati kredencijale u oba polja.",
+        content: "Morate uneti svoje kredencijale u oba polja.",
         type: "red",
         typeAnimated: true,
         buttons: {
@@ -1332,7 +1332,11 @@
     }
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "login" + "?user=" + $("#username").val() + "&pass=" + $("#password").val(),
-      function(responseArray) {
+      function(responseArray, status) {
+        if (status != 200) {
+          $("#login-button").html("Sign In");
+          return;
+        }
         if (responseArray.length == 0) {
           $("#login-button").html("Sign In");
           $.confirm({
@@ -1375,7 +1379,7 @@
           var sync = 0;
           $ajaxUtils.sendGetRequest(
             ZEALOT.apiRoot + "allOperators",
-            function(responseArray) {
+            function(responseArray, status) {
               ZEALOT.allOperators = responseArray;
               sync = sync + 1;
               if (sync == 6) ZEALOT.loadSidebarTickets();
@@ -1384,7 +1388,7 @@
           );
           $ajaxUtils.sendGetRequest(
             ZEALOT.apiRoot + "allSectors",
-            function(responseArray) {
+            function(responseArray, status) {
               ZEALOT.allSectors = responseArray;
               sync = sync + 1;
               if (sync == 6) ZEALOT.loadSidebarTickets();
@@ -1393,7 +1397,7 @@
           );
           $ajaxUtils.sendGetRequest(
             ZEALOT.apiRoot + "allTicketTypes",
-            function(responseArray) {
+            function(responseArray, status) {
               ZEALOT.allTicketTypes = responseArray;
               sync = sync + 1;
               if (sync == 6) ZEALOT.loadSidebarTickets();
@@ -1402,7 +1406,7 @@
           );
           $ajaxUtils.sendGetRequest(
             ZEALOT.apiRoot + "allTicketStatuses",
-            function(responseArray) {
+            function(responseArray, status) {
               ZEALOT.allTicketStatuses = responseArray;
               sync = sync + 1;
               if (sync == 6) ZEALOT.loadSidebarTickets();
@@ -1411,7 +1415,7 @@
           );
           $ajaxUtils.sendGetRequest(
             ZEALOT.apiRoot + "allTicketPriorities",
-            function(responseArray) {
+            function(responseArray, status) {
               ZEALOT.allTicketPriorities = responseArray;
               sync = sync + 1;
               if (sync == 6) ZEALOT.loadSidebarTickets();
@@ -1420,7 +1424,7 @@
           );
           $ajaxUtils.sendGetRequest(
             ZEALOT.apiRoot + "getCompanies",
-            function(responseArray) {
+            function(responseArray, status) {
               ZEALOT.allCompanies = responseArray;
               sync = sync + 1;
               if (sync == 6) ZEALOT.loadSidebarTickets();
@@ -1440,7 +1444,7 @@
     var synct = 0;
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "allUnreadTicketsCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator),
-      function(responseArray) {
+      function(responseArray, status) {
         ZEALOT.allUnreadTicketsCount = responseArray[0].allUnreadTicketsCount;
         ZEALOT.allUncompletedTicketsCount = responseArray[0].allUncompletedTicketsCount;
         ZEALOT.allUnassignedTicketsCount = responseArray[0].allUnassignedTicketsCount;
@@ -1452,7 +1456,7 @@
     for (var i = 0; i < ZEALOT.allTicketPriorities.length; i++) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allUnreadTicketsByPriorityCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idP=" + ZEALOT.allTicketPriorities[i].idP + "&i=" + i,
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.allTicketPriorities[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByPriorityCount;
           ZEALOT.allTicketPriorities[responseArray[0].i].all = responseArray[0].allTicketsByPriorityCount;
           syncp = syncp + 1;
@@ -1467,7 +1471,7 @@
     for (var i = 0; i < ZEALOT.allTicketStatuses.length; i++) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allUnreadTicketsByStatusCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idS=" + ZEALOT.allTicketStatuses[i].idSt + "&i=" + i,
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.allTicketStatuses[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByStatusCount;
           ZEALOT.allTicketStatuses[responseArray[0].i].all = responseArray[0].allTicketsByStatusCount;
           syncs = syncs + 1;
@@ -1482,7 +1486,7 @@
     for (var i = 0; i < ZEALOT.allTicketTypes.length; i++) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "allUnreadTicketsByTypeCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idT=" + ZEALOT.allTicketTypes[i].idTtp + "&i=" + i,
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.allTicketTypes[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByTypeCount;
           ZEALOT.allTicketTypes[responseArray[0].i].all = responseArray[0].allTicketsByTypeCount;
           synct = synct + 1;
@@ -1502,7 +1506,7 @@
     $(".category .fa-caret-right").addClass("hidden");
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "search" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&words=" + encodeURIComponent(words),
-      function(responseArray) {
+      function(responseArray, status) {
         ZEALOT.ccAux(responseArray);
       },
       true /*, ZEALOT.bearer*/
@@ -1563,7 +1567,7 @@
     if ($("#change-password").val() == "") return;
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "changePassword" + "?idO=" + ZEALOT.userInfo.idOperator + "&newPass=" + encodeURIComponent($("#change-password").val()),
-      function(responseArray) {},
+      function(responseArray, status) {},
       true /*, ZEALOT.bearer*/
     );
   };
@@ -1725,7 +1729,7 @@
     if (Number(ZEALOT.idOperatorForStats) == 0 && Number(ZEALOT.idSectorForStats) == 0) {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[0].idSc + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           specialCounters['s' + 0] = responseArray;
           sync = sync + 1;
           if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
@@ -1734,7 +1738,7 @@
       );
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[1].idSc + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           specialCounters['s' + 1] = responseArray;
           sync = sync + 1;
           if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
@@ -1743,7 +1747,7 @@
       );
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[2].idSc + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           specialCounters['s' + 2] = responseArray;
           sync = sync + 1;
           if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
@@ -1752,7 +1756,7 @@
       );
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[3].idSc + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           specialCounters['s' + 3] = responseArray;
           sync = sync + 1;
           if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
@@ -1761,7 +1765,7 @@
       );
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[4].idSc + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           specialCounters['s' + 4] = responseArray;
           sync = sync + 1;
           if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
@@ -1771,7 +1775,7 @@
     } else {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.s0 = responseArray;
           sync = sync + 1;
           if (sync == 4) ZEALOT.ssAux(false, ZEALOT.nc);
@@ -1780,7 +1784,7 @@
       );
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=1" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.s1 = responseArray;
           sync = sync + 1;
           if (sync == 4) ZEALOT.ssAux(false, ZEALOT.nc);
@@ -1789,7 +1793,7 @@
       );
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=2" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.s2 = responseArray;
           sync = sync + 1;
           if (sync == 4) ZEALOT.ssAux(false, ZEALOT.nc);
@@ -1798,7 +1802,7 @@
       );
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=3" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,
-        function(responseArray) {
+        function(responseArray, status) {
           ZEALOT.s3 = responseArray;
           sync = sync + 1;
           if (sync == 4) ZEALOT.ssAux(false, ZEALOT.nc);
@@ -1868,7 +1872,7 @@
   /*
   $ajaxUtils.sendGetRequest(
     ZEALOT.apiRoot + "allOperators",
-    function (responseArray) {
+    function (responseArray, status) {
       //
     },
     true /*, ZEALOT.bearer
