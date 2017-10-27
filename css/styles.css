@@ -3,6 +3,7 @@
 body {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 2vh !important;
+  line-height: 1.5 !important;
   overflow-x: hidden;
   overflow-y: hidden;
   color: #011;
@@ -70,6 +71,11 @@ h2 {
 
 h3 {
   font-size: 2.5vh !important;
+}
+
+.conversation-container {
+  width: 100%;
+  max-width: 100%;
 }
 
 
@@ -264,7 +270,7 @@ h3 {
 }
 
 .sidebar>div {
-  line-height: 9vh;
+  line-height: 9vh !important;
   position: absolute;
   width: 9vh;
   height: 9vh;
@@ -301,7 +307,7 @@ h3 {
 }
 
 .thumb {
-  line-height: 9vh;
+  line-height: 9vh !important;
   position: relative;
   width: 9vh;
   height: 9vh;
@@ -341,13 +347,14 @@ h3 {
 }
 
 .sidebar-popup-content>div>div, .sidebar-popup-content>div>h2 {
-  width: 100%;
-  padding-right: 5vh;
-  padding-left: 5vh;
+  width: 100% !important;
+  padding-right: 5vh !important;
+  padding-left: 5vh !important;
 }
 
 .sidebar-popup-content>div>h2 {
-  margin-top: 2vh;
+  margin: 0 !important;
+  margin-top: 2vh !important;
 }
 
 .sidebar-popup-content>div>div:hover {
@@ -367,7 +374,7 @@ h3 {
 }
 
 .sidebar-popup-content>div>.popup-bar>input, .ticket-options-container>div>input {
-  line-height: 4.5vh;
+  line-height: 4.5vh !important;
   width: 70%;
   margin-top: 3.5vh;
   margin-bottom: 1vh;
@@ -387,7 +394,7 @@ h3 {
 
 .sidebar-popup-content>div>.popup-bar>button {
   font-size: 60% !important;
-  line-height: 5vh;
+  line-height: 5vh !important;
   float: right;
   width: 25%;
   height: 5vh;
@@ -412,7 +419,7 @@ h3 {
 }
 
 .sidebar-popup-content>div>div>.fa-caret-right {
-  line-height: 4vh;
+  line-height: 4vh !important;
   position: absolute;
   left: -.5vh;
   color: #00b3b3;
@@ -485,7 +492,7 @@ input:checked+.slider:before {
 
 .operator-select-container>input {
   font-family: inherit;
-  line-height: 4.5vh;
+  line-height: 4.5vh !important;
   width: 100%;
   height: 4.5vh;
   margin-top: 1vh;
@@ -718,7 +725,7 @@ input:checked+.slider:before {
 
 .ticket-container>.tc-assign {
   font-size: 170% !important;
-  line-height: 3vh;
+  line-height: 3vh !important;
   padding-top: 0.2vh;
 }
 

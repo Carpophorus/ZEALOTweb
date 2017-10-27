@@ -755,7 +755,7 @@
             </div>
           </div>
           <input class="to-tags gone">
-          <div class="main-panel-ticket scrollable-hotfix container">
+          <div class="main-panel-ticket scrollable-hotfix conversation-container">
         `;
         for (var i = 0; i < responseArray.length; i++) {
           ticketHtml += `
