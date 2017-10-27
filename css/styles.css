@@ -355,6 +355,7 @@ h3 {
 .sidebar-popup-content>div>h2 {
   margin: 0 !important;
   margin-top: 2vh !important;
+  margin-bottom: 1vh !important;
 }
 
 .sidebar-popup-content>div>div:hover {
