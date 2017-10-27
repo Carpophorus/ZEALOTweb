@@ -1333,10 +1333,6 @@
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "login" + "?user=" + $("#username").val() + "&pass=" + $("#password").val(),
       function(responseArray, status) {
-        if (status != 200) {
-          $("#login-button").html("Sign In");
-          return;
-        }
         if (responseArray.length == 0) {
           $("#login-button").html("Sign In");
           $.confirm({

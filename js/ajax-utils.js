@@ -46,6 +46,7 @@
         responseHandler(request.responseText, request.status);
       }
     } else {
+      $("#login-button").html("Sign In");
       $.confirm({
         theme: "material",
         title: "Greška",
