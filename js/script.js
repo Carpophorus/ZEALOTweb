@@ -1312,6 +1312,24 @@
 
   ZEALOT.signIn = function() {
     $("#login-button").html("<i class='fa fa-circle-o-notch fa-spin'></i>");
+    if ($("#username").val() == "" || $("#password").val() == "") {
+      $("#login-button").html("Sign In");
+      $.confirm({
+        theme: "material",
+        title: "Greška",
+        content: "Morate upisati kredencijale u oba polja.",
+        type: "red",
+        typeAnimated: true,
+        buttons: {
+          ok: {
+            text: "OK",
+            btnClass: "btn-red",
+            action: function() {}
+          }
+        }
+      });
+      return;
+    }
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "login" + "?user=" + $("#username").val() + "&pass=" + $("#password").val(),
       function(responseArray) {
