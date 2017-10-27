@@ -33,34 +33,31 @@
   };
 
   function handleResponse(request, responseHandler, isJsonResponse) {
-    if ((request.readyState == 4) &&
-      (request.status == 200)) {
-
-      if (isJsonResponse == undefined) {
-        isJsonResponse = true;
-      }
-
-      if (isJsonResponse) {
-        responseHandler(JSON.parse(request.responseText), request.status);
+    if (request.readyState == 4) {
+      if (request.status == 200) {
+        if (isJsonResponse == undefined)
+          isJsonResponse = true;
+        if (isJsonResponse)
+          responseHandler(JSON.parse(request.responseText), request.status);
+        else
+          responseHandler(request.responseText, request.status);
       } else {
-        responseHandler(request.responseText, request.status);
-      }
-    } else {
-      $("#login-button").html("Sign In");
-      $.confirm({
-        theme: "material",
-        title: "Greška",
-        content: "Desila se nepredviđena greška u sistemu, pokušajte ponovo kasnije.<br><br>Kontaktirajte sistemske administratore ukoliko se problem ponovo pojavi.",
-        type: "red",
-        typeAnimated: true,
-        buttons: {
-          ok: {
-            text: "OK",
-            btnClass: "btn-red",
-            action: function() {}
+        $("#login-button").html("Sign In");
+        $.confirm({
+          theme: "material",
+          title: "Greška",
+          content: "Desila se nepredviđena greška u sistemu, pokušajte ponovo kasnije.<br><br>Kontaktirajte sistemske administratore ukoliko se problem ponovo pojavi.",
+          type: "red",
+          typeAnimated: true,
+          buttons: {
+            ok: {
+              text: "OK",
+              btnClass: "btn-red",
+              action: function() {}
+            }
           }
-        }
-      });
+        });
+      }
     }
   }
 
