@@ -1315,8 +1315,42 @@
     $ajaxUtils.sendGetRequest(
       ZEALOT.apiRoot + "login" + "?user=" + $("#username").val() + "&pass=" + $("#password").val(),
       function(responseArray) {
-        if (responseArray.length == 0) $("#login-button").html("Sign In");
-        else {
+        if (responseArray.length == 0) {
+          $("#login-button").html("Sign In");
+          $.confirm({
+            theme: "material",
+            title: "Greška",
+            content: "U sistemu ne postoji zadata kombinacija korisničkog imena i lozinke.<br><br>Proverite svoje kredencijale i pokušajte opet.",
+            type: "red",
+            typeAnimated: true,
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-red",
+                action: function() {}
+              }
+            }
+          });
+          return;
+        } else {
+          if (responseArray[0].ERROR != undefined) {
+            $("#login-button").html("Sign In");
+            $.confirm({
+              theme: "material",
+              title: "Greška",
+              content: "Desila se nepredviđena greška u sistemu, pokušajte ponovo kasnije.<br><br>Kontaktirajte sistemske administratore ukoliko se problem ponovo pojavi.",
+              type: "red",
+              typeAnimated: true,
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-red",
+                  action: function() {}
+                }
+              }
+            });
+            return;
+          }
           ZEALOT.userInfo = responseArray[0];
           ZEALOT.adminPrivilegesGranted = ZEALOT.userInfo.isAdmin;
           ZEALOT.siAux();
