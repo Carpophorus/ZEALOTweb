@@ -1495,7 +1495,7 @@
     var popupTicketsHtml = `
       <div class="popup-ticket">
         <div class="popup-bar">
-          <input type="text" id="search-terms" class="open-sans-dark-normal bump" placeholder="Pretraga" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Pretraga'"></input>
+          <input type="text" onkeydown="if (event.keyCode == 13) $ZEALOT.searchTickets();" id="search-terms" class="open-sans-dark-normal bump" placeholder="Pretraga" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Pretraga'"></input>
           <button class="popup-button" onclick="$ZEALOT.searchTickets();"><i class="fa fa-search"></i></button>
         </div>
         <h2 class="oswald-dark-blue-normal">Svi tiketi</h2>

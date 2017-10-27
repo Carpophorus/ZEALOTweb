@@ -58,9 +58,9 @@
       <div class="row">
         <div class="col-2 col-md-4"></div>
         <div class="col-8 col-md-4" id="login-form" method="post">
-          <input id="username" onkeydown="if (event.keyCode == 13) $ZEALOT.signIn();" class="open-sans-dark-normal" type="text" name="username">
+          <input id="username" onkeydown="if (event.keyCode == 13) $ZEALOT.signIn();" class="open-sans-dark-normal" type="text" name="username" placeholder="username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'username'">
           <br>
-          <input id="password" onkeydown="if (event.keyCode == 13) $ZEALOT.signIn();" class="open-sans-dark-normal" type="password" name="password">
+          <input id="password" onkeydown="if (event.keyCode == 13) $ZEALOT.signIn();" class="open-sans-dark-normal" type="password" name="password" placeholder="password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'password'">
           <br>
           <button id="login-button" type="submit" onclick="$ZEALOT.signIn();">Sign In</button>
         </div>
