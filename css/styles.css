@@ -1,10 +1,7 @@
 /* GENERAL */
 
-* {
-  font-family: 'Open Sans', sans-serif !important;
-}
-
 body {
+  font-family: 'Open Sans', sans-serif !important;
   font-size: 2vh !important;
   overflow-x: hidden;
   overflow-y: hidden;
