@@ -1039,6 +1039,7 @@
   ZEALOT.statsSectorSelect = function(e, idS) {
     $(".popup-stats div .num").removeClass("fa-check-circle");
     $(".popup-stats div .num").addClass("fa-circle-o");
+    $(".popup-stats div .switch-num").removeClass("fa-circle-o");
     if (e != null) {
       $(e).find(".num").removeClass("fa-circle-o");
       $(e).find(".num").addClass("fa-check-circle");
@@ -1813,7 +1814,7 @@
           <button class="popup-button" onclick="$ZEALOT.statsSearch();"><i class="fa fa-search"></i></button >
         </div>
         <h2 class="oswald-dark-blue-normal">Vrsta</h2>
-        <div class="open-sans-dark-normal bump tabbed unhoverable"><div class="search-nc-status">OBRAĐENI</div><div class="num"><label class="switch"><input class="search-nc" type="checkbox" onclick="$ZEALOT.searchNC(this);"></input><span class="slider"></span></label></div></div>
+        <div class="open-sans-dark-normal bump tabbed unhoverable"><div class="search-nc-status">OBRAĐENI</div><div class="num switch-num"><label class="switch"><input class="search-nc" type="checkbox" onclick="$ZEALOT.searchNC(this);"></input><span class="slider"></span></label></div></div>
     `;
     if (ZEALOT.adminPrivilegesGranted) {
       popupStatsHtml += `
