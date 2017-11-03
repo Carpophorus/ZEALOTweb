@@ -78,7 +78,6 @@ h3 {
   max-width: 100%;
 }
 
-
 /* FONTS */
 
 .oswald-dark-normal {
@@ -156,7 +155,6 @@ h3 {
 .bump {
   font-size: 125% !important;
 }
-
 
 /* OTHER */
 
@@ -418,6 +416,10 @@ h3 {
 .sidebar-popup-content>div>div>.num {
   float: right;
   font-family: 'Open Sans', sans-serif !important;
+}
+
+.sidebar-popup-content>div>div>.fa {
+  font-family: FontAwesome !important;
 }
 
 .sidebar-popup-content>div>div>.fa-caret-right {
@@ -702,7 +704,6 @@ input:checked+.slider:before {
   }
 }
 
-
 /*
 .ticket-container>.tc-priority-3 {
   color: #efbb1b;
@@ -952,11 +953,10 @@ input:checked+.slider:before {
   z-index: 10;
 }
 
-
 /* MEDIA */
 
 @media (max-width: 991.5px;
-{
+  {
   .stat {
     height: 100%;
   }
