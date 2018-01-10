@@ -22,8 +22,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
-  //ZEALOT.apiRoot = "http://localhost:50358/api/";
+  //ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
+  ZEALOT.apiRoot = "http://localhost:50358/api/";
   ZEALOT.userInfo = "";
   ZEALOT.allOperators = "";
   ZEALOT.allSectors = "";
@@ -161,7 +161,8 @@
         width: $(".stats-progress-bar").parent().width() + 15
       }, 180 * 1000, "linear",
       function() {
-        if ($(".statistics-button").hasClass("active")) ZEALOT.statsSearch();
+        if ($(".statistics-button").hasClass("active") && $(".stats-progress-bar").width() > $(".stats-progress-bar").parent().width() + 14)
+          ZEALOT.statsSearch();
       });
     $(e).remove();
   };
@@ -656,6 +657,19 @@
     return ("" + day + "." + month + "." + year + ". " + hour + ":" + minute + ":" + second);
   };
 
+  ZEALOT.injectHTML = function(e, html) {
+    var iframedoc = e.document;
+    if (e.contentDocument)
+      iframedoc = e.contentDocument;
+    else if (e.contentWindow)
+      iframedoc = e.contentWindow.document;
+    if (iframedoc) {
+      iframedoc.open();
+      iframedoc.writeln(decodeURIComponent(html));
+      iframedoc.close();
+    }
+  };
+
   ZEALOT.ticketClicked = function(idT, completed) {
     if (ZEALOT.hideClicked) {
       ZEALOT.hideClicked = false;
@@ -759,8 +773,8 @@
         `;
         for (var i = 0; i < responseArray.length; i++) {
           ticketHtml += `
-            <div class="` + ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `internal-message` : `operator-message`) : `client-message`) + `">
-              ` + responseArray[i].body +
+            <div class="` + ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `internal-message` : `operator-message`) : `client-message`) + `">` +
+            ((!responseArray[i].side) ? `<iframe class="message-iframe" src="about:blank" onload="$ZEALOT.injectHTML(this, \`` + encodeURIComponent(responseArray[i].body) + `\`);"></iframe>` : responseArray[i].body) +
             ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `` : `<div class="unselectable speechdart">◥</div>`) : `<div class="unselectable speechdart">◤</div>`) + `
               <div class="timestamp">` + ((responseArray[i].side) ? responseArray[i].onm + ` &bull; ` : "") + ZEALOT.formatDate(responseArray[i].messageCreated) + `</div>
             </div>

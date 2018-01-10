@@ -821,6 +821,13 @@ input:checked+.slider:before {
   -khtml-user-select: none;
 }
 
+.message-iframe {
+  width: 100%;
+  border: none;
+  outline: none;
+  height: 70vh;
+}
+
 .client-message>.speechdart {
   bottom: -1.4vh;
   left: -.2vh;
