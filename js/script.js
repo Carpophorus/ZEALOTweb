@@ -1,5 +1,4 @@
 (function(global) {
-
   ZEALOT = {};
 
   ZEALOT.browserWidth;
@@ -22,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  //ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
-  ZEALOT.apiRoot = "http://localhost:50358/api/";
+  ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
+  //ZEALOT.apiRoot = "http://localhost:50358/api/";
   ZEALOT.userInfo = "";
   ZEALOT.allOperators = "";
   ZEALOT.allSectors = "";
@@ -1066,7 +1065,7 @@
     $("#operator-select").val("");
     var datalistHtml = " ";
     for (var i = 0; i < ZEALOT.allOperators.length; i++) {
-      if ((ZEALOT.allOperators[i].idSc == idS || idS == 0) && ZEALOT.allOperators[i].idSc != null)
+      if (((ZEALOT.allOperators[i].idSc == idS && ZEALOT.userInfo.adminSector == idS) || (idS == 0 && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.allOperators[i].idSc == ZEALOT.userInfo.adminSector))) && ZEALOT.allOperators[i].idSc != null)
         datalistHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
     }
     insertHtml("#select-operator", datalistHtml);
@@ -1836,9 +1835,10 @@
         <div class="open-sans-dark-normal bump tabbed s-all" onclick="$ZEALOT.statsSectorSelect(this, 0);">SVI<div class="num fa fa-check-circle stats-radio"></div></div>
       `;
       for (var i = 0; i < ZEALOT.allSectors.length; i++) {
-        popupStatsHtml += `
-        <div class="open-sans-dark-normal bump tabbed" onclick="$ZEALOT.statsSectorSelect(this, ` + ZEALOT.allSectors[i].idSc + `);">` + ZEALOT.allSectors[i].scn + `<div class="num fa fa-circle-o stats-radio"></div></div>
-        `;
+        if (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == ZEALOT.allSectors[i].idSc)
+          popupStatsHtml += `
+            <div class="open-sans-dark-normal bump tabbed" onclick="$ZEALOT.statsSectorSelect(this, ` + ZEALOT.allSectors[i].idSc + `);">` + ZEALOT.allSectors[i].scn + `<div class="num fa fa-circle-o stats-radio"></div></div>
+          `;
       }
       popupStatsHtml += `
         <h2 class="oswald-dark-blue-normal">Po operateru</h2>
@@ -1847,7 +1847,7 @@
           <datalist id="select-operator">
       `;
       for (var i = 0; i < ZEALOT.allOperators.length; i++) {
-        if (ZEALOT.allOperators[i].idSc != null)
+        if (ZEALOT.allOperators[i].idSc != null && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == ZEALOT.allOperators[i].idSc))
           popupStatsHtml += `
             <option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>
           `;
@@ -1864,15 +1864,4 @@
   };
 
   global.$ZEALOT = ZEALOT;
-
-  /*
-  $ajaxUtils.sendGetRequest(
-    ZEALOT.apiRoot + "allOperators",
-    function (responseArray, status) {
-      //
-    },
-    true /*, ZEALOT.bearer
-  );
-  */
-
 })(window);
