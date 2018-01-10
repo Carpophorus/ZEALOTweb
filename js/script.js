@@ -37,6 +37,9 @@
   var specialCounters = {};
   ZEALOT.nc = false;
 
+  ZEALOT.currentTicketsArray = [];
+  ZEALOT.currentTicket = "";
+
   $.trumbowyg.svgPath = 'wyg/ui/icons.svg';
 
   var insertHtml = function(selector, html) {
@@ -251,6 +254,23 @@
     });
     $(".mec-editor-toggle").on("click", function() {
       if ($(".mec-editor-toggle").hasClass("fa-chevron-up")) {
+        if (ZEALOT.currentTicket.idSector == null || ZEALOT.currentTicket.idOperator == null) {
+          $.confirm({
+            theme: "material",
+            title: "Greška",
+            content: "Ne možete odgovoriti na tiket koji nije prosleđen.",
+            type: "red",
+            typeAnimated: true,
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-red",
+                action: function() {}
+              }
+            }
+          });
+          return;
+        }
         $(".mec-editor-toggle").removeClass("fa-chevron-up");
         $(".mec-editor-toggle").addClass("fa-chevron-down");
         $(".mec-send").removeClass("gone");
@@ -553,6 +573,25 @@
         );
         break;
       case 3, "3": //sector & operator
+        if (ZEALOT.idSectorForTicket == 0 || ZEALOT.idOperatorForTicket == 0) {
+          $.confirm({
+            theme: "material",
+            title: "Greška",
+            content: "Morate popuniti oba polja.",
+            type: "red",
+            typeAnimated: true,
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-red",
+                action: function() {}
+              }
+            }
+          });
+          return;
+        }
+        ZEALOT.currentTicket.idSector = ZEALOT.idSectorForTicket;
+        ZEALOT.currentTicket.idOperator = ZEALOT.idOperatorForTicket;
         $ajaxUtils.sendPostRequest(
           ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
           "&idS=" + ZEALOT.idSectorForTicket +
@@ -673,6 +712,12 @@
     if (ZEALOT.hideClicked) {
       ZEALOT.hideClicked = false;
       return;
+    }
+    for (var i = 0; i < ZEALOT.currentTicketsArray.length; i++) {
+      if (ZEALOT.currentTicketsArray[i].idTicket == idT) {
+        ZEALOT.currentTicket = ZEALOT.currentTicketsArray[i];
+        break;
+      }
     }
     $(".tooltip").addClass("gone");
     $ajaxUtils.sendGetRequest(
@@ -802,6 +847,7 @@
   }
 
   ZEALOT.ccAux = function(messagesArray) {
+    ZEALOT.currentTicketsArray = messagesArray;
     var mainTicketsHtml = `
       <div class="title-fixed oswald-blue-semibold">
         Tiketi
@@ -880,6 +926,7 @@
   };
 
   ZEALOT.categoryClicked = function(e) {
+    ZEALOT.currentTicket = "";
     $(".category .fa-caret-right").addClass("hidden");
     $(e).find(".fa-caret-right").removeClass("hidden");
     if (ZEALOT.browserWidth < 992) {
