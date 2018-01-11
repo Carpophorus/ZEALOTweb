@@ -24,6 +24,7 @@
   ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
   //ZEALOT.apiRoot = "http://localhost:50358/api/";
   ZEALOT.userInfo = "";
+  ZEALOT.signature = "";
   ZEALOT.allOperators = "";
   ZEALOT.allSectors = "";
   ZEALOT.allTicketTypes = "";
@@ -213,25 +214,26 @@
         ['fullscreen']
       ]
     });
-    $(".trumbowyg-editor").html(`
-      <br>
-      <br>
-      <br>
-      <div id="mail-signature" style="margin-left: 5px">
-        <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
-        <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-        <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
-        <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
-        <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
-        <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
-          <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
-          <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
-            Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
-            <br>Please print this e-mail only if necessary.
-          </div>
-        </div>
-      </div>
-    `);
+    $(".trumbowyg-editor").html(ZEALOT.signature);
+    // (`
+    //   <br>
+    //   <br>
+    //   <br>
+    //   <div id="mail-signature" style="margin-left: 5px">
+    //     <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
+    //     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
+    //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
+    //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
+    //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
+    //     <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
+    //       <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
+    //       <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
+    //         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
+    //         <br>Please print this e-mail only if necessary.
+    //       </div>
+    //     </div>
+    //   </div>
+    // `);
     $(".scrollable-hotfix").css({
       "height": Math.round(ZEALOT.browserHeight * 0.91 - 33)
     });
@@ -368,25 +370,26 @@
                     <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
                   </div>
                 `);
-                $(".trumbowyg-editor").html(`
-                  <br>
-                  <br>
-                  <br>
-                  <div id="mail-signature" style="margin-left: 5px">
-                    <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
-                    <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
-                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
-                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
-                    <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
-                      <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
-                      <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
-                        Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
-                        <br>Please print this e-mail only if necessary.
-                      </div>
-                    </div>
-                  </div>
-                `);
+                $(".trumbowyg-editor").html(ZEALOT.signature);
+                // (`
+                //   <br>
+                //   <br>
+                //   <br>
+                //   <div id="mail-signature" style="margin-left: 5px">
+                //     <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
+                //     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
+                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
+                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
+                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
+                //     <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
+                //       <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
+                //       <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
+                //         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
+                //         <br>Please print this e-mail only if necessary.
+                //       </div>
+                //     </div>
+                //   </div>
+                // `);
                 if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
                   $(".mec-editor-toggle").removeClass("fa-chevron-down");
                   $(".mec-editor-toggle").addClass("fa-chevron-up");
@@ -481,25 +484,26 @@
                     <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
                   </div>
                 `);
-                $(".trumbowyg-editor").html(`
-                  <br>
-                  <br>
-                  <br>
-                  <div id="mail-signature" style="margin-left: 5px">
-                    <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
-                    <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
-                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
-                    <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
-                    <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
-                      <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
-                      <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
-                        Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
-                        <br>Please print this e-mail only if necessary.
-                      </div>
-                    </div>
-                  </div>
-                `);
+                $(".trumbowyg-editor").html(ZEALOT.signature);
+                // (`
+                //   <br>
+                //   <br>
+                //   <br>
+                //   <div id="mail-signature" style="margin-left: 5px">
+                //     <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
+                //     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
+                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
+                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
+                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
+                //     <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
+                //       <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
+                //       <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
+                //         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
+                //         <br>Please print this e-mail only if necessary.
+                //       </div>
+                //     </div>
+                //   </div>
+                // `);
                 if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
                   $(".mec-editor-toggle").removeClass("fa-chevron-down");
                   $(".mec-editor-toggle").addClass("fa-chevron-up");
@@ -1393,8 +1397,10 @@
       });
       return;
     }
+    var usernameAux = $("#username").val().toLowerCase();
+    if (!~usernameAux.indexOf('@')) usernameAux += "@dbs.rs";
     $ajaxUtils.sendGetRequest(
-      ZEALOT.apiRoot + "login" + "?user=" + $("#username").val() + "&pass=" + $("#password").val(),
+      ZEALOT.apiRoot + "login" + "?user=" + usernameAux + "&pass=" + $("#password").val(),
       function(responseArray, status) {
         if (responseArray.length == 0) {
           $("#login-button").html("Sign In");
@@ -1417,6 +1423,51 @@
         } else {
           ZEALOT.userInfo = responseArray[0];
           ZEALOT.adminPrivilegesGranted = ZEALOT.userInfo.isAdmin;
+          ZEALOT.signature = `
+            <div id="mail-signature">
+            <br>
+            <br>
+            <br>
+            S poštovanjem / Best regards
+            <br>
+            <br>
+            <br><span style="font-size: 1.2em; font-weight: bold">` + ZEALOT.userInfo.operatorName + `</span>
+            <br><span style="font-size: 0.8em; font-style: italic">` + ZEALOT.userInfo.position + `</span>
+            <br>
+            <br>Mobile: ` + ZEALOT.userInfo.phone + `
+            <br>E-mail: <a href="mailto:` + ZEALOT.userInfo.username + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.username + `</a>
+            <br>
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4; width: 11em; height: 7em; margin-top: 0.3em" xml:space="preserve">
+              <style type="text/css">
+              	.st0{fill:#E62022;}
+              	.st1{fill:#918F93;}
+              </style>
+              <g>
+              	<rect x="344.9" y="489.4" class="st0" width="91.8" height="90.7"/>
+              	<path class="st1" d="M344.9,211.8h259.9l-0.1,0.1c45.8,0,82.9,37.1,82.9,82.9l0.1-0.1v202.6l-0.1,0.1c0,45.8-37.1,82.9-82.9,82.9
+              		l0.1-0.1H455.4V476.6H558l-0.1,0.1c8.3,0,15.1-6.7,15.1-15.1l0.1-0.1V325.6l-0.1,0.1c0-8.3-6.7-15.1-15.1-15.1h0.1H444.5V469h-99.6
+              		"/>
+              	<rect x="730.3" y="489.4" class="st1" width="91.7" height="90.7"/>
+              	<path class="st1" d="M974.8,211.9l0.1-0.1H730.2V469h99.6v-29.9h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.3L944,470
+              		c0,4.1-3.4,7.5-7.5,7.5l0.1-0.1h-95.9V580h134l-0.1,0.1c45.8,0,82.9-37.1,82.9-82.9v-0.1v-63l-0.1,0.1c-1-20.1-13.6-37.7-32.2-45.2
+              		l0,0c18.6-7.5,31.2-25.2,32.2-45.2h0.1v-49.1C1057.7,249,1020.5,211.9,974.8,211.9z M944.3,346.2l-0.1,0.1c0,4.1-3.4,7.5-7.5,7.5
+              		h0.1h-0.1H829.8v-38.3h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.2H944.3z"/>
+              	<path class="st1" d="M1426.1,497.3v-60.7l-0.1,0.1c0-45.8-37.1-82.9-82.9-82.9h0.1h-146.8v-38.3h212.6V211.8h-239.1l-0.1,0.1
+              		c-45.8,0-82.9,37.1-82.9,82.9v-0.1v61.6v0.1c0,45.8,37.1,82.9,82.9,82.9l0.1-0.1h145v37.4h-117.4V580h145.7l-0.1,0.1
+              		c45.8,0,82.9-37.1,82.9-82.9"/>
+              	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
+              </g>
+            </svg>
+            <br>Azanjska 5B
+            <br>11210 Beograd – Srbija
+            <br>
+            <br>T 381.11.20.86.106
+            <br>F 381.11.20.86.107
+            <br>
+            <br><a href="https://www.dbs.rs/" target="_blank" rel="noopener noreferrer" style="display: inline">www.dbs.rs</a>
+            <br>
+            </div>
+          `;
           ZEALOT.siAux();
           var sync = 0;
           $ajaxUtils.sendGetRequest(
