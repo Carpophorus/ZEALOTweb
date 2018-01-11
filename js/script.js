@@ -1434,7 +1434,7 @@
             <br><span style="font-size: 1.2em; font-weight: bold">` + ZEALOT.userInfo.operatorName + `</span>
             <br><span style="font-size: 0.8em; font-style: italic">` + ZEALOT.userInfo.position + `</span>
             <br>
-            <br>Mobile: ` + ZEALOT.userInfo.phone + `
+            <br>Mobile: <a href="tel:+` + ZEALOT.userInfo.phone.replace('.', '') + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.phone + `</a>
             <br>E-mail: <a href="mailto:` + ZEALOT.userInfo.username + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.username + `</a>
             <br>
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4; width: 11em; height: 7em; margin-top: 0.3em" xml:space="preserve">
@@ -1461,8 +1461,8 @@
             <br>Azanjska 5B
             <br>11210 Beograd – Srbija
             <br>
-            <br>T 381.11.20.86.106
-            <br>F 381.11.20.86.107
+            <br>T <a href="tel:+381112086106" target="_blank" rel="noopener noreferrer" style="display: inline">381.11.20.86.106</a>
+            <br>F <a href="tel:+381112086107" target="_blank" rel="noopener noreferrer" style="display: inline">381.11.20.86.107</a>
             <br>
             <br><a href="https://www.dbs.rs/" target="_blank" rel="noopener noreferrer" style="display: inline">www.dbs.rs</a>
             <br>
