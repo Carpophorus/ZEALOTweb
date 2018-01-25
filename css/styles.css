@@ -879,7 +879,7 @@ input:checked+.slider:before {
   text-align: center;
 }
 
-.mec-editor-toggle, .mec-send, .mec-internal {
+.mec-editor-toggle, .mec-send, .mec-internal, .mec-toggle {
   height: 33px;
   width: 50px;
   line-height: 33px;
@@ -887,18 +887,29 @@ input:checked+.slider:before {
   color: #003d3d;
 }
 
+.mec-toggle {
+  height: 23px;
+  width: 23px;
+  margin: 5px 5px;
+  border: 1px solid #003d3d;
+  border-radius: 5px;
+  line-height: 23px;
+  font-size: 14px !important;
+}
+
 .mec-editor-toggle:hover {
   cursor: pointer;
 }
 
-.mec-send, .mec-internal {
+.mec-send, .mec-internal, .mec-toggle {
   position: absolute;
 }
 
-.mec-send:hover, .mec-internal:hover {
+.mec-send:hover, .mec-internal:hover, .mec-toggle:hover, .mec-toggle.active {
   cursor: pointer;
   background-color: #003d3d;
   color: #00b3b3;
+  border-color: #00b3b3;
 }
 
 .mec-send {
@@ -909,6 +920,25 @@ input:checked+.slider:before {
 .mec-internal {
   right: 0px;
   font-size: 20px !important;
+}
+
+.mec-toggle-internal-messages {
+  right: 66px;
+  text-align: right;
+}
+
+.mec-toggle-operator-messages {
+  right: 99px;
+  text-align: right;
+  font-size: 13px !important;
+  line-height: 22px;
+}
+
+.mec-toggle-client-messages {
+  right: 132px;
+  text-align: left;
+  font-size: 13px !important;
+  line-height: 22px;
 }
 
 .trumbowyg-box {

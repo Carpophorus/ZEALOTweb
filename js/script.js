@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
-  //ZEALOT.apiRoot = "http://localhost:50358/api/";
+  //ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
+  ZEALOT.apiRoot = "http://localhost:50358/api/";
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
   ZEALOT.allOperators = "";
@@ -214,26 +214,7 @@
         ['fullscreen']
       ]
     });
-    $(".trumbowyg-editor").html(ZEALOT.signature);
-    // (`
-    //   <br>
-    //   <br>
-    //   <br>
-    //   <div id="mail-signature" style="margin-left: 5px">
-    //     <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
-    //     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-    //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
-    //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
-    //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
-    //     <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
-    //       <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
-    //       <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
-    //         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
-    //         <br>Please print this e-mail only if necessary.
-    //       </div>
-    //     </div>
-    //   </div>
-    // `);
+    $(".trumbowyg-editor").html("");
     $(".scrollable-hotfix").css({
       "height": Math.round(ZEALOT.browserHeight * 0.91 - 33)
     });
@@ -359,37 +340,18 @@
           text: "DA",
           btnClass: "btn-red",
           action: function() {
+            //please wait
             $ajaxUtils.sendPostRequest(
-              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator,
+              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html() + ZEALOT.signature) + "&idO=" + ZEALOT.userInfo.idOperator,
               function(responseArray, status) {
-                ZEALOT.loadSidebarTickets();
                 $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
                   <div class="operator-message">
-                    ` + $(".trumbowyg-editor").html() + `
+                    ` + $(".trumbowyg-editor").html() + ZEALOT.signature + `
                     <div class="unselectable speechdart">◥</div>
                     <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
                   </div>
                 `);
-                $(".trumbowyg-editor").html(ZEALOT.signature);
-                // (`
-                //   <br>
-                //   <br>
-                //   <br>
-                //   <div id="mail-signature" style="margin-left: 5px">
-                //     <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
-                //     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
-                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
-                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
-                //     <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
-                //       <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
-                //       <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
-                //         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
-                //         <br>Please print this e-mail only if necessary.
-                //       </div>
-                //     </div>
-                //   </div>
-                // `);
+                $(".trumbowyg-editor").html("");
                 if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
                   $(".mec-editor-toggle").removeClass("fa-chevron-down");
                   $(".mec-editor-toggle").addClass("fa-chevron-up");
@@ -402,55 +364,63 @@
                     "height": Math.round(ZEALOT.browserHeight * 0.91 - 33)
                   });
                 }
+                $.confirm({
+                  theme: "material",
+                  title: "Promena statusa",
+                  content: "Koji je novi status za tekući tiket?",
+                  type: "red",
+                  typeAnimated: true,
+                  buttons: {
+                    cancel: {
+                      text: "NE MENJAJ STATUS",
+                      action: function() {
+                        ZEALOT.loadSidebarTickets();
+                      }
+                    },
+                    one: {
+                      text: "NEOBRAĐEN",
+                      btnClass: "btn-red",
+                      action: function() {
+                        $ajaxUtils.sendPostRequest(
+                          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=1",
+                          function(responseArray, status) {
+                            ZEALOT.loadSidebarTickets();
+                          },
+                          true /*, ZEALOT.bearer*/
+                        );
+                      }
+                    },
+                    three: {
+                      text: "OBRADA U TOKU",
+                      btnClass: "btn-red",
+                      action: function() {
+                        $ajaxUtils.sendPostRequest(
+                          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=3",
+                          function(responseArray, status) {
+                            ZEALOT.loadSidebarTickets();
+                          },
+                          true /*, ZEALOT.bearer*/
+                        );
+                      }
+                    },
+                    four: {
+                      text: "USPEŠNO KOMPLETIRAN",
+                      btnClass: "btn-red",
+                      action: function() {
+                        $ajaxUtils.sendPostRequest(
+                          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=4",
+                          function(responseArray, status) {
+                            ZEALOT.loadSidebarTickets();
+                          },
+                          true /*, ZEALOT.bearer*/
+                        );
+                      }
+                    }
+                  }
+                });
               },
               true /*, ZEALOT.bearer*/
             );
-            $.confirm({
-              theme: "material",
-              title: "Promena statusa",
-              content: "Koji je novi status za tekući tiket?",
-              type: "red",
-              typeAnimated: true,
-              buttons: {
-                cancel: {
-                  text: "NE MENJAJ STATUS",
-                  action: function() {}
-                },
-                one: {
-                  text: "NEOBRAĐEN",
-                  btnClass: "btn-red",
-                  action: function() {
-                    $ajaxUtils.sendPostRequest(
-                      ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=1",
-                      function(responseArray, status) {},
-                      true /*, ZEALOT.bearer*/
-                    );
-                  }
-                },
-                three: {
-                  text: "OBRADA U TOKU",
-                  btnClass: "btn-red",
-                  action: function() {
-                    $ajaxUtils.sendPostRequest(
-                      ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=3",
-                      function(responseArray, status) {},
-                      true /*, ZEALOT.bearer*/
-                    );
-                  }
-                },
-                four: {
-                  text: "USPEŠNO KOMPLETIRAN",
-                  btnClass: "btn-red",
-                  action: function() {
-                    $ajaxUtils.sendPostRequest(
-                      ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=4",
-                      function(responseArray, status) {},
-                      true /*, ZEALOT.bearer*/
-                    );
-                  }
-                }
-              }
-            });
           }
         }
       }
@@ -474,7 +444,6 @@
           text: "DA",
           btnClass: "btn-blue",
           action: function() {
-            $(".trumbowyg-editor #mail-signature").remove();
             $ajaxUtils.sendPostRequest(
               ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=true" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator,
               function(responseArray, status) {
@@ -484,26 +453,7 @@
                     <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
                   </div>
                 `);
-                $(".trumbowyg-editor").html(ZEALOT.signature);
-                // (`
-                //   <br>
-                //   <br>
-                //   <br>
-                //   <div id="mail-signature" style="margin-left: 5px">
-                //     <div id="mail-signature-logo" display="inline-block" style="background: url('img/DBS logo.svg') no-repeat; height: 10vh; width: 20vh; background-size: 100% auto"></div>
-                //     <span id="mail-signature-name" style="font-size: 2.7vh; font-weight: bold; display: inline-block; margin-bottom: 10px; padding-top: 10px">` + ZEALOT.userInfo.operatorName + `</span>
-                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">sektor:</span><span id="mail-signature-sector" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.sectorName + `</span>
-                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">e-mail:</span><span id="mail-signature-email" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.username + `</span>
-                //     <br><span style="font-size: 2vh; font-style: italic; display: inline-block; min-width: 10vh; line-height: 1.2">telefon:</span><span id="mail-signature-phone" style="font-size: 2vh; line-height: 1.2">` + ZEALOT.userInfo.phone + `</span>
-                //     <div id="mail-signature-eco" style="margin-top: 3vh; margin-bottom: 3vh; height: 3vh">
-                //       <div id="mail-signature-leaf" alt="leaf" style="background: url('img/green leaf.svg') no-repeat; height: 3vh; width: 3vh; background-size: 100% auto; display: inline-block"></div>
-                //       <div id="mail-signature-eco-notice" style="color: #00b3b3; font-size: 1.2vh; line-height: 1.5vh; display: inline-block; margin-top: -0.5vh; vertical-align: 0.5vh; padding-left: 0.5vh">
-                //         Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
-                //         <br>Please print this e-mail only if necessary.
-                //       </div>
-                //     </div>
-                //   </div>
-                // `);
+                $(".trumbowyg-editor").html("");
                 if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
                   $(".mec-editor-toggle").removeClass("fa-chevron-down");
                   $(".mec-editor-toggle").addClass("fa-chevron-up");
@@ -533,6 +483,7 @@
           "&idTs=" + ZEALOT.idStatusForTicket +
           "&idTt=" + ZEALOT.idTypeForTicket,
           function(responseArray, status) {
+            ZEALOT.loadSidebarTickets();
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
@@ -601,6 +552,7 @@
           "&idS=" + ZEALOT.idSectorForTicket +
           "&idO=" + ZEALOT.idOperatorForTicket,
           function(responseArray, status) {
+            ZEALOT.loadSidebarTickets();
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
@@ -709,6 +661,36 @@
       iframedoc.open();
       iframedoc.writeln(decodeURIComponent(html));
       iframedoc.close();
+    }
+  };
+
+  ZEALOT.toggleClientMessages = function(e) {
+    if ($(e).hasClass("active")) {
+      $(".client-message").removeClass("gone");
+      $(e).removeClass("active");
+    } else {
+      $(".client-message").addClass("gone");
+      $(e).addClass("active");
+    }
+  };
+
+  ZEALOT.toggleOperatorMessages = function(e) {
+    if ($(e).hasClass("active")) {
+      $(".operator-message").removeClass("gone");
+      $(e).removeClass("active");
+    } else {
+      $(".operator-message").addClass("gone");
+      $(e).addClass("active");
+    }
+  };
+
+  ZEALOT.toggleInternalMessages = function(e) {
+    if ($(e).hasClass("active")) {
+      $(".internal-message").removeClass("gone");
+      $(e).removeClass("active");
+    } else {
+      $(".internal-message").addClass("gone");
+      $(e).addClass("active");
     }
   };
 
@@ -835,6 +817,9 @@
               <div class="mec-editor-toggle fa fa-chevron-up"></div>
               <div class="mec-send fa fa-send gone" onclick="ZEALOT.sendMail();"></div>
               <div class="mec-internal fa fa-info-circle gone" onclick="ZEALOT.sendInternal();"></div>
+              <div class="mec-toggle mec-toggle-client-messages fa fa-square" onclick="ZEALOT.toggleClientMessages(this);"></div>
+              <div class="mec-toggle mec-toggle-operator-messages fa fa-square" onclick="ZEALOT.toggleOperatorMessages(this);"></div>
+              <div class="mec-toggle mec-toggle-internal-messages fa fa-square-o" onclick="ZEALOT.toggleInternalMessages(this);"></div>
             </div>
             <div class="mec-editor">
               <div id="trumbowyg-icons">
@@ -896,8 +881,8 @@
           sectorName = "PRODAJA";
           break;
         case 4:
-          sectorSign = "🅣";
-          sectorName = "TEHNIKA";
+          sectorSign = "🅗";
+          sectorName = "HARDVER";
           break;
         case 5:
           sectorSign = "🅕";
@@ -1424,7 +1409,6 @@
           ZEALOT.userInfo = responseArray[0];
           ZEALOT.adminPrivilegesGranted = ZEALOT.userInfo.isAdmin;
           ZEALOT.signature = `
-            <div id="mail-signature">
             <br>
             <br>
             <br>
@@ -1458,15 +1442,17 @@
               	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
               </g>
             </svg>
-            <br>Azanjska 5B
-            <br>11210 Beograd – Srbija
+            <br>Tošin Bunar 274v
+            <br>11070 Novi Beograd, Srbija
             <br>
             <br>T <a href="tel:+381112086106" target="_blank" rel="noopener noreferrer" style="display: inline">381.11.20.86.106</a>
             <br>F <a href="tel:+381112086107" target="_blank" rel="noopener noreferrer" style="display: inline">381.11.20.86.107</a>
-            <br>
             <br><a href="https://www.dbs.rs/" target="_blank" rel="noopener noreferrer" style="display: inline">www.dbs.rs</a>
             <br>
-            </div>
+            <br><span style="color: #4BA524; font-size: 0.5em; line-height: 1.5">
+              Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
+              <br>Please print this e-mail only if necessary.
+            </span>
           `;
           ZEALOT.siAux();
           var sync = 0;
