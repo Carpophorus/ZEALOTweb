@@ -130,11 +130,15 @@
     }
   };
 
+  $(window).resize(function() {
+    ZEALOT.mainLoaded(null);
+  });
+
   ZEALOT.mainLoaded = function(e) {
     ZEALOT.browserWidth = window.innerWidth;
     ZEALOT.browserHeight = window.innerHeight;
     var nineVH = $(".sidebar").width();
-    if (ZEALOT.browserWidth < 992) {
+    if (ZEALOT.browserWidth < 991.5) {
       ZEALOT.popupWidth = Math.round(ZEALOT.browserWidth - nineVH - ZEALOT.x);
       ZEALOT.mainWidthSmall = 0;
       ZEALOT.mainWidthLarge = Math.round(ZEALOT.browserWidth - nineVH - ZEALOT.x);
@@ -156,7 +160,8 @@
         "width": ZEALOT.mainWidthSmall
       });
     }
-    $(e).remove();
+    if (e)
+      $(e).remove();
   };
 
   ZEALOT.statsLoaded = function(e) {
@@ -1329,7 +1334,7 @@
           <div class="sidebar-button contacts-button" onclick="$ZEALOT.sidebarButtonClick(this);">
             <i class="fa fa-address-book"></i>
           </div>
-          <div class="thumb hidden-md-up">
+          <div class="thumb hidden-lg-up">
             <div class="thumb-helper" onmouseenter="$ZEALOT.thumbEnter();" onmouseout="$ZEALOT.thumbLeave();" onclick="$ZEALOT.thumbClick();"></div>
             <i class="fa fa-chevron-left"></i>
           </div>
