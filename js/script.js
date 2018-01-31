@@ -344,6 +344,9 @@
             $ajaxUtils.sendPostRequest(
               ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html() + ZEALOT.signature) + "&idO=" + ZEALOT.userInfo.idOperator,
               function(responseArray, status) {
+                ZEALOT.currentTicket.isUnread = false;
+                if (ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.idOperator != null && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
+                  insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
                 $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
                   <div class="operator-message">
                     ` + $(".trumbowyg-editor").html() + ZEALOT.signature + `
@@ -545,14 +548,16 @@
           });
           return;
         }
-        ZEALOT.currentTicket.idSector = ZEALOT.idSectorForTicket;
-        ZEALOT.currentTicket.idOperator = ZEALOT.idOperatorForTicket;
         $ajaxUtils.sendPostRequest(
           ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
           "&idS=" + ZEALOT.idSectorForTicket +
           "&idO=" + ZEALOT.idOperatorForTicket,
           function(responseArray, status) {
             ZEALOT.loadSidebarTickets();
+            ZEALOT.currentTicket.idSector = ZEALOT.idSectorForTicket;
+            ZEALOT.currentTicket.idOperator = ZEALOT.idOperatorForTicket;
+            if (ZEALOT.currentTicket.isUnread == false && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
+              insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
@@ -719,7 +724,7 @@
               <div class="toc-selection">
                 <input id="selection-select-ticket" type="search" list="select-selection-ticket" placeholder="Podešavanje" onfocus="this.placeholder=''" onblur="this.placeholder='Podešavanje'" oninput="$ZEALOT.ticketSelectionSelect(this)">
                 <datalist id="select-selection-ticket">
-                    ` + ((completed == false) ? `<option value="Status i tip"><div value="1" id="val"></div></option>` : ``) + `
+                    ` + ((completed == false && ZEALOT.currentTicket.idOperator != null && ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.isUnread == false) ? `<option value="Status i tip"><div value="1" id="val"></div></option>` : ``) + `
                     <option value="Kompanija i klijent"><div value="2" id="val"></div></option>
                     <option value="Tagovi"><div value="5" id="val"></div></option>
                     ` + ((ZEALOT.adminPrivilegesGranted) ? (`
@@ -1101,7 +1106,7 @@
     $("#operator-select").val("");
     var datalistHtml = " ";
     for (var i = 0; i < ZEALOT.allOperators.length; i++) {
-      if (((ZEALOT.allOperators[i].idSc == idS && ZEALOT.userInfo.adminSector == idS) || (idS == 0 && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.allOperators[i].idSc == ZEALOT.userInfo.adminSector))) && ZEALOT.allOperators[i].idSc != null)
+      if (((ZEALOT.allOperators[i].idSc == idS && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == idS)) || (idS == 0 && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.allOperators[i].idSc == ZEALOT.userInfo.adminSector))) && ZEALOT.allOperators[i].idSc != null)
         datalistHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
     }
     insertHtml("#select-operator", datalistHtml);
