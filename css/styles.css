@@ -23,11 +23,11 @@ body {
 }
 
 .hidden {
-  visibility: hidden;
+  visibility: hidden !important;
 }
 
 .gone {
-  display: none;
+  display: none !important;
 }
 
 a, a:hover, a:focus, a:visited {
