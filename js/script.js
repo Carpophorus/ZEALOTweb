@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  //ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
-  ZEALOT.apiRoot = "http://localhost:50358/api/";
+  ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
+  //ZEALOT.apiRoot = "http://localhost:50358/api/";
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
   ZEALOT.allOperators = "";
