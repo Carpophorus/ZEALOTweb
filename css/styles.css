@@ -239,7 +239,8 @@ h3 {
 .main-screen>.main-panel>.scrollable {
   float: right;
   overflow: auto;
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
   height: 91vh;
   margin-top: 9vh;
 }
@@ -624,12 +625,36 @@ input:checked+.slider:before {
   line-height: 4.5vh;
   right: 0;
   float: right;
-  width: 90%;
-  height: 4.5vh;
+  width: calc(100% - 9vh);
   text-align: center;
   border: 1px solid #00b3b3;
   border-top: 0;
   margin-right: 0.1vh;
+}
+
+.company-contact>div {
+  height: 4.5vh;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
+.company-contact>div>a {
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
+.company-contact>div>a:hover {
+  color: #00b3b3;
+}
+
+.contact-name {
+  font-weight: 700;
+}
+
+.company-contacts-container {
+  overflow: hidden;
 }
 
 .main-panel-tickets {
@@ -744,6 +769,7 @@ input:checked+.slider:before {
 
 .ticket-options-container>div>input {
   font-size: 2vh !important;
+  font-family: 'Open Sans', sans-serif;
   width: 100%;
 }
 
@@ -992,8 +1018,19 @@ input:checked+.slider:before {
 
 /* MEDIA */
 
-@media (max-width: 991.5px;
-  {
+@media (max-width: 767.5px) {
+  .company-contact {
+    padding: 2vh 0;
+  }
+  .company-contact>div {
+    text-align: left;
+  }
+  .contact-email, .contact-phone {
+    padding-left: 9vh;
+  }
+}
+
+@media (max-width: 991.5px) {
   .stat {
     height: 100%;
   }

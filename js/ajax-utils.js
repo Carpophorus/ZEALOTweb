@@ -44,6 +44,7 @@
       } else {
         $("#login-button").html("Sign In");
         $("#username, #password").prop("disabled", false);
+        $(".jconfirm").remove();
         $.confirm({
           theme: "material",
           title: "Greška",

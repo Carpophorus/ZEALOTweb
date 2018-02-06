@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
-  //ZEALOT.apiRoot = "http://localhost:50358/api/";
+  //ZEALOT.apiRoot = "https://zealott.azurewebsites.net/api/";
+  ZEALOT.apiRoot = "http://localhost:50358/api/";
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
   ZEALOT.allOperators = "";
@@ -83,13 +83,14 @@
       });
       if (ZEALOT.mainWidthSmall == 0) {
         main.css({
+          "width": ZEALOT.mainWidthLarge,
           "margin-right": 0,
-          "transition": "0.75s"
+          "transition": ".75s"
         });
       } else {
         main.css({
           "width": ZEALOT.mainWidthLarge,
-          "transition": "0.75s"
+          "transition": ".75s"
         });
       }
     } else if (thumb.hasClass("fa-chevron-right")) {
@@ -101,13 +102,14 @@
       });
       if (ZEALOT.mainWidthSmall == 0) {
         main.css({
+          "width": ZEALOT.mainWidthLarge,
           "margin-right": -(ZEALOT.mainWidthLarge),
-          "transition": "0.75s"
+          "transition": ".75s"
         });
       } else {
         main.css({
           "width": ZEALOT.mainWidthSmall,
-          "transition": "0.75s"
+          "transition": ".75s"
         });
       }
     }
@@ -115,8 +117,8 @@
 
   ZEALOT.sidebarButtonClick = function(e) {
     if ($(e).hasClass("active")) {
-      if ($(".thumb i").hasClass("fa-chevron-right"))
-        ZEALOT.thumbClick();
+      //if ($(".thumb i").hasClass("fa-chevron-right"))
+      ZEALOT.thumbClick();
       return;
     }
     $(".sidebar .sidebar-button").removeClass("active");
@@ -132,7 +134,7 @@
     } else if ($(e).hasClass("statistics-button")) {
       ZEALOT.loadSidebarStats();
     }
-    if (ZEALOT.browserWidth < 991.5 && $(".thumb i").hasClass("fa-chevron-right"))
+    if ($(".thumb i").hasClass("fa-chevron-right"))
       ZEALOT.thumbClick();
   };
 
@@ -150,21 +152,49 @@
       ZEALOT.mainWidthLarge = Math.round(ZEALOT.browserWidth - nineVH - ZEALOT.x - 1);
     } else {
       ZEALOT.popupWidth = 333;
-      ZEALOT.mainWidthSmall = Math.round(ZEALOT.browserWidth - 2 * nineVH - ZEALOT.popupWidth - ZEALOT.x);
-      ZEALOT.mainWidthLarge = Math.round(ZEALOT.browserWidth - 2 * nineVH - ZEALOT.x);
+      ZEALOT.mainWidthSmall = Math.round(ZEALOT.browserWidth - 2 * nineVH - ZEALOT.popupWidth - ZEALOT.x - 1);
+      ZEALOT.mainWidthLarge = Math.round(ZEALOT.browserWidth - 2 * nineVH - ZEALOT.x - 1);
     }
-    $(".sidebar-popup").css({
-      "width": ZEALOT.popupWidth
-    });
-    if (ZEALOT.mainWidthSmall == 0) {
-      $(".main-panel").css({
-        "width": ZEALOT.mainWidthLarge,
-        "margin-right": -(ZEALOT.mainWidthLarge)
+    var thumb = $(".thumb i");
+    var popup = $(".sidebar-popup");
+    var main = $(".main-panel");
+    if (thumb.length == 0 || popup.length == 0 || main.length == 0) return;
+    if (thumb.hasClass("fa-chevron-right")) {
+      popup.css({
+        "width": ZEALOT.popupWidth,
+        "margin-left": -ZEALOT.popupWidth + 1,
+        "transition": "0s"
       });
-    } else {
-      $(".main-panel").css({
-        "width": ZEALOT.mainWidthSmall
+      if (ZEALOT.mainWidthSmall == 0) {
+        main.css({
+          "width": ZEALOT.mainWidthLarge,
+          "margin-right": 0,
+          "transition": "0s"
+        });
+      } else {
+        main.css({
+          "width": ZEALOT.mainWidthLarge,
+          "transition": "0s"
+        });
+      }
+    } else if (thumb.hasClass("fa-chevron-left")) {
+      popup.css({
+        "width": ZEALOT.popupWidth,
+        "margin-left": 0,
+        "transition": "0s"
       });
+      if (ZEALOT.mainWidthSmall == 0) {
+        main.css({
+          "width": ZEALOT.mainWidthLarge,
+          "margin-right": -(ZEALOT.mainWidthLarge),
+          "transition": "0s"
+        });
+      } else {
+        main.css({
+          "width": ZEALOT.mainWidthSmall,
+          "transition": "0s"
+        });
+      }
     }
     if (e)
       $(e).remove();
@@ -183,15 +213,6 @@
 
   ZEALOT.ticketsLoaded = function(e) {
     $('[data-toggle="tooltip"]').tooltip();
-    /*$(".pulse").pulsate({
-      color: "#b30000",
-      reach: 5,
-      speed: 666,
-      pause: 0,
-      glow: true,
-      repeat: true,
-      onHover: false
-    });*/
     $(e).remove();
   };
 
@@ -1051,11 +1072,14 @@
       }
       var now = new Date();
       var lcmt = new Date(messagesArray[i].lcmt);
+      var startIndex = (messagesArray[i].clientMail.lastIndexOf('<') == -1) ? 0 : messagesArray[i].clientMail.lastIndexOf('<') + 1;
+      var addressLength = (messagesArray[i].clientMail.lastIndexOf('>') == -1) ? messagesArray[i].clientMail.length - startIndex : messagesArray[i].clientMail.lastIndexOf('>') - startIndex;
+      var mail = messagesArray[i].clientMail.substr(startIndex, addressLength);
       mainTicketsHtml += `
         <div class="ticket-container row` + ((messagesArray[i].isUnread) ? ` open-sans-dark-bold` : ``) + `" onclick="$ZEALOT.ticketClicked(` + messagesArray[i].idTicket + `, ` + ((Number(messagesArray[i].idStatus) < 4) ? `false` : `true`) + `);">
           <div class="tc-priority-` + messagesArray[i].idPriority + ` col-1 fa fa-circle ` + ((lcmt.getTime() < now.getTime() - 48 * 60 * 60 * 1000 && Number(messagesArray[i].idPriority) == 2) ? `pulse` : ``) + `" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
           <div class="tc-id-len col-2">` + messagesArray[i].idTicket + ` (` + messagesArray[i].conversationLength + `)</div>
-          <div class="tc-sender col-3" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].clientName + `, ` + messagesArray[i].companyName + `">` + messagesArray[i].clientMail + `</div>
+          <div class="tc-sender col-3" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].clientName + `, ` + messagesArray[i].companyName + `">` + mail + `</div>
           <div class="tc-subject col-3">` + messagesArray[i].eMailSubject + `</div>
           <div class="tc-status col-1" data-toggle="tooltip" data-placement="left" title="` + messagesArray[i].statusName + `">&#` + (10101 + messagesArray[i].idStatus) + `;</div>
           <div class="tc-type col-1 fa ` + statusIcon + `" data-toggle="tooltip" data-placement="left" title="` + messagesArray[i].typeName + `"></div>
@@ -1146,16 +1170,15 @@
               <div class="company-name oswald-dark-blue-normal">DBS</div>
               <a class="company-expand fa fa-chevron-up" data-toggle="collapse" data-target="#collapse-contacts-1" onclick="$ZEALOT.contactExpand(this);"></a>
             </div>
-            <style>#collapse-contacts-1 {height: ` + (ZEALOT.allOperators.length * 4.5) + `vh;}</style>
             <div id="collapse-contacts-1" class="company-contacts-container collapse show">
       `;
       for (var i = 0; i < ZEALOT.allOperators.length; i++)
         if (ZEALOT.allOperators[i].idSc != null)
           dbsContactsHtml += `
               <div class="company-contact row">
-                <div class="contact-name col-4">` + ZEALOT.allOperators[i].onm + `</div>
-                <div class="contact-email col-4">` + ZEALOT.allOperators[i].mail + `</div>
-                <div class="contact-phone col-4">` + ZEALOT.allOperators[i].p + `</div>
+                <div class="contact-name col-12 col-md-4">` + ZEALOT.allOperators[i].onm + `</div>
+                <div class="contact-email col-12 col-md-4">` + ZEALOT.allOperators[i].mail + `</div>
+                <div class="contact-phone col-12 col-md-4">` + ZEALOT.allOperators[i].p + `</div>
               </div>
           `;
       dbsContactsHtml += `
@@ -1196,17 +1219,20 @@
                 <div class="company-container">
                   <div class="company-header">
                     <div class="company-name oswald-dark-blue-normal">` + companyName + `</div>
-                    <a class="company-expand fa fa-chevron-down" data-toggle="collapse" data-target="#collapse-contacts-` + companyNum + `" onclick="$ZEALOT.contactExpand(this);"></a>
+                    <a class="company-expand fa fa-chevron-down collapsed" data-toggle="collapse" data-target="#collapse-contacts-` + companyNum + `" onclick="$ZEALOT.contactExpand(this);"></a>
                   </div>
                   <div id="collapse-contacts-` + companyNum + `" class="company-contacts-container collapse">
               `;
               while (i < responseArray.length) {
                 if (responseArray[i].companyName != companyName) break;
+                var startIndex = (responseArray[i].clientMail.lastIndexOf('<') == -1) ? 0 : responseArray[i].clientMail.lastIndexOf('<') + 1;
+                var addressLength = (responseArray[i].clientMail.lastIndexOf('>') == -1) ? responseArray[i].clientMail.length - startIndex : responseArray[i].clientMail.lastIndexOf('>') - startIndex;
+                var mail = responseArray[i].clientMail.substr(startIndex, addressLength);
                 otherContactsHtml += `
                     <div class="company-contact row">
-                      <div class="contact-name col-4">` + responseArray[i].clientName + `</div>
-                      <div class="contact-email col-4">` + responseArray[i].clientMail + `</div>
-                      <div class="contact-phone col-4">` + responseArray[i].clientPhone + `</div>
+                      <div class="contact-name col-12 col-md-4">` + responseArray[i].clientName + `</div>
+                      <div class="contact-email col-12 col-md-4"><a href="mailto:` + mail + `">` + mail + `</a></div>
+                      <div class="contact-phone col-12 col-md-4"><a href="tel:" ` + responseArray[i].clientPhone + `>` + responseArray[i].clientPhone + `</a></div>
                     </div>
                 `;
                 i = i + 1;
@@ -1214,7 +1240,6 @@
               }
               otherContactsHtml += `
                   </div>
-                  <style>#collapse-contacts-` + companyNum + ` {height: ` + (companyHeadCount * 4.5) + `vh;}</style>
                 </div>
               `;
               companyNum = companyNum + 1;
@@ -1461,12 +1486,14 @@
   };
 
   ZEALOT.contactExpand = function(e) {
-    if ($(e).hasClass("fa-chevron-down")) {
-      $(e).removeClass("fa-chevron-down");
-      $(e).addClass("fa-chevron-up");
-    } else if ($(e).hasClass("fa-chevron-up")) {
+    var ccc = $(e).parent().parent().find(".company-contacts-container");
+    if ($(ccc).hasClass("collapsing")) return;
+    if ($(ccc).hasClass("show")) {
       $(e).removeClass("fa-chevron-up");
       $(e).addClass("fa-chevron-down");
+    } else {
+      $(e).removeClass("fa-chevron-down");
+      $(e).addClass("fa-chevron-up");
     }
   };
 
@@ -1481,7 +1508,7 @@
           <div class="sidebar-button contacts-button" onclick="$ZEALOT.sidebarButtonClick(this);">
             <i class="fa fa-address-book"></i>
           </div>
-          <div class="thumb hidden-lg-up">
+          <div class="thumb d-lg-none">
             <div class="thumb-helper" onmouseenter="$ZEALOT.thumbEnter();" onmouseout="$ZEALOT.thumbLeave();" onclick="$ZEALOT.thumbClick();"></div>
             <i class="fa fa-chevron-left"></i>
           </div>
@@ -1502,7 +1529,7 @@
             Copyright&nbsp;&copy;&nbsp;2017.&nbsp;DBS. All&nbsp;rights&nbsp;reserved.
           </div>
         </div>
-        <div class="sidebar-thumb hidden-md-down">
+        <div class="sidebar-thumb d-none d-lg-block">
           <div class="thumb">
             <div class="thumb-helper" onmouseenter="$ZEALOT.thumbEnter();" onmouseout="$ZEALOT.thumbLeave();" onclick="$ZEALOT.thumbClick();"></div>
             <i class="fa fa-chevron-left"></i>
@@ -1930,7 +1957,7 @@
         </div>
       `;
     } else {
-      statsSearchHtml += `<div class="special-stat col-md-1 hidden-sm-down"></div>`;
+      statsSearchHtml += `<div class="special-stat col-md-1 d-none d-md-block"></div>`;
       for (var i = 0; i < ZEALOT.allSectors.length; i++) {
         var sum = 0;
         for (var j = 0; j < specialCounters['s' + i].length; j++) sum += specialCounters['s' + i][j].cnt;
