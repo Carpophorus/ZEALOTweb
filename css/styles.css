@@ -34,6 +34,9 @@ a, a:hover, a:focus, a:visited {
   display: block;
   text-decoration: none;
   color: inherit;
+  -webkit-transition: color .5s ease;
+  -moz-transition: color .5s ease;
+  transition: color .5s ease;
 }
 
 input, button {
@@ -47,6 +50,9 @@ button {
   font-family: 'Oswald', sans-serif !important;
   font-weight: 600;
   border-radius: 100vh;
+  -webkit-transition: background-color .5s ease, color .5s ease;
+  -moz-transition: background-color .5s ease, color .5s ease;
+  transition: background-color .5s ease, color .5s ease;
 }
 
 button:hover {
@@ -276,6 +282,10 @@ h3 {
   padding-top: 1vh;
   text-align: center;
   color: #003d3d;
+  background-color: transparent;
+  -webkit-transition: background-color .5s ease;
+  -moz-transition: background-color .5s ease;
+  transition: background-color .5s ease;
 }
 
 .sidebar>div:hover {
@@ -320,6 +330,9 @@ h3 {
 .sidebar .thumb {
   top: 45.5vh;
   border-radius: 0;
+  -webkit-transition: background-color .5s ease, color .5s ease;
+  -moz-transition: background-color .5s ease, color .5s ease;
+  transition: background-color .5s ease, color .5s ease;
 }
 
 .thumb-helper {
@@ -335,6 +348,9 @@ h3 {
   width: 9vh;
   height: 91vh;
   background-color: #00b3b3;
+  -webkit-transition: background-color .5s ease, color .5s ease;
+  -moz-transition: background-color .5s ease, color .5s ease;
+  transition: background-color .5s ease, color .5s ease;
 }
 
 .under-thumb {
@@ -412,6 +428,9 @@ h3 {
 .sidebar-popup-content>div>.tabbed {
   position: relative;
   padding-left: 10vh !important;
+  -webkit-transition: color .5s ease;
+  -moz-transition: color .5s ease;
+  transition: color .5s ease;
 }
 
 .sidebar-popup-content>div>div>.num {
@@ -614,6 +633,9 @@ input:checked+.slider:before {
   text-align: center;
   color: #00b3b3 !important;
   background: transparent;
+  -webkit-transition: color .5s ease;
+  -moz-transition: color .5s ease;
+  transition: color .5s ease;
 }
 
 .company-expand:hover {
@@ -659,11 +681,23 @@ input:checked+.slider:before {
 
 .main-panel-tickets {
   padding: 5vh;
+  position: relative;
+}
+
+.expanded {
+  background-color: #dfffff !important;
+  border-top: 1px solid #00b3b3 !important;
+  border-left: 1px solid #00b3b3 !important;
+  border-right: 1px solid #00b3b3 !important;
 }
 
 .ticket-container {
   padding: 1vh;
   border-top: 1px solid #00b3b3;
+  background-color: transparent;
+  -webkit-transition: background-color .5s ease;
+  -moz-transition: background-color .5s ease;
+  transition: background-color .5s ease;
 }
 
 .ticket-container:hover {
@@ -682,6 +716,14 @@ input:checked+.slider:before {
 .ticket-container>.col-1 {
   cursor: pointer;
   color: #003d3d;
+}
+
+.ticket-container>.tc-priority {
+  padding-left: 1vh !important;
+}
+
+.ticket-container>.tc-status {
+  text-align: center;
 }
 
 .ticket-container>.tc- us, .ticket-container>.tc-type, .ticket-container>.tc-hide, .ticket-container>.tc-assign {
@@ -755,6 +797,49 @@ input:checked+.slider:before {
   font-size: 170% !important;
   line-height: 3vh !important;
   padding-top: 0.2vh;
+}
+
+.ticket-container>.tc-info {
+  padding-left: 8.333333%;
+  font-weight: 400 !important;
+}
+
+.tc-info-data-container {
+  padding: 3vh 0 4vh 0;
+}
+
+.tc-info-label {
+  padding-top: 1vh;
+  font-family: 'Oswald', sans-serif;
+}
+
+.tc-info-info {
+  padding-left: 3vh;
+}
+
+.ticket-button {
+  font-size: 70% !important;
+  line-height: 5vh !important;
+  width: 15vh;
+  height: 5vh;
+  padding-top: .4vh;
+  color: #003d3d;
+  background-color: #00b3b3;
+}
+
+.ticket-button:hover {
+  padding-top: .4vh;
+  color: #f9fdfd;
+  background-color: #003d3d;
+}
+
+.ticket-button-abs {
+  position: absolute;
+  bottom: 0;
+}
+
+.ticket-button-regular, .ticket-button-regular:hover {
+  margin-bottom: 3vh;
 }
 
 .ticket-container>.fa {
@@ -1025,8 +1110,11 @@ input:checked+.slider:before {
   .company-contact>div {
     text-align: left;
   }
+  .contact-name {
+    padding-left: 4.5vh !important;
+  }
   .contact-email, .contact-phone {
-    padding-left: 9vh;
+    padding-left: 9vh !important;
   }
 }
 
@@ -1043,8 +1131,14 @@ input:checked+.slider:before {
   }
 }
 
+@media (max-width: 500px) {
+  .ticket-container>.tc-id-len {
+    text-align: center;
+  }
+}
+
 @media (min-width: 1px) {
-  [class^='col-'] {
+  [class*="col-"] {
     padding-right: 0;
     padding-left: 0;
   }
