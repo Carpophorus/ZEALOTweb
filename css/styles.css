@@ -398,6 +398,42 @@ h3 {
   border: 1px solid #00b3b3;
 }
 
+.main-panel-admin input, .main-panel-admin select {
+  display: block;
+  line-height: 5vh !important;
+  height: 5vh !important;
+  width: 70%;
+  margin: auto;
+  margin-bottom: 1vh;
+  padding-left: 1vh;
+  border: 1px solid #00b3b3;
+}
+
+.main-panel-admin input {
+  padding-left: 1.7vh;
+}
+
+.main-panel-admin select {
+  color: rgba(0, 17, 17, 0.65);
+}
+
+.main-panel-admin select option {
+  color: #011;
+}
+
+.main-panel-admin #user-select {
+  color: #011;
+}
+
+.main-panel-admin button {
+  margin: auto;
+  margin-top: 5vh;
+}
+
+.main-panel-admin #user-select {
+  margin: 5vh auto;
+}
+
 .ticket-options-container>div {
   float: left;
 }
@@ -827,8 +863,25 @@ input:checked+.slider:before {
   background-color: #00b3b3;
 }
 
+.main-panel-button {
+  font-size: 65% !important;
+  line-height: 5vh !important;
+  width: 15vh;
+  height: 5vh;
+  padding-top: .5vh;
+  color: #003d3d;
+  background-color: #00b3b3;
+  display: block;
+}
+
 .ticket-button:hover {
   padding-top: .4vh;
+  color: #f9fdfd;
+  background-color: #003d3d;
+}
+
+.main-panel-button:hover {
+  padding-top: .5vh;
   color: #f9fdfd;
   background-color: #003d3d;
 }

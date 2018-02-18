@@ -967,7 +967,7 @@
                 <datalist id="select-operator-ticket">
         `;
         for (var i = 0; i < ZEALOT.allOperators.length; i++)
-          if (ZEALOT.allOperators[i].idSc != null)
+          if (ZEALOT.allOperators[i].idSc != null && ZEALOT.allOperators[i].isActive == true)
             ticketHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
         ticketHtml += `
                 </datalist>
@@ -1235,12 +1235,12 @@
             <div id="collapse-contacts-1" class="company-contacts-container collapse show">
       `;
       for (var i = 0; i < ZEALOT.allOperators.length; i++)
-        if (ZEALOT.allOperators[i].idSc != null)
+        if (ZEALOT.allOperators[i].idSc != null && ZEALOT.allOperators[i].isActive == true)
           dbsContactsHtml += `
               <div class="company-contact row">
                 <div class="contact-name col-12 col-md-4">` + ZEALOT.allOperators[i].onm + `</div>
                 <div class="contact-email col-12 col-md-4"><a href="mailto:` + ZEALOT.allOperators[i].mail + `">` + ZEALOT.allOperators[i].mail + `</a></div>
-                <div class="contact-phone col-12 col-md-4"><a href="tel:+` + ZEALOT.allOperators[i].p.replace(/\./g, '') + `">` + ZEALOT.allOperators[i].p + `</a></div>
+                <div class="contact-phone col-12 col-md-4"><a href="tel:+` + ((ZEALOT.allOperators[i].p != null) ? ZEALOT.allOperators[i].p.replace(/\./g, '') : '') + `">` + ((ZEALOT.allOperators[i].p != null) ? ZEALOT.allOperators[i].p : '') + `</a></div>
               </div>
           `;
       dbsContactsHtml += `
@@ -1321,12 +1321,13 @@
     //maybe all if hasadminprivileges in user info
     if ($(e).prop("checked") == true) {
       $(".admin-privileges-status").html("UKLJUČENO");
-      ZEALOT.adminPrivilegesGranted = 1;
+      ZEALOT.adminPrivilegesGranted = true;
     } else {
       $(".admin-privileges-status").html("ISKLJUČENO");
-      ZEALOT.adminPrivilegesGranted = 0;
+      ZEALOT.adminPrivilegesGranted = false;
     }
     $(".main-panel").html("");
+    if (ZEALOT.adminPrivilegesGranted == true) ZEALOT.adminUsers();
   };
 
   ZEALOT.statsSectorSelect = function(e, idS) {
@@ -1345,7 +1346,7 @@
     $("#operator-select").val("");
     var datalistHtml = " ";
     for (var i = 0; i < ZEALOT.allOperators.length; i++) {
-      if (((ZEALOT.allOperators[i].idSc == idS && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == idS)) || (idS == 0 && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.allOperators[i].idSc == ZEALOT.userInfo.adminSector))) && ZEALOT.allOperators[i].idSc != null)
+      if (((ZEALOT.allOperators[i].idSc == idS && ZEALOT.allOperators[i].isActive == true && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == idS)) || (idS == 0 && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.allOperators[i].idSc == ZEALOT.userInfo.adminSector))) && ZEALOT.allOperators[i].idSc != null)
         datalistHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
     }
     insertHtml("#select-operator", datalistHtml);
@@ -1426,7 +1427,7 @@
       $("#operator-select-ticket").val("");
       var datalistHtmlSectorCleared = "";
       for (var i = 0; i < ZEALOT.allOperators.length; i++) {
-        if (ZEALOT.allOperators[i].idSc != null)
+        if (ZEALOT.allOperators[i].idSc != null && ZEALOT.allOperators[i].isActive == true)
           datalistHtmlSectorCleared += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
       }
       insertHtml("#select-operator-ticket", datalistHtmlSectorCleared);
@@ -1438,7 +1439,7 @@
           $("#operator-select-ticket").val("");
           var datalistHtml = "";
           for (var i = 0; i < ZEALOT.allOperators.length; i++) {
-            if ((ZEALOT.allOperators[i].idSc == ZEALOT.idSectorForTicket || ZEALOT.idSectorForTicket == 0) && ZEALOT.allOperators[i].idSc != null)
+            if ((ZEALOT.allOperators[i].idSc == ZEALOT.idSectorForTicket || ZEALOT.idSectorForTicket == 0) && ZEALOT.allOperators[i].idSc != null && ZEALOT.allOperators[i].isActive == true)
               datalistHtml += `<option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>`;
           }
           insertHtml("#select-operator-ticket", datalistHtml);
@@ -1663,8 +1664,9 @@
             <br>
             <br><span style="font-size: 1.2em; font-weight: bold">` + ZEALOT.userInfo.operatorName + `</span>
             <br><span style="font-size: 0.8em; font-style: italic">` + ZEALOT.userInfo.position + `</span>
-            <br>
-            <br>Mobile: <a href="tel:+` + ZEALOT.userInfo.phone.replace('.', '') + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.phone + `</a>
+            <br> ` + ((ZEALOT.userInfo.phone != null) ? `
+            <br>Mobile: <a href="tel:+` + ZEALOT.userInfo.phone.replace(/\./g, '') + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.phone + `</a>
+            ` : ``) + `
             <br>E-mail: <a href="mailto:` + ZEALOT.userInfo.username + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.username + `</a>
             <br>
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4; width: 11em; height: 7em; margin-top: 0.3em" xml:space="preserve">
@@ -1908,13 +1910,208 @@
         </div>
         <h2 class="oswald-dark-blue-normal">Informacije</h2>
         <div class="open-sans-dark-normal bump tabbed unhoverable">IME<div class="num user-name">` + ZEALOT.userInfo.operatorName + `</div></div>
-        <div class="open-sans-dark-normal bump tabbed unhoverable">SEKTOR<div class="num user-sector">` + ZEALOT.userInfo.sectorName + `</div></div>
-        <div class="open-sans-dark-normal bump tabbed unhoverable">E-MAIL<div class="num user-email">` + ZEALOT.userInfo.username + `</div></div>
-        <div class="open-sans-dark-normal bump tabbed unhoverable">TELEFON<div class="num user-phone">` + ZEALOT.userInfo.phone + `</div></div>` + ((ZEALOT.userInfo.isAdmin) ? `
+        <div class="open-sans-dark-normal bump tabbed unhoverable">SEKTOR<div class="num user-sector">` + ((ZEALOT.userInfo.sectorName != null) ? ZEALOT.userInfo.sectorName : '') + `</div></div>
+        <div class="open-sans-dark-normal bump tabbed unhoverable">E-MAIL<div class="num user-email">` + ((ZEALOT.userInfo.username != null) ? ZEALOT.userInfo.username : '') + `</div></div>
+        <div class="open-sans-dark-normal bump tabbed unhoverable">TELEFON<div class="num user-phone">` + ((ZEALOT.userInfo.phone != null) ? ZEALOT.userInfo.phone : '') + `</div></div>` + ((ZEALOT.userInfo.isAdmin) ? `
         <h2 class="oswald-dark-blue-normal">Admin privilegije</h2>
         <div class="open-sans-dark-normal bump tabbed unhoverable"><div class="admin-privileges-status">` + ((ZEALOT.adminPrivilegesGranted) ? `UKLJUČENO` : `ISKLJUČENO`) + `</div><div class="num"><label class="switch"><input class="admin-privileges" type="checkbox" onclick="$ZEALOT.adminPrivileges(this);" ` + ((ZEALOT.adminPrivilegesGranted) ? `checked` : ``) + `></input><span class="slider"></span></label></div></div>` : ``) + `
       </div>
     `);
+    if (ZEALOT.adminPrivilegesGranted == true) ZEALOT.adminUsers();
+  };
+
+  ZEALOT.adminUsers = function() {
+    var adminUsersHtml = `
+      <div class="title-fixed oswald-blue-semibold">
+        Administratorski&nbsp;panel
+        <div class="title-bar"></div>
+        <img class="tickets-loaded-helper" src="img/Z white.svg" onload="$ZEALOT.ticketsLoaded(this);">
+      </div>
+      <div class="main-panel-admin scrollable container open-sans-dark-normal">
+        <select id="user-select" onchange="$ZEALOT.adminUserChanged();">
+          <option value="0" selected>NOVI OPERATER</option>
+    `;
+    for (var i = 0; i < ZEALOT.allOperators.length; i++)
+      if (ZEALOT.allOperators[i].idSc != null && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == ZEALOT.allOperators[i].idSc))
+        adminUsersHtml += `<option value="` + ZEALOT.allOperators[i].idO + `" x="` + i + `">` + ZEALOT.allOperators[i].onm + `</option>`;
+    adminUsersHtml += `
+        </select>
+        <input id="user-name" placeholder="ime i prezime" onfocus="this.placeholder=''" onblur="this.placeholder='ime i prezime'">
+        <select id="user-sector" onchange="$ZEALOT.selectColorChange(this);">
+          <option value="0" disabled selected hidden>sektor</option>
+    `;
+    for (var i = 0; i < ZEALOT.allSectors.length; i++)
+      if (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == ZEALOT.allSectors[i].idSc)
+        adminUsersHtml += `<option value="` + ZEALOT.allSectors[i].idSc + `" x="` + i + `">` + ZEALOT.allSectors[i].scn + `</option>`;
+    adminUsersHtml += `
+        </select>
+        <input id="user-position" placeholder="pozicija (format: na srpskom / na engleskom)" onfocus="this.placeholder=''" onblur="this.placeholder='pozicija (format: na srpskom / na engleskom)'">
+        <select id="user-role" onchange="$ZEALOT.selectColorChange(this);">
+          <option value="0" disabled selected hidden>rola</option>
+          <option value="1">Operater</option>
+    `;
+    if (ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.adminSector == 0)
+      adminUsersHtml += `
+          <option value="2">Administrator</option>
+          <option value="3">Superadministrator</option>
+      `;
+    adminUsersHtml += `
+        </select>
+        <input id="user-phone" placeholder="telefon (format: 381.6x.xxx.xx.xx)" onfocus="this.placeholder=''" onblur="this.placeholder='telefon (format: 381.6x.xxx.xx.xx)'">
+        <input id="user-mail" placeholder="e-mail" onfocus="this.placeholder=''" onblur="this.placeholder='e-mail'">
+        <select id="user-status" onchange="$ZEALOT.selectColorChange(this);">
+          <option value="0" disabled selected hidden>status</option>
+          <option value="1">AKTIVAN</option>
+          <option value="2">NEAKTIVAN</option>
+        </select>
+        <button class="main-panel-button" onclick="$ZEALOT.addOrEditUser();">
+          <i class="fa fa-check"></i>
+        </button>
+    `;
+    adminUsersHtml += `
+      </div>
+    `;
+    insertHtml(".main-panel", adminUsersHtml);
+  };
+
+  ZEALOT.selectColorChange = function(e) {
+    $(e).css({
+      "color": "#011"
+    });
+  };
+
+  ZEALOT.adminUserChanged = function() {
+    if ($("#user-select option:selected").attr("value") == 0) {
+      $(".main-panel-admin input").val("");
+      $(".main-panel-admin select option").prop("selected", false);
+      $(".main-panel-admin select option:first-child").prop("selected", true);
+      $(".main-panel-admin select").css({
+        "color": "rgba(0, 17, 17, 0.65)"
+      });
+      $(".main-panel-admin #user-select").css({
+        "color": "#011"
+      });
+    } else {
+      $("#user-name").val(ZEALOT.allOperators[$("#user-select option:selected").attr("x")].onm);
+      $("#user-position").val(ZEALOT.allOperators[$("#user-select option:selected").attr("x")].pos);
+      $("#user-phone").val(ZEALOT.allOperators[$("#user-select option:selected").attr("x")].p);
+      $("#user-mail").val(ZEALOT.allOperators[$("#user-select option:selected").attr("x")].mail);
+      $(".main-panel-admin #user-sector option, .main-panel-admin #user-role option, .main-panel-admin #user-status option").prop("selected", false);
+      for (let o of $(".main-panel-admin #user-sector option")) {
+        if ($(o).attr("value") == ZEALOT.allOperators[$("#user-select option:selected").attr("x")].idSc) {
+          $(o).prop("selected", true);
+          break;
+        }
+      }
+      if (ZEALOT.allOperators[$("#user-select option:selected").attr("x")].isAdmin == true && ZEALOT.allOperators[$("#user-select option:selected").attr("x")].adSc == 0)
+        $(".main-panel-admin #user-role option:nth-child(4)").prop("selected", true);
+      else if (ZEALOT.allOperators[$("#user-select option:selected").attr("x")].isAdmin == true && ZEALOT.allOperators[$("#user-select option:selected").attr("x")].adSc != 0)
+        $(".main-panel-admin #user-role option:nth-child(3)").prop("selected", true);
+      else
+        $(".main-panel-admin #user-role option:nth-child(2)").prop("selected", true);
+      if (ZEALOT.allOperators[$("#user-select option:selected").attr("x")].isActive == true)
+        $(".main-panel-admin #user-status option:nth-child(2)").prop("selected", true);
+      else
+        $(".main-panel-admin #user-status option:nth-child(3)").prop("selected", true);
+      $(".main-panel-admin select").css({
+        "color": "#011"
+      });
+    }
+  };
+
+  ZEALOT.addOrEditUser = function() {
+    if ($(".main-panel-admin #user-name").val() == "" || $(".main-panel-admin #user-position").val() == "" || $(".main-panel-admin #user-phone").val() == "" || $(".main-panel-admin #user-mail").val() == "" || $(".main-panel-admin #user-sector option:selected").attr("value") == 0 || $(".main-panel-admin #user-role option:selected").attr("value") == 0 || $(".main-panel-admin #user-status option:selected").attr("value") == 0) {
+      $.confirm({
+        theme: "material",
+        title: "Greška",
+        content: "Morate popuniti sva polja.",
+        type: "red",
+        typeAnimated: true,
+        buttons: {
+          ok: {
+            text: "OK",
+            btnClass: "btn-red",
+            action: function() {}
+          }
+        }
+      });
+      return;
+    }
+    $.confirm({
+      theme: 'material',
+      title: 'Molimo sačekajte',
+      content: 'Obrada Vašeg zahteva je u toku...',
+      type: 'green',
+      typeAnimated: true,
+      buttons: {
+        ok: {
+          text: 'ОК',
+          btnClass: 'gone',
+          action: function() {}
+        }
+      }
+    });
+    if ($(".main-panel-admin #user-select option:selected").attr("value") == 0) {
+      $ajaxUtils.sendPostRequest(
+        ZEALOT.apiRoot + "newOperator" + "?name=" + encodeURIComponent($(".main-panel-admin #user-name").val()) + "&pos=" + encodeURIComponent($(".main-panel-admin #user-position").val()) + "&phone=" + encodeURIComponent($(".main-panel-admin #user-phone").val()) + "&mail=" + encodeURIComponent($(".main-panel-admin #user-mail").val()) + "&idS=" + encodeURIComponent($(".main-panel-admin #user-sector option:selected").attr("value")) + "&privilege=" + encodeURIComponent($(".main-panel-admin #user-role option:selected").attr("value")) + "&isActive=" + (($(".main-panel-admin #user-status option:selected").attr("value") == 1) ? "true" : "false"),
+        function(responseArray, status) {
+          $ajaxUtils.sendGetRequest(
+            ZEALOT.apiRoot + "allOperators",
+            function(responseArray, status) {
+              ZEALOT.allOperators = responseArray;
+              ZEALOT.adminUsers();
+              $(".jconfirm").remove();
+              $.confirm({
+                theme: "material",
+                title: "Potvrda akcije",
+                content: "Podaci sačuvani.",
+                type: "green",
+                typeAnimated: true,
+                buttons: {
+                  ok: {
+                    text: "OK",
+                    btnClass: "btn-green",
+                    action: function() {}
+                  }
+                }
+              });
+            },
+            true /*, ZEALOT.bearer*/
+          );
+        },
+        true /*, ZEALOT.bearer*/
+      );
+    } else {
+      $ajaxUtils.sendPostRequest(
+        ZEALOT.apiRoot + "editOperator" + "?idO=" + encodeURIComponent($(".main-panel-admin #user-select option:selected").attr("value")) + "&name=" + encodeURIComponent($(".main-panel-admin #user-name").val()) + "&pos=" + encodeURIComponent($(".main-panel-admin #user-position").val()) + "&phone=" + encodeURIComponent($(".main-panel-admin #user-phone").val()) + "&mail=" + encodeURIComponent($(".main-panel-admin #user-mail").val()) + "&idS=" + encodeURIComponent($(".main-panel-admin #user-sector option:selected").attr("value")) + "&privilege=" + encodeURIComponent($(".main-panel-admin #user-role option:selected").attr("value")) + "&isActive=" + (($(".main-panel-admin #user-status option:selected").attr("value") == 1) ? "true" : "false"),
+        function(responseArray, status) {
+          $ajaxUtils.sendGetRequest(
+            ZEALOT.apiRoot + "allOperators",
+            function(responseArray, status) {
+              ZEALOT.allOperators = responseArray;
+              ZEALOT.adminUsers();
+              $(".jconfirm").remove();
+              $.confirm({
+                theme: "material",
+                title: "Potvrda akcije",
+                content: "Podaci sačuvani.",
+                type: "green",
+                typeAnimated: true,
+                buttons: {
+                  ok: {
+                    text: "OK",
+                    btnClass: "btn-green",
+                    action: function() {}
+                  }
+                }
+              });
+            },
+            true /*, ZEALOT.bearer*/
+          );
+        },
+        true /*, ZEALOT.bearer*/
+      );
+    }
   };
 
   ZEALOT.ssAux = function(all, nc) {
@@ -2181,7 +2378,7 @@
           <datalist id="select-operator">
       `;
       for (var i = 0; i < ZEALOT.allOperators.length; i++) {
-        if (ZEALOT.allOperators[i].idSc != null && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == ZEALOT.allOperators[i].idSc))
+        if (ZEALOT.allOperators[i].idSc != null && ZEALOT.allOperators[i].isActive == true && (ZEALOT.userInfo.adminSector == 0 || ZEALOT.userInfo.adminSector == ZEALOT.allOperators[i].idSc))
           popupStatsHtml += `
             <option value="` + ZEALOT.allOperators[i].onm + `"><div value="` + ZEALOT.allOperators[i].idO + `" id="val"></div></option>
           `;
