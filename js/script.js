@@ -38,10 +38,15 @@
   var specialCounters = {};
   ZEALOT.nc = false;
 
-  ZEALOT.currentTicketsArray = [];
+  ZEALOT.currentTicketsArray = {};
   ZEALOT.currentTicket = "";
 
   var wadjetClicked = false;
+
+  var ccI = -1;
+  var bccI = -1;
+  var ccA = {};
+  var bccA = {};
 
   $.trumbowyg.svgPath = 'wyg/ui/icons.svg';
 
@@ -166,6 +171,26 @@
     var thumb = $(".thumb i");
     var popup = $(".sidebar-popup");
     var main = $(".main-panel");
+    var ticket = $(".main-panel-ticket");
+    if (ticket.length != 0) {
+      if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
+        $(ticket).css({
+          "height": Math.round(ZEALOT.browserHeight * 0.27 - 33)
+        });
+        $(".mail-editor-container").css({
+          "height": Math.round(33 + ZEALOT.browserHeight * 0.64)
+        });
+        $(".trumbowyg-editor").css({
+          "height": Math.round(ZEALOT.browserHeight * 0.64 - $(".trumbowyg-button-pane").height()),
+          "min-height": 0,
+          "padding": 0
+        });
+      } else if ($(".mec-editor-toggle").hasClass("fa-chevron-up")) {
+        $(ticket).css({
+          "height": Math.round(ZEALOT.browserHeight * 0.91 - 33)
+        });
+      }
+    }
     if (thumb.length == 0 || popup.length == 0 || main.length == 0) return;
     if (thumb.hasClass("fa-chevron-right")) {
       popup.css({
@@ -266,6 +291,9 @@
       $(".mec-editor-toggle").css({
         "color": "#00b3b3"
       });
+      $(".mec-menu div:not(.mec-editor-toggle):not(.bootstrap-tagsinput)").css({
+        "opacity": 0
+      });
     });
     $(".mec-editor-toggle").on("mouseleave", function() {
       $(".mec-menu").css({
@@ -273,6 +301,9 @@
       });
       $(".mec-editor-toggle").css({
         "color": "#003d3d"
+      });
+      $(".mec-menu div:not(.mec-editor-toggle):not(.bootstrap-tagsinput)").css({
+        "opacity": 1
       });
     });
     $(".mec-editor-toggle").on("click", function() {
@@ -298,6 +329,9 @@
         $(".mec-editor-toggle").addClass("fa-chevron-down");
         $(".mec-send").removeClass("gone");
         $(".mec-internal").removeClass("gone");
+        $(".mec-attach").removeClass("gone");
+        $(".mec-cc").removeClass("gone");
+        $(".mec-bcc").removeClass("gone");
         $(".mail-editor-container").css({
           "height": Math.round(33 + ZEALOT.browserHeight * 0.64)
         });
@@ -314,6 +348,9 @@
         $(".mec-editor-toggle").addClass("fa-chevron-up");
         $(".mec-send").addClass("gone");
         $(".mec-internal").addClass("gone");
+        $(".mec-attach").addClass("gone");
+        $(".mec-cc").addClass("gone");
+        $(".mec-bcc").addClass("gone");
         $(".mail-editor-container").css({
           "height": 33
         });
@@ -367,211 +404,221 @@
     $.confirm({
       theme: "material",
       title: "Potvrda akcije",
-      content: "Da li želite da pošaljete ovaj mail klijentu?",
+      content: "Da li želite da pošaljete ovaj mail samo klijentu (Reply)" + (($('.cc-tagsinput').tagsinput('items').length > 0 || $('.bcc-tagsinput').tagsinput('items').length > 0) ? " ili svim učesnicima u konverzaciji (Reply All)?" + (($('.cc-tagsinput').tagsinput('items').length > 0) ? "<br><br>CC: " + $('.cc-tagsinput').tagsinput('items').join(', ') : "") + (($('.bcc-tagsinput').tagsinput('items').length > 0) ? "<br><br>BCC: " + $('.bcc-tagsinput').tagsinput('items').join(', ') : "") : "?"),
       type: "red",
       typeAnimated: true,
-      autoClose: 'no|10000',
+      autoClose: 'no|' + (($('.cc-tagsinput').tagsinput('items').length > 0 || $('.bcc-tagsinput').tagsinput('items').length > 0) ? '30000' : '10000'),
       buttons: {
         no: {
           text: "NE",
           action: function() {}
         },
-        yes: {
-          text: "DA",
+        reply: {
+          text: "<i class='fa fa-reply confirm-btn-icon'></i>&nbsp;&nbsp;&nbsp;Reply",
           btnClass: "btn-red",
           action: function() {
-            $.confirm({
-              theme: 'material',
-              title: 'Molimo sačekajte',
-              content: 'Obrada Vašeg zahteva je u toku...',
-              type: 'green',
-              typeAnimated: true,
-              buttons: {
-                ok: {
-                  text: 'ОК',
-                  btnClass: 'gone',
-                  action: function() {}
-                }
-              }
-            });
-            $ajaxUtils.sendPostRequest(
-              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html() + ZEALOT.signature) + "&idO=" + ZEALOT.userInfo.idOperator,
-              function(responseArray, status) {
-                ZEALOT.currentTicket.isUnread = false;
-                if (ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.idOperator != null && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
-                  insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
-                $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
-                  <div class="operator-message">
-                    ` + $(".trumbowyg-editor").html() + ZEALOT.signature + `
-                    <div class="unselectable speechdart">◥</div>
-                    <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
-                  </div>
-                `);
-                $(".trumbowyg-editor").html("");
-                if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
-                  $(".mec-editor-toggle").removeClass("fa-chevron-down");
-                  $(".mec-editor-toggle").addClass("fa-chevron-up");
-                  $(".mec-send").addClass("gone");
-                  $(".mec-internal").addClass("gone");
-                  $(".mail-editor-container").css({
-                    "height": 33
-                  });
-                  $(".main-panel-ticket").css({
-                    "height": Math.round(ZEALOT.browserHeight * 0.91 - 33)
-                  });
-                }
-                $(".scrollable-hotfix").animate({
-                  scrollTop: $(".scrollable-hotfix")[0].scrollHeight
-                }, 1000);
-                $(".jconfirm").remove();
-                $.confirm({
-                  theme: "material",
-                  title: "Promena statusa",
-                  content: "Koji je novi status za tekući tiket?",
-                  type: "red",
-                  typeAnimated: true,
-                  buttons: {
-                    cancel: {
-                      text: "NE MENJAJ STATUS",
-                      action: function() {
-                        ZEALOT.loadSidebarTickets();
-                      }
-                    },
-                    one: {
-                      text: "NEOBRAĐEN",
-                      btnClass: "btn-red",
-                      action: function() {
-                        $.confirm({
-                          theme: 'material',
-                          title: 'Molimo sačekajte',
-                          content: 'Obrada Vašeg zahteva je u toku...',
-                          type: 'green',
-                          typeAnimated: true,
-                          buttons: {
-                            ok: {
-                              text: 'ОК',
-                              btnClass: 'gone',
-                              action: function() {}
-                            }
-                          }
-                        });
-                        $ajaxUtils.sendPostRequest(
-                          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=1",
-                          function(responseArray, status) {
-                            $(".jconfirm").remove();
-                            $.confirm({
-                              theme: "material",
-                              title: "Potvrda akcije",
-                              content: "Podaci sačuvani.",
-                              type: "green",
-                              typeAnimated: true,
-                              buttons: {
-                                ok: {
-                                  text: "OK",
-                                  btnClass: "btn-green",
-                                  action: function() {}
-                                }
-                              }
-                            });
-                            ZEALOT.loadSidebarTickets();
-                          },
-                          true /*, ZEALOT.bearer*/
-                        );
-                      }
-                    },
-                    three: {
-                      text: "OBRADA U TOKU",
-                      btnClass: "btn-red",
-                      action: function() {
-                        $.confirm({
-                          theme: 'material',
-                          title: 'Molimo sačekajte',
-                          content: 'Obrada Vašeg zahteva je u toku...',
-                          type: 'green',
-                          typeAnimated: true,
-                          buttons: {
-                            ok: {
-                              text: 'ОК',
-                              btnClass: 'gone',
-                              action: function() {}
-                            }
-                          }
-                        });
-                        $ajaxUtils.sendPostRequest(
-                          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=3",
-                          function(responseArray, status) {
-                            $(".jconfirm").remove();
-                            $.confirm({
-                              theme: "material",
-                              title: "Potvrda akcije",
-                              content: "Podaci sačuvani.",
-                              type: "green",
-                              typeAnimated: true,
-                              buttons: {
-                                ok: {
-                                  text: "OK",
-                                  btnClass: "btn-green",
-                                  action: function() {}
-                                }
-                              }
-                            });
-                            ZEALOT.loadSidebarTickets();
-                          },
-                          true /*, ZEALOT.bearer*/
-                        );
-                      }
-                    },
-                    four: {
-                      text: "USPEŠNO KOMPLETIRAN",
-                      btnClass: "btn-red",
-                      action: function() {
-                        $.confirm({
-                          theme: 'material',
-                          title: 'Molimo sačekajte',
-                          content: 'Obrada Vašeg zahteva je u toku...',
-                          type: 'green',
-                          typeAnimated: true,
-                          buttons: {
-                            ok: {
-                              text: 'ОК',
-                              btnClass: 'gone',
-                              action: function() {}
-                            }
-                          }
-                        });
-                        $ajaxUtils.sendPostRequest(
-                          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=4",
-                          function(responseArray, status) {
-                            $(".jconfirm").remove();
-                            $.confirm({
-                              theme: "material",
-                              title: "Potvrda akcije",
-                              content: "Podaci sačuvani.",
-                              type: "green",
-                              typeAnimated: true,
-                              buttons: {
-                                ok: {
-                                  text: "OK",
-                                  btnClass: "btn-green",
-                                  action: function() {}
-                                }
-                              }
-                            });
-                            ZEALOT.loadSidebarTickets();
-                          },
-                          true /*, ZEALOT.bearer*/
-                        );
-                      }
-                    }
-                  }
-                });
-              },
-              true /*, ZEALOT.bearer*/
-            );
+            ZEALOT.sendMailAux("");
+          }
+        },
+        replyAll: {
+          text: "<i class='fa fa-reply-all confirm-btn-icon'></i>&nbsp;&nbsp;&nbsp;Reply All",
+          btnClass: "btn-red " + (($('.cc-tagsinput').tagsinput('items').length > 0 || $('.bcc-tagsinput').tagsinput('items').length > 0) ? "" : "gone"),
+          action: function() {
+            ZEALOT.sendMailAux("&cc=" + encodeURIComponent($('.cc-tagsinput').tagsinput('items').join(',')) + "&bcc=" + encodeURIComponent($('.bcc-tagsinput').tagsinput('items').join(',')));
           }
         }
       }
     });
+  };
+
+  ZEALOT.sendMailAux = function(ccbcc) {
+    $.confirm({
+      theme: 'material',
+      title: 'Molimo sačekajte',
+      content: 'Obrada Vašeg zahteva je u toku...',
+      type: 'green',
+      typeAnimated: true,
+      buttons: {
+        ok: {
+          text: 'ОК',
+          btnClass: 'gone',
+          action: function() {}
+        }
+      }
+    });
+    $ajaxUtils.sendPostRequest(
+      ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html() + ZEALOT.signature) + "&idO=" + ZEALOT.userInfo.idOperator + ccbcc,
+      function(responseArray, status) {
+        ZEALOT.currentTicket.isUnread = false;
+        if (ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.idOperator != null && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
+          insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
+        $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
+          <div class="operator-message">
+            ` + $(".trumbowyg-editor").html() + ZEALOT.signature + `
+            <div class="unselectable speechdart">◥</div>
+            <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
+          </div>
+        `);
+        $(".trumbowyg-editor").html("");
+        if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
+          $(".mec-editor-toggle").removeClass("fa-chevron-down");
+          $(".mec-editor-toggle").addClass("fa-chevron-up");
+          $(".mec-menu div:not(.mec-editor-toggle):not(.bootstrap-tagsinput):not(.mec-toggle)").addClass("gone");
+          $(".mail-editor-container").css({
+            "height": 33
+          });
+          $(".main-panel-ticket").css({
+            "height": Math.round(ZEALOT.browserHeight * 0.91 - 33)
+          });
+        }
+        $(".scrollable-hotfix").animate({
+          scrollTop: $(".scrollable-hotfix")[0].scrollHeight
+        }, 1000);
+        $(".jconfirm").remove();
+        $.confirm({
+          theme: "material",
+          title: "Promena statusa",
+          content: "Koji je novi status za tekući tiket?",
+          type: "red",
+          typeAnimated: true,
+          buttons: {
+            cancel: {
+              text: "NE MENJAJ STATUS",
+              action: function() {
+                ZEALOT.loadSidebarTickets();
+              }
+            },
+            one: {
+              text: "NEOBRAĐEN",
+              btnClass: "btn-red",
+              action: function() {
+                $.confirm({
+                  theme: 'material',
+                  title: 'Molimo sačekajte',
+                  content: 'Obrada Vašeg zahteva je u toku...',
+                  type: 'green',
+                  typeAnimated: true,
+                  buttons: {
+                    ok: {
+                      text: 'ОК',
+                      btnClass: 'gone',
+                      action: function() {}
+                    }
+                  }
+                });
+                $ajaxUtils.sendPostRequest(
+                  ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=1",
+                  function(responseArray, status) {
+                    $(".jconfirm").remove();
+                    $.confirm({
+                      theme: "material",
+                      title: "Potvrda akcije",
+                      content: "Podaci sačuvani.",
+                      type: "green",
+                      typeAnimated: true,
+                      buttons: {
+                        ok: {
+                          text: "OK",
+                          btnClass: "btn-green",
+                          action: function() {}
+                        }
+                      }
+                    });
+                    ZEALOT.loadSidebarTickets();
+                  },
+                  true /*, ZEALOT.bearer*/
+                );
+              }
+            },
+            three: {
+              text: "OBRADA U TOKU",
+              btnClass: "btn-red",
+              action: function() {
+                $.confirm({
+                  theme: 'material',
+                  title: 'Molimo sačekajte',
+                  content: 'Obrada Vašeg zahteva je u toku...',
+                  type: 'green',
+                  typeAnimated: true,
+                  buttons: {
+                    ok: {
+                      text: 'ОК',
+                      btnClass: 'gone',
+                      action: function() {}
+                    }
+                  }
+                });
+                $ajaxUtils.sendPostRequest(
+                  ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=3",
+                  function(responseArray, status) {
+                    $(".jconfirm").remove();
+                    $.confirm({
+                      theme: "material",
+                      title: "Potvrda akcije",
+                      content: "Podaci sačuvani.",
+                      type: "green",
+                      typeAnimated: true,
+                      buttons: {
+                        ok: {
+                          text: "OK",
+                          btnClass: "btn-green",
+                          action: function() {}
+                        }
+                      }
+                    });
+                    ZEALOT.loadSidebarTickets();
+                  },
+                  true /*, ZEALOT.bearer*/
+                );
+              }
+            },
+            four: {
+              text: "USPEŠNO KOMPLETIRAN",
+              btnClass: "btn-red",
+              action: function() {
+                $.confirm({
+                  theme: 'material',
+                  title: 'Molimo sačekajte',
+                  content: 'Obrada Vašeg zahteva je u toku...',
+                  type: 'green',
+                  typeAnimated: true,
+                  buttons: {
+                    ok: {
+                      text: 'ОК',
+                      btnClass: 'gone',
+                      action: function() {}
+                    }
+                  }
+                });
+                $ajaxUtils.sendPostRequest(
+                  ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=4",
+                  function(responseArray, status) {
+                    $(".jconfirm").remove();
+                    $.confirm({
+                      theme: "material",
+                      title: "Potvrda akcije",
+                      content: "Podaci sačuvani.",
+                      type: "green",
+                      typeAnimated: true,
+                      buttons: {
+                        ok: {
+                          text: "OK",
+                          btnClass: "btn-green",
+                          action: function() {}
+                        }
+                      }
+                    });
+                    ZEALOT.loadSidebarTickets();
+                  },
+                  true /*, ZEALOT.bearer*/
+                );
+              }
+            }
+          }
+        });
+      },
+      true /*, ZEALOT.bearer*/
+    );
   };
 
   ZEALOT.sendInternal = function() {
@@ -838,6 +885,16 @@
     return ("" + day + "." + month + "." + year + ". " + hour + ":" + minute + ":" + second);
   };
 
+  ZEALOT.formatMail = function(mailsString) {
+    var mailsArray = mailsString.split(',');
+    for (var i = 0; i < mailsArray.length; i++) {
+      var startIndex = (mailsArray[i].lastIndexOf('<') == -1) ? 0 : mailsArray[i].lastIndexOf('<') + 1;
+      var addressLength = (mailsArray[i].lastIndexOf('>') == -1) ? mailsArray[i].length - startIndex : mailsArray[i].lastIndexOf('>') - startIndex;
+      mailsArray[i] = (mailsArray[i].substr(startIndex, addressLength)).trim();
+    }
+    return mailsArray;
+  };
+
   ZEALOT.injectHTML = function(e, html) {
     var iframedoc = e.document;
     if (e.contentDocument)
@@ -989,12 +1046,24 @@
           <input class="to-tags gone">
           <div class="main-panel-ticket scrollable-hotfix conversation-container">
         `;
+        ccI = -1;
+        bccI = -1;
+        var ccA = {};
+        var bccA = {};
         for (var i = 0; i < responseArray.length; i++) {
+          if (i > ccI && responseArray[i].cc != null && responseArray[i].cc != "") {
+            ccI = i;
+            ccA = ZEALOT.formatMail(responseArray[i].cc);
+          }
+          if (i > bccI && responseArray[i].bcc != null && responseArray[i].bcc != "") {
+            bccI = i;
+            bccA = ZEALOT.formatMail(responseArray[i].bcc);
+          }
           ticketHtml += `
             <div class="` + ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `internal-message` : `operator-message`) : `client-message`) + `">` +
             ((!responseArray[i].side) ? `<iframe class="message-iframe" src="about:blank" onload="$ZEALOT.injectHTML(this, \`` + encodeURIComponent(responseArray[i].body) + `\`);"></iframe>` : responseArray[i].body) +
             ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `` : `<div class="unselectable speechdart">◥</div>`) : `<div class="unselectable speechdart">◤</div>`) + `
-              <div class="timestamp">` + ((responseArray[i].side) ? responseArray[i].onm + ` &bull; ` : "") + ZEALOT.formatDate(responseArray[i].messageCreated) + `</div>
+              <div class="timestamp">` + ((responseArray[i].cc != null && responseArray[i].cc != "") ? `CC: ` + ZEALOT.formatMail(responseArray[i].cc).join(', ') + `<br>` : ``) + ((responseArray[i].bcc != null && responseArray[i].bcc != "") ? `BCC: ` + ZEALOT.formatMail(responseArray[i].bcc).join(', ') + `<br>` : ``) + ((responseArray[i].side) ? responseArray[i].onm + ` &bull; ` : "") + ZEALOT.formatDate(responseArray[i].messageCreated) + `</div>
             </div>
           `;
         }
@@ -1008,6 +1077,11 @@
               <div class="mec-toggle mec-toggle-client-messages fa fa-square" onclick="ZEALOT.toggleClientMessages(this);"></div>
               <div class="mec-toggle mec-toggle-operator-messages fa fa-square" onclick="ZEALOT.toggleOperatorMessages(this);"></div>
               <div class="mec-toggle mec-toggle-internal-messages fa fa-square-o" onclick="ZEALOT.toggleInternalMessages(this);"></div>
+              <div class="mec-attach fa fa-paperclip gone" onclick="ZEALOT.attach();"></div>
+              <div class="mec-cc oswald-dark-blue-normal gone" onclick="ZEALOT.cc(this);">CC</div>
+              <div class="mec-bcc oswald-dark-blue-normal gone" onclick="ZEALOT.bcc(this);">BCC</div>
+              <input class="cc-tagsinput">
+              <input class="bcc-tagsinput">
             </div>
             <div class="mec-editor">
               <div id="trumbowyg-icons">
@@ -1018,10 +1092,50 @@
           </div>
         `;
         insertHtml(".main-panel", ticketHtml);
+        $(".cc-tagsinput, .bcc-tagsinput").tagsinput({
+          trimValue: true,
+          typeaheadjs: {
+            source: function() {
+              var operatorMailsArray = [];
+              for (var qq = 0; qq < ZEALOT.allOperators.length; qq++)
+                operatorMailsArray.push(ZEALOT.allOperators[qq].mail);
+              return operatorMailsArray;
+            }
+          }
+        });
+        if (ccI != -1)
+          for (var i = 0; i < ccA.length; i++)
+            $(".cc-tagsinput").tagsinput('add', ccA[i]);
+        if (bccI != -1)
+          for (var i = 0; i < bccA.length; i++)
+            $(".bcc-tagsinput").tagsinput('add', bccA[i]);
+        $(".mec-menu .bootstrap-tagsinput").addClass("gone");
       },
       true /*, ZEALOT.bearer*/
     );
-  }
+  };
+
+  ZEALOT.cc = function(e) {
+    $(".mec-bcc, .mec-attach").removeClass("active");
+    $(".mec-menu .bootstrap-tagsinput").addClass("gone");
+    if ($(e).hasClass("active"))
+      $(e).removeClass("active");
+    else {
+      $(e).addClass("active");
+      $(".cc-tagsinput").prev().removeClass("gone");
+    }
+  };
+
+  ZEALOT.bcc = function(e) {
+    $(".mec-cc, .mec-attach").removeClass("active");
+    $(".mec-menu .bootstrap-tagsinput").addClass("gone");
+    if ($(e).hasClass("active"))
+      $(e).removeClass("active");
+    else {
+      $(e).addClass("active");
+      $(".bcc-tagsinput").prev().removeClass("gone");
+    }
+  };
 
   ZEALOT.ccAux = function(messagesArray) {
     ZEALOT.currentTicketsArray = messagesArray;
@@ -1992,6 +2106,10 @@
         "color": "#011"
       });
     } else {
+      var saCnt = 0;
+      for (var i = 0; i < ZEALOT.allOperators.length; i++)
+        if (ZEALOT.allOperators[i].isAdmin == true && ZEALOT.allOperators[i].adSc == 0)
+          saCnt = saCnt + 1;
       $("#user-name").val(ZEALOT.allOperators[$("#user-select option:selected").attr("x")].onm);
       $("#user-position").val(ZEALOT.allOperators[$("#user-select option:selected").attr("x")].pos);
       $("#user-phone").val(ZEALOT.allOperators[$("#user-select option:selected").attr("x")].p);
@@ -2013,6 +2131,9 @@
         $(".main-panel-admin #user-status option:nth-child(2)").prop("selected", true);
       else
         $(".main-panel-admin #user-status option:nth-child(3)").prop("selected", true);
+      $(".main-panel-admin #user-role").prop("disabled", false);
+      if (saCnt == 2 && ZEALOT.allOperators[$("#user-select option:selected").attr("x")].isAdmin == true && ZEALOT.allOperators[$("#user-select option:selected").attr("x")].adSc == 0)
+        $(".main-panel-admin #user-role").prop("disabled", true);
       $(".main-panel-admin select").css({
         "color": "#011"
       });
@@ -2082,6 +2203,7 @@
         true /*, ZEALOT.bearer*/
       );
     } else {
+      var idEdited = $(".main-panel-admin #user-select option:selected").attr("value");
       $ajaxUtils.sendPostRequest(
         ZEALOT.apiRoot + "editOperator" + "?idO=" + encodeURIComponent($(".main-panel-admin #user-select option:selected").attr("value")) + "&name=" + encodeURIComponent($(".main-panel-admin #user-name").val()) + "&pos=" + encodeURIComponent($(".main-panel-admin #user-position").val()) + "&phone=" + encodeURIComponent($(".main-panel-admin #user-phone").val()) + "&mail=" + encodeURIComponent($(".main-panel-admin #user-mail").val()) + "&idS=" + encodeURIComponent($(".main-panel-admin #user-sector option:selected").attr("value")) + "&privilege=" + encodeURIComponent($(".main-panel-admin #user-role option:selected").attr("value")) + "&isActive=" + (($(".main-panel-admin #user-status option:selected").attr("value") == 1) ? "true" : "false"),
         function(responseArray, status) {
@@ -2101,7 +2223,26 @@
                   ok: {
                     text: "OK",
                     btnClass: "btn-green",
-                    action: function() {}
+                    action: function() {
+                      if (idEdited == ZEALOT.userInfo.idOperator)
+                        $.confirm({
+                          theme: "material",
+                          title: "Obaveštenje",
+                          content: "Izmenili ste sopstvene podatke. Radi pravilnog funkcionisanja aplikacije, bićete preusmereni na stranu za prijavljivanje. Molimo da se ponovo prijavite na sistem.",
+                          type: "red",
+                          typeAnimated: true,
+                          buttons: {
+                            ok: {
+                              text: "OK",
+                              btnClass: "btn-red",
+                              action: function() {
+                                //invalidate token
+                                location.reload();
+                              }
+                            }
+                          }
+                        });
+                    }
                   }
                 }
               });

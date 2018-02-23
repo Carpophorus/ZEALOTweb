@@ -727,6 +727,10 @@ input:checked+.slider:before {
   border-right: 1px solid #00b3b3 !important;
 }
 
+.expanded:last-child {
+  border-bottom: 1px solid #00b3b3 !important;
+}
+
 .ticket-container {
   padding: 1vh;
   border-top: 1px solid #00b3b3;
@@ -942,9 +946,17 @@ input:checked+.slider:before {
   overflow-y: scroll;
   line-height: inherit;
   padding: 1vh;
+  text-align: left;
 }
 
-.bootstrap-tagsinput>span {
+.mec-menu>.bootstrap-tagsinput {
+  left: 0;
+  top: 33px;
+  width: 100%;
+  border-top: 0;
+}
+
+.bootstrap-tagsinput>span, .bootstrap-tagsinput>input {
   padding: 0.5vh;
   display: inline-block;
   margin: 0.3vh;
@@ -954,8 +966,14 @@ input:checked+.slider:before {
   background-color: #00b3b3;
 }
 
-.bootstrap-tagsinput .tag {
+.bootstrap-tagsinput .tag, .cc-tagsinput .tag, .bcc-tagsinput .tag {
   color: #f9fdfd;
+}
+
+.main-panel-ticket {
+  -webkit-transition: height .5s ease;
+  -moz-transition: height .5s ease;
+  transition: height .5s ease;
 }
 
 .main-panel-ticket>div {
@@ -1035,6 +1053,9 @@ input:checked+.slider:before {
   height: 33px;
   bottom: 0;
   right: -1px;
+  -webkit-transition: height .5s ease;
+  -moz-transition: height .5s ease;
+  transition: height .5s ease;
 }
 
 .mec-menu {
@@ -1043,7 +1064,13 @@ input:checked+.slider:before {
   text-align: center;
 }
 
-.mec-editor-toggle, .mec-send, .mec-internal, .mec-toggle {
+.mec-menu, .mec-menu>div {
+  -webkit-transition: background-color .5s ease, color .5s ease, opacity .5s ease;
+  -moz-transition: background-color .5s ease, color .5s ease, opacity .5s ease;
+  transition: background-color .5s ease, color .5s ease, opacity .5s ease;
+}
+
+.mec-editor-toggle, .mec-send, .mec-internal, .mec-toggle, .mec-attach, .mec-cc, .mec-bcc {
   height: 33px;
   width: 50px;
   line-height: 33px;
@@ -1065,11 +1092,11 @@ input:checked+.slider:before {
   cursor: pointer;
 }
 
-.mec-send, .mec-internal, .mec-toggle {
+.mec-send, .mec-internal, .mec-toggle, .mec-attach, .mec-cc, .mec-bcc {
   position: absolute;
 }
 
-.mec-send:hover, .mec-internal:hover, .mec-toggle:hover, .mec-toggle.active {
+.mec-send:hover, .mec-internal:hover, .mec-toggle:hover, .mec-toggle.active, .mec-attach:hover, .mec-cc:hover, .mec-bcc:hover, .mec-attach.active, .mec-cc.active, .mec-bcc.active {
   cursor: pointer;
   background-color: #003d3d;
   color: #00b3b3;
@@ -1079,6 +1106,10 @@ input:checked+.slider:before {
 .mec-send {
   left: 0;
   font-size: 18px !important;
+}
+
+.confirm-btn-icon {
+  font-size: 14px !important;
 }
 
 .mec-internal {
@@ -1105,8 +1136,36 @@ input:checked+.slider:before {
   line-height: 22px;
 }
 
+.mec-attach {
+  left: 50px;
+}
+
+.mec-cc {
+  top: 0;
+  left: 100px;
+  font-size: 17px !important;
+}
+
+.mec-bcc {
+  top: 0;
+  left: 150px;
+  font-size: 17px !important;
+}
+
 .trumbowyg-box {
   margin: 0;
+}
+
+.trumbowyg-box button {
+  border-radius: 0;
+}
+
+.trumbowyg-button-group:before, .trumbowyg-button-group:after {
+  margin: 0 !important;
+}
+
+.trumbowyg-button-pane {
+  padding: 0;
 }
 
 .trumbowyg-editor>#mail-signature>#mail-signature-logo, .operator-message.>#mail-signature>#mail-signature-logo {
