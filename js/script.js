@@ -1077,9 +1077,10 @@
               <div class="mec-toggle mec-toggle-client-messages fa fa-square" onclick="ZEALOT.toggleClientMessages(this);"></div>
               <div class="mec-toggle mec-toggle-operator-messages fa fa-square" onclick="ZEALOT.toggleOperatorMessages(this);"></div>
               <div class="mec-toggle mec-toggle-internal-messages fa fa-square-o" onclick="ZEALOT.toggleInternalMessages(this);"></div>
-              <div class="mec-attach fa fa-paperclip gone" onclick="ZEALOT.attach();"></div>
+              <div class="mec-attach fa fa-paperclip gone" onclick="ZEALOT.attach(this);"></div>
               <div class="mec-cc oswald-dark-blue-normal gone" onclick="ZEALOT.cc(this);">CC</div>
               <div class="mec-bcc oswald-dark-blue-normal gone" onclick="ZEALOT.bcc(this);">BCC</div>
+              <input class="attach-tagsinput">
               <input class="cc-tagsinput">
               <input class="bcc-tagsinput">
             </div>
@@ -1092,6 +1093,42 @@
           </div>
         `;
         insertHtml(".main-panel", ticketHtml);
+        $(".attach-tagsinput").tagsinput({
+          trimValue: true
+        });
+        $(".attach-tagsinput").prev().find("input").attr("type", "file").attr("accept", "media_type");
+        $(".attach-tagsinput").prev().find("input").on('change', function(e) {
+          var files = e.target.files;
+          if (files.length > 0) {
+            if (window.FormData !== undefined) {
+              var data = new FormData();
+              for (var x = 0; x < files.length; x++) {
+                data.append("file" + x, files[x]);
+              }
+              $.ajax({
+                type: "POST",
+                url: ZEALOT.apiRoot + 'UploadFile' + '?idT=' + ZEALOT.idTicketCurrent,
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function(result) {
+                  console.log(result);
+                  //add each in result to tagsinput
+                  this.value = '';
+                },
+                error: function(xhr, status, p3, p4) {
+                  var err = "Error " + " " + status + " " + p3 + " " + p4;
+                  if (xhr.responseText && xhr.responseText[0] == "{")
+                    err = JSON.parse(xhr.responseText).Message;
+                  console.log(err);
+                  this.value = '';
+                }
+              });
+            } else {
+              alert("This browser doesn't support HTML5 file uploads!");
+            }
+          }
+        });
         $(".cc-tagsinput, .bcc-tagsinput").tagsinput({
           trimValue: true,
           typeaheadjs: {
@@ -1113,6 +1150,17 @@
       },
       true /*, ZEALOT.bearer*/
     );
+  };
+
+  ZEALOT.attach = function(e) {
+    $(".mec-cc, .mec-bcc").removeClass("active");
+    $(".mec-menu .bootstrap-tagsinput").addClass("gone");
+    if ($(e).hasClass("active"))
+      $(e).removeClass("active");
+    else {
+      $(e).addClass("active");
+      $(".attach-tagsinput").prev().removeClass("gone");
+    }
   };
 
   ZEALOT.cc = function(e) {
