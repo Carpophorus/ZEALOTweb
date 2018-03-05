@@ -949,6 +949,24 @@ input:checked+.slider:before {
   text-align: left;
 }
 
+.bootstrap-tagsinput input::-webkit-input-placeholder {
+  color: #003d3d;
+}
+
+.bootstrap-tagsinput input::-moz-placeholder {
+  color: #003d3d;
+  opacity: 1;
+}
+
+.bootstrap-tagsinput input:-moz-placeholder {
+  color: #003d3d;
+  opacity: 1;
+}
+
+.bootstrap-tagsinput input:-ms-input-placeholder {
+  color: #003d3d;
+}
+
 .mec-menu>.bootstrap-tagsinput {
   left: 0;
   top: 33px;
@@ -988,6 +1006,35 @@ input:checked+.slider:before {
   margin-top: 3vh;
 }
 
+.attachmentBox:first-of-type {
+  margin-top: 3vh;
+}
+
+.attachmentBox {
+  height: 7vh;
+  line-height: 7vh;
+}
+
+.attachmentBox:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, .1);
+}
+
+.attachmentBox>i {
+  width: 7vh;
+  height: 7vh;
+  line-height: 7vh;
+  font-size: 3vh !important;
+  text-align: center;
+  display: inline-block;
+  float: left;
+}
+
+.attachmentBox>span {
+  display: inline-block;
+  float: left;
+}
+
 .main-panel-ticket>div>.speechdart {
   line-height: 2vh;
   position: absolute;
@@ -1024,7 +1071,7 @@ input:checked+.slider:before {
 
 .timestamp {
   font-size: 1.5vh !important;
-  padding-top: 2vh;
+  padding-top: 3vh;
   color: #00b3b3;
 }
 

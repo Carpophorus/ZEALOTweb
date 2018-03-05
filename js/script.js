@@ -48,6 +48,8 @@
   var ccA = {};
   var bccA = {};
 
+  ZEALOT.filesForAttach = null;
+
   $.trumbowyg.svgPath = 'wyg/ui/icons.svg';
 
   var insertHtml = function(selector, html) {
@@ -404,7 +406,7 @@
     $.confirm({
       theme: "material",
       title: "Potvrda akcije",
-      content: "Da li želite da pošaljete ovaj mail samo klijentu (Reply)" + (($('.cc-tagsinput').tagsinput('items').length > 0 || $('.bcc-tagsinput').tagsinput('items').length > 0) ? " ili svim učesnicima u konverzaciji (Reply All)?" + (($('.cc-tagsinput').tagsinput('items').length > 0) ? "<br><br>CC: " + $('.cc-tagsinput').tagsinput('items').join(', ') : "") + (($('.bcc-tagsinput').tagsinput('items').length > 0) ? "<br><br>BCC: " + $('.bcc-tagsinput').tagsinput('items').join(', ') : "") : "?"),
+      content: "Da li želite da pošaljete ovaj mail samo klijentu (Reply)" + (($('.cc-tagsinput').tagsinput('items').length > 0 || $('.bcc-tagsinput').tagsinput('items').length > 0) ? " ili svim učesnicima u konverzaciji (Reply All)?" + (($('.cc-tagsinput').tagsinput('items').length > 0) ? "<br><br>CC: " + $('.cc-tagsinput').tagsinput('items').join(', ') : "") + (($('.bcc-tagsinput').tagsinput('items').length > 0) ? "<br><br>BCC: " + $('.bcc-tagsinput').tagsinput('items').join(', ') : "") : "?") + "<br><br>ATTACHMENT: " + (($('.attach-tagsinput').tagsinput('items').length == 0) ? "<strong>Poruka nema priloženih datoteka.</strong>" : ($('.attach-tagsinput').tagsinput('items').length + " file(s)")),
       type: "red",
       typeAnimated: true,
       autoClose: 'no|' + (($('.cc-tagsinput').tagsinput('items').length > 0 || $('.bcc-tagsinput').tagsinput('items').length > 0) ? '30000' : '10000'),
@@ -447,19 +449,24 @@
       }
     });
     $ajaxUtils.sendPostRequest(
-      ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html() + ZEALOT.signature) + "&idO=" + ZEALOT.userInfo.idOperator + ccbcc,
+      ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html() + ZEALOT.signature) + "&idO=" + ZEALOT.userInfo.idOperator + ccbcc + (($(".attach-tagsinput").tagsinput('items').length > 0) ? ("&attachmentString=" + encodeURIComponent(JSON.stringify($(".attach-tagsinput").tagsinput('items')))) : ""),
       function(responseArray, status) {
         ZEALOT.currentTicket.isUnread = false;
         if (ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.idOperator != null && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
           insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
+        var attachmentsHtml = ``;
+        var attachmentAuxJSON = $(".attach-tagsinput").tagsinput('items');
+        for (var w = 0; w < attachmentAuxJSON.length; w++)
+          attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, ` + attachmentAuxJSON[w].filename + `, true)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
         $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
           <div class="operator-message">
-            ` + $(".trumbowyg-editor").html() + ZEALOT.signature + `
+            ` + $(".trumbowyg-editor").html() + ZEALOT.signature + attachmentsHtml + `
             <div class="unselectable speechdart">◥</div>
             <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
           </div>
         `);
         $(".trumbowyg-editor").html("");
+        $('.attach-tagsinput').tagsinput('removeAll');
         if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
           $(".mec-editor-toggle").removeClass("fa-chevron-down");
           $(".mec-editor-toggle").addClass("fa-chevron-up");
@@ -625,8 +632,8 @@
     $.confirm({
       theme: "material",
       title: "Potvrda akcije",
-      content: "Da li želite da pošaljete ovu poruku kao internu?",
-      type: "blue",
+      content: "Da li želite da pošaljete ovu poruku kao internu?" + "<br><br>ATTACHMENT: " + (($('.attach-tagsinput').tagsinput('items').length == 0) ? "<strong>Poruka nema priloženih datoteka.</strong>" : ($('.attach-tagsinput').tagsinput('items').length + " file(s)")),
+      type: "red",
       typeAnimated: true,
       autoClose: 'no|10000',
       buttons: {
@@ -636,7 +643,7 @@
         },
         yes: {
           text: "DA",
-          btnClass: "btn-blue",
+          btnClass: "btn-red",
           action: function() {
             $.confirm({
               theme: 'material',
@@ -653,20 +660,25 @@
               }
             });
             $ajaxUtils.sendPostRequest(
-              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=true" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator,
+              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=true" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator + (($(".attach-tagsinput").tagsinput('items').length > 0) ? ("&attachmentString=" + encodeURIComponent(JSON.stringify($(".attach-tagsinput").tagsinput('items')))) : ""),
               function(responseArray, status) {
+                var attachmentsHtml = ``;
+                var attachmentAuxJSON = $(".attach-tagsinput").tagsinput('items');
+                console.log(attachmentAuxJSON);
+                for (var w = 0; w < attachmentAuxJSON.length; w++)
+                  attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, ` + attachmentAuxJSON[w].filename + `, true)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
                 $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
                   <div class="internal-message">
-                    ` + $(".trumbowyg-editor").html() + `
+                    ` + $(".trumbowyg-editor").html() + attachmentsHtml + `
                     <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
                   </div>
                 `);
                 $(".trumbowyg-editor").html("");
+                $('.attach-tagsinput').tagsinput('removeAll');
                 if ($(".mec-editor-toggle").hasClass("fa-chevron-down")) {
                   $(".mec-editor-toggle").removeClass("fa-chevron-down");
                   $(".mec-editor-toggle").addClass("fa-chevron-up");
-                  $(".mec-send").addClass("gone");
-                  $(".mec-internal").addClass("gone");
+                  $(".mec-menu div:not(.mec-editor-toggle):not(.bootstrap-tagsinput):not(.mec-toggle)").addClass("gone");
                   $(".mail-editor-container").css({
                     "height": 33
                   });
@@ -1059,9 +1071,15 @@
             bccI = i;
             bccA = ZEALOT.formatMail(responseArray[i].bcc);
           }
+          var attachmentsHtml = ``;
+          if (responseArray[i].attachmentString != null && responseArray[i].attachmentString != "") {
+            var attachmentAuxJSON = JSON.parse(responseArray[i].attachmentString);
+            for (var w = 0; w < attachmentAuxJSON.length; w++)
+              attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, ` + attachmentAuxJSON[w].filename + `, ` + ((responseArray[i].side) ? `true` : `false`) + `)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
+          }
           ticketHtml += `
             <div class="` + ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `internal-message` : `operator-message`) : `client-message`) + `">` +
-            ((!responseArray[i].side) ? `<iframe class="message-iframe" src="about:blank" onload="$ZEALOT.injectHTML(this, \`` + encodeURIComponent(responseArray[i].body) + `\`);"></iframe>` : responseArray[i].body) +
+            ((!responseArray[i].side) ? `<iframe class="message-iframe" src="about:blank" onload="$ZEALOT.injectHTML(this, \`` + encodeURIComponent(responseArray[i].body) + `\`);"></iframe>` : responseArray[i].body) + attachmentsHtml +
             ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `` : `<div class="unselectable speechdart">◥</div>`) : `<div class="unselectable speechdart">◤</div>`) + `
               <div class="timestamp">` + ((responseArray[i].cc != null && responseArray[i].cc != "") ? `CC: ` + ZEALOT.formatMail(responseArray[i].cc).join(', ') + `<br>` : ``) + ((responseArray[i].bcc != null && responseArray[i].bcc != "") ? `BCC: ` + ZEALOT.formatMail(responseArray[i].bcc).join(', ') + `<br>` : ``) + ((responseArray[i].side) ? responseArray[i].onm + ` &bull; ` : "") + ZEALOT.formatDate(responseArray[i].messageCreated) + `</div>
             </div>
@@ -1094,39 +1112,105 @@
         `;
         insertHtml(".main-panel", ticketHtml);
         $(".attach-tagsinput").tagsinput({
-          trimValue: true
+          trimValue: true,
+          itemValue: 'idAttachment',
+          itemText: 'filename'
         });
-        $(".attach-tagsinput").prev().find("input").attr("type", "file").attr("accept", "media_type");
-        $(".attach-tagsinput").prev().find("input").on('change', function(e) {
-          var files = e.target.files;
-          if (files.length > 0) {
-            if (window.FormData !== undefined) {
-              var data = new FormData();
-              for (var x = 0; x < files.length; x++) {
-                data.append("file" + x, files[x]);
-              }
-              $.ajax({
-                type: "POST",
-                url: ZEALOT.apiRoot + 'UploadFile' + '?idT=' + ZEALOT.idTicketCurrent,
-                contentType: false,
-                processData: false,
-                data: data,
-                success: function(result) {
-                  console.log(result);
-                  //add each in result to tagsinput
-                  this.value = '';
+        $(".attach-tagsinput").prev().find("input").prop("readonly", true).attr("placeholder", "🞧").css({
+          "cursor": "pointer",
+          "text-align": "center",
+          "background-color": "rgba(0, 179, 179, .5)",
+          "width": "50px"
+        });
+        $(".attach-tagsinput").prev().find("input").on("click", function(e) {
+          $("body").focus();
+          if (window.FormData !== undefined) {
+            $.confirm({
+              theme: "material",
+              title: "Attachment",
+              content: "Izaberite datoteke koje prilažete uz poruku...<br><br><input type='file' accept='media_type' multiple onchange='$ZEALOT.attachInputChanged(event);'>",
+              type: "green",
+              typeAnimated: true,
+              buttons: {
+                cancel: {
+                  text: "Cancel",
+                  action: function() {}
                 },
-                error: function(xhr, status, p3, p4) {
-                  var err = "Error " + " " + status + " " + p3 + " " + p4;
-                  if (xhr.responseText && xhr.responseText[0] == "{")
-                    err = JSON.parse(xhr.responseText).Message;
-                  console.log(err);
-                  this.value = '';
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-green",
+                  action: function() {
+                    var files = ZEALOT.filesForAttach;
+                    if (files.length > 0) {
+                      $.confirm({
+                        theme: 'material',
+                        title: 'Molimo sačekajte',
+                        content: 'Datoteke se šalju na server...',
+                        type: 'green',
+                        typeAnimated: true,
+                        buttons: {
+                          ok: {
+                            text: 'ОК',
+                            btnClass: 'gone',
+                            action: function() {}
+                          }
+                        }
+                      });
+                      var data = new FormData();
+                      for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                      }
+                      $.ajax({
+                        type: "POST",
+                        url: ZEALOT.apiRoot + 'UploadFile' + '?idT=' + ZEALOT.idTicketCurrent,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        data: data,
+                        success: function(result) {
+                          for (var x = 0; x < result.length; x++) {
+                            $('.attach-tagsinput').tagsinput('add', result[x]);
+                          }
+                          $(".jconfirm").remove();
+                        },
+                        error: function() {
+                          $(".jconfirm").remove();
+                          $.confirm({
+                            theme: "material",
+                            title: "Greška",
+                            content: "Neuspešno slanje datoteka na server.",
+                            type: "red",
+                            typeAnimated: true,
+                            buttons: {
+                              ok: {
+                                text: "OK",
+                                btnClass: "btn-red",
+                                action: function() {}
+                              }
+                            }
+                          });
+                        }
+                      });
+                    }
+                  }
                 }
-              });
-            } else {
-              alert("This browser doesn't support HTML5 file uploads!");
-            }
+              }
+            });
+          } else {
+            $.confirm({
+              theme: "material",
+              title: "Greška",
+              content: "Vaš pretraživač ne podržava HTML5 upload datoteka. Molimo, ažurirajte svoj pretraživač na najnoviju moguću verziju.",
+              type: "red",
+              typeAnimated: true,
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-red",
+                  action: function() {}
+                }
+              }
+            });
           }
         });
         $(".cc-tagsinput, .bcc-tagsinput").tagsinput({
@@ -1150,6 +1234,10 @@
       },
       true /*, ZEALOT.bearer*/
     );
+  };
+
+  ZEALOT.attachInputChanged = function(e) {
+    ZEALOT.filesForAttach = e.target.files;
   };
 
   ZEALOT.attach = function(e) {
