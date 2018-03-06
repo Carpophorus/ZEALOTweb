@@ -457,7 +457,7 @@
         var attachmentsHtml = ``;
         var attachmentAuxJSON = $(".attach-tagsinput").tagsinput('items');
         for (var w = 0; w < attachmentAuxJSON.length; w++)
-          attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, ` + attachmentAuxJSON[w].filename + `, true)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
+          attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, '` + attachmentAuxJSON[w].filename + `', true)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
         $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
           <div class="operator-message">
             ` + $(".trumbowyg-editor").html() + ZEALOT.signature + attachmentsHtml + `
@@ -629,6 +629,23 @@
   };
 
   ZEALOT.sendInternal = function() {
+    if (($(".trumbowyg-editor").html() == null || $(".trumbowyg-editor").html() == '') && $('.attach-tagsinput').tagsinput('items').length == 0) {
+      $.confirm({
+        theme: "material",
+        title: "Greška",
+        content: "Ne možete poslati praznu internu poruku. Možete poslati praznu internu poruku samo ukoliko poruka ima priloženih datoteka.",
+        type: "red",
+        typeAnimated: true,
+        buttons: {
+          ok: {
+            text: "OK",
+            btnClass: "btn-red",
+            action: function() {}
+          }
+        }
+      });
+      return;
+    }
     $.confirm({
       theme: "material",
       title: "Potvrda akcije",
@@ -660,16 +677,15 @@
               }
             });
             $ajaxUtils.sendPostRequest(
-              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=true" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator + (($(".attach-tagsinput").tagsinput('items').length > 0) ? ("&attachmentString=" + encodeURIComponent(JSON.stringify($(".attach-tagsinput").tagsinput('items')))) : ""),
+              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=true" + "&body=" + encodeURIComponent(($(".trumbowyg-editor").html() == null || $(".trumbowyg-editor").html() == '') ? '<i>(prazna poruka)</i>' : $(".trumbowyg-editor").html()) + "&idO=" + ZEALOT.userInfo.idOperator + (($(".attach-tagsinput").tagsinput('items').length > 0) ? ("&attachmentString=" + encodeURIComponent(JSON.stringify($(".attach-tagsinput").tagsinput('items')))) : ""),
               function(responseArray, status) {
                 var attachmentsHtml = ``;
                 var attachmentAuxJSON = $(".attach-tagsinput").tagsinput('items');
-                console.log(attachmentAuxJSON);
                 for (var w = 0; w < attachmentAuxJSON.length; w++)
-                  attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, ` + attachmentAuxJSON[w].filename + `, true)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
+                  attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, '` + attachmentAuxJSON[w].filename + `', true)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
                 $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
                   <div class="internal-message">
-                    ` + $(".trumbowyg-editor").html() + attachmentsHtml + `
+                    ` + (($(".trumbowyg-editor").html() == null || $(".trumbowyg-editor").html() == '') ? '<i>(prazna poruka)</i>' : $(".trumbowyg-editor").html()) + attachmentsHtml + `
                     <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
                   </div>
                 `);
@@ -1075,7 +1091,7 @@
           if (responseArray[i].attachmentString != null && responseArray[i].attachmentString != "") {
             var attachmentAuxJSON = JSON.parse(responseArray[i].attachmentString);
             for (var w = 0; w < attachmentAuxJSON.length; w++)
-              attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, ` + attachmentAuxJSON[w].filename + `, ` + ((responseArray[i].side) ? `true` : `false`) + `)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
+              attachmentsHtml += `<div class="attachmentBox" onclick="$ZEALOT.fetchFile(` + attachmentAuxJSON[w].idAttachment + `, '` + attachmentAuxJSON[w].filename + `', ` + ((responseArray[i].side) ? `true` : `false`) + `)"><i class="fa fa-paperclip"></i><span>` + attachmentAuxJSON[w].filename + `</span></div>`;
           }
           ticketHtml += `
             <div class="` + ((responseArray[i].side) ? ((responseArray[i].isInternal) ? `internal-message` : `operator-message`) : `client-message`) + `">` +
@@ -1234,6 +1250,62 @@
       },
       true /*, ZEALOT.bearer*/
     );
+  };
+
+  ZEALOT.fetchFile = function(id, fn, side) {
+    $.confirm({
+      theme: 'material',
+      title: 'Molimo sačekajte',
+      content: 'Obrada Vašeg zahteva je u toku...',
+      type: 'green',
+      typeAnimated: true,
+      buttons: {
+        ok: {
+          text: 'ОК',
+          btnClass: 'gone',
+          action: function() {}
+        }
+      }
+    });
+    var oReq = new XMLHttpRequest();
+    oReq.open("GET", ZEALOT.apiRoot + 'FetchFile' + '?idAttachment=' + id + '&filename=' + encodeURIComponent(fn) + '&side=' + side, true);
+    oReq.responseType = "arraybuffer";
+    oReq.onreadystatechange = function(oEvent) {
+      if (oReq.readyState === 4) {
+        if (oReq.status === 200) {
+          var blob = new Blob([oReq.response], {
+            type: "octet/stream"
+          });
+          var url = window.URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
+          a.href = url;
+          a.download = fn;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          $(a).remove();
+          $(".jconfirm").remove();
+        } else {
+          $(".jconfirm").remove();
+          $.confirm({
+            theme: "material",
+            title: "Greška",
+            content: "Tražena datoteka ne postoji na serveru.",
+            type: "red",
+            typeAnimated: true,
+            buttons: {
+              ok: {
+                text: "OK",
+                btnClass: "btn-red",
+                action: function() {}
+              }
+            }
+          });
+        }
+      }
+    };
+    oReq.send();
   };
 
   ZEALOT.attachInputChanged = function(e) {
