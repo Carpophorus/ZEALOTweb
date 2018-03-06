@@ -426,7 +426,7 @@
           text: "<i class='fa fa-reply-all confirm-btn-icon'></i>&nbsp;&nbsp;&nbsp;Reply All",
           btnClass: "btn-red " + (($('.cc-tagsinput').tagsinput('items').length > 0 || $('.bcc-tagsinput').tagsinput('items').length > 0) ? "" : "gone"),
           action: function() {
-            ZEALOT.sendMailAux("&cc=" + encodeURIComponent($('.cc-tagsinput').tagsinput('items').join(',')) + "&bcc=" + encodeURIComponent($('.bcc-tagsinput').tagsinput('items').join(',')));
+            ZEALOT.sendMailAux((($('.cc-tagsinput').tagsinput('items').length > 0) ? "&cc=" + encodeURIComponent($('.cc-tagsinput').tagsinput('items').join(',')) : "") + (($('.bcc-tagsinput').tagsinput('items').length > 0) ? "&bcc=" + encodeURIComponent($('.bcc-tagsinput').tagsinput('items').join(',')) : ""));
           }
         }
       }
@@ -1990,28 +1990,7 @@
             <br>Mobile: <a href="tel:+` + ZEALOT.userInfo.phone.replace(/\./g, '') + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.phone + `</a>
             ` : ``) + `
             <br>E-mail: <a href="mailto:` + ZEALOT.userInfo.username + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.username + `</a>
-            <br>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="334.8 83.8 1101.5 624.4" style="enable-background:new 334.8 83.8 1101.5 624.4; width: 11em; height: 7em; margin-top: 0.3em" xml:space="preserve">
-              <style type="text/css">
-              	.st0{fill:#E62022;}
-              	.st1{fill:#918F93;}
-              </style>
-              <g>
-              	<rect x="344.9" y="489.4" class="st0" width="91.8" height="90.7"/>
-              	<path class="st1" d="M344.9,211.8h259.9l-0.1,0.1c45.8,0,82.9,37.1,82.9,82.9l0.1-0.1v202.6l-0.1,0.1c0,45.8-37.1,82.9-82.9,82.9
-              		l0.1-0.1H455.4V476.6H558l-0.1,0.1c8.3,0,15.1-6.7,15.1-15.1l0.1-0.1V325.6l-0.1,0.1c0-8.3-6.7-15.1-15.1-15.1h0.1H444.5V469h-99.6
-              		"/>
-              	<rect x="730.3" y="489.4" class="st1" width="91.7" height="90.7"/>
-              	<path class="st1" d="M974.8,211.9l0.1-0.1H730.2V469h99.6v-29.9h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.3L944,470
-              		c0,4.1-3.4,7.5-7.5,7.5l0.1-0.1h-95.9V580h134l-0.1,0.1c45.8,0,82.9-37.1,82.9-82.9v-0.1v-63l-0.1,0.1c-1-20.1-13.6-37.7-32.2-45.2
-              		l0,0c18.6-7.5,31.2-25.2,32.2-45.2h0.1v-49.1C1057.7,249,1020.5,211.9,974.8,211.9z M944.3,346.2l-0.1,0.1c0,4.1-3.4,7.5-7.5,7.5
-              		h0.1h-0.1H829.8v-38.3h106.8l-0.1,0.1c4.1,0,7.5,3.4,7.5,7.5l0.1-0.1v23.2H944.3z"/>
-              	<path class="st1" d="M1426.1,497.3v-60.7l-0.1,0.1c0-45.8-37.1-82.9-82.9-82.9h0.1h-146.8v-38.3h212.6V211.8h-239.1l-0.1,0.1
-              		c-45.8,0-82.9,37.1-82.9,82.9v-0.1v61.6v0.1c0,45.8,37.1,82.9,82.9,82.9l0.1-0.1h145v37.4h-117.4V580h145.7l-0.1,0.1
-              		c45.8,0,82.9-37.1,82.9-82.9"/>
-              	<rect x="1086.8" y="489.4" class="st1" width="91.7" height="90.7"/>
-              </g>
-            </svg>
+            <br><img style="width: 11em; margin-top: 0.3em" src="/img/DBS logo.gif"></img>
             <br>Tošin Bunar 274v
             <br>11070 Novi Beograd, Srbija
             <br>
