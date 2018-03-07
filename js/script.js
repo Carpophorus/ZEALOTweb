@@ -1370,6 +1370,9 @@
         case 4:
           statusIcon = "fa-check-circle";
           break;
+        case 5:
+          statusIcon = "fa-flag";
+          break;
         default:
           break;
       }
@@ -1990,7 +1993,7 @@
             <br>Mobile: <a href="tel:+` + ZEALOT.userInfo.phone.replace(/\./g, '') + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.phone + `</a>
             ` : ``) + `
             <br>E-mail: <a href="mailto:` + ZEALOT.userInfo.username + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.username + `</a>
-            <br><img style="width: 11em; margin-top: 0.3em" src="/img/DBS logo.gif"></img>
+            <br><img style='width: 11em; margin-top: 0.3em' src='/img/DBS logo.gif'></img>
             <br>Tošin Bunar 274v
             <br>11070 Novi Beograd, Srbija
             <br>
