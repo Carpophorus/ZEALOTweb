@@ -162,6 +162,13 @@ h3 {
   font-size: 125% !important;
 }
 
+.sidebar-popup-content>div>.t-visible, .sidebar-popup-content>div>.t-unassigned, .sidebar-popup-content>div>.t-status, .sidebar-popup-content>div>.t-type {
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  padding-right: 17.5vh !important;
+}
+
 /* OTHER */
 
 .login-screen {
@@ -470,7 +477,9 @@ h3 {
 }
 
 .sidebar-popup-content>div>div>.num {
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 5vh;
   font-family: 'Open Sans', sans-serif !important;
 }
 
