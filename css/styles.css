@@ -247,6 +247,8 @@ h3 {
 
 .sidebar-popup {
   background-color: #dfffff;
+  resize: horizontal;
+  overflow: auto;
 }
 
 .main-screen>.main-panel>.scrollable {
@@ -355,6 +357,7 @@ h3 {
   width: 9vh;
   height: 91vh;
   background-color: #00b3b3;
+  /* cursor: col-resize; */
   -webkit-transition: background-color .5s ease, color .5s ease;
   -moz-transition: background-color .5s ease, color .5s ease;
   transition: background-color .5s ease, color .5s ease;
@@ -463,9 +466,42 @@ h3 {
   background-color: #00b3b3;
 }
 
+#new-ticket-button {
+  position: absolute;
+  bottom: 5vh;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 25%;
+  font-size: 60% !important;
+  line-height: 5vh !important;
+  height: 5vh;
+  padding-top: .7vh;
+  color: #003d3d;
+  background-color: #00b3b3;
+}
+
 .sidebar-popup-content>div>.popup-bar>button:hover {
   color: #f9fdfd;
   background-color: #003d3d;
+}
+
+#new-ticket-button:hover {
+  color: #f9fdfd;
+  background-color: #003d3d;
+}
+
+#nit-subject, #nit-body {
+  width: 100%;
+  resize: none;
+  border: 1px solid #00b3b3;
+  padding: 1vh 1.5vh;
+}
+
+#nit-subject {
+  line-height: 5vh;
+  margin-bottom: 2vh;
+  padding: 0 1.5vh;
 }
 
 .sidebar-popup-content>div>.tabbed {
@@ -606,6 +642,32 @@ input:checked+.slider:before {
 .title-fixed>div {
   position: absolute;
   left: 5px;
+}
+
+#title-fixed-ticket-number {
+  display: inline-block;
+  height: 100%;
+  cursor: pointer;
+}
+
+#title-fixed-ticket-subject {
+  position: absolute;
+  top: 8.9vh;
+  right: -5px;
+  z-index: 99;
+  width: inherit;
+  text-align: right;
+  line-height: normal !important;
+  font-size: 2vh;
+  background: -webkit-linear-gradient(left, transparent, #00b3b3);
+  background: -o-linear-gradient(left, transparent, #00b3b3);
+  background: -moz-linear-gradient(left, transparent, #00b3b3);
+  background: linear-gradient(to right, transparent, #00b3b3);
+}
+
+#title-fixed-ticket-subject>span {
+  padding: 2.2vh 4vh 3vh 50%;
+  display: inline-block;
 }
 
 .stat {
@@ -1270,6 +1332,13 @@ input:checked+.slider:before {
 }
 
 /* MEDIA */
+
+@media (min-width: 991.5px) {
+  .sidebar-popup {
+    min-width: 333px;
+    max-width: 45%;
+  }
+}
 
 @media (max-width: 767.5px) {
   .company-contact {

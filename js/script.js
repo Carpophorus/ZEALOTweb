@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  // ZEALOT.apiRoot = "http://localhost:50358/api/";
-  ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
+  ZEALOT.apiRoot = "http://localhost:50358/api/";
+  // ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
   ZEALOT.allOperators = "";
@@ -49,6 +49,11 @@
   var bccA = {};
 
   ZEALOT.filesForAttach = null;
+
+  ZEALOT.lgPopupWidth = 333;
+
+  ZEALOT.nitSubject = "";
+  ZEALOT.nitBody = "";
 
   $.trumbowyg.svgPath = 'wyg/ui/icons.svg';
 
@@ -166,7 +171,7 @@
       ZEALOT.mainWidthSmall = 0;
       ZEALOT.mainWidthLarge = Math.round(ZEALOT.browserWidth - nineVH - ZEALOT.x - 1);
     } else {
-      ZEALOT.popupWidth = 333;
+      ZEALOT.popupWidth = ZEALOT.lgPopupWidth;
       ZEALOT.mainWidthSmall = Math.round(ZEALOT.browserWidth - 2 * nineVH - ZEALOT.popupWidth - ZEALOT.x - 1);
       ZEALOT.mainWidthLarge = Math.round(ZEALOT.browserWidth - 2 * nineVH - ZEALOT.x - 1);
     }
@@ -452,8 +457,8 @@
       ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=false" + "&body=" + encodeURIComponent($(".trumbowyg-editor").html() + ZEALOT.signature) + "&idO=" + ZEALOT.userInfo.idOperator + ccbcc + (($(".attach-tagsinput").tagsinput('items').length > 0) ? ("&attachmentString=" + encodeURIComponent(JSON.stringify($(".attach-tagsinput").tagsinput('items')))) : ""),
       function(responseArray, status) {
         ZEALOT.currentTicket.isUnread = false;
-        if (ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.idOperator != null && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
-          insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
+        // if (ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.idOperator != null && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
+        //   insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
         var attachmentsHtml = ``;
         var attachmentAuxJSON = $(".attach-tagsinput").tagsinput('items');
         for (var w = 0; w < attachmentAuxJSON.length; w++)
@@ -809,8 +814,8 @@
             ZEALOT.loadSidebarTickets();
             ZEALOT.currentTicket.idSector = ZEALOT.idSectorForTicket;
             ZEALOT.currentTicket.idOperator = ZEALOT.idOperatorForTicket;
-            if (ZEALOT.currentTicket.isUnread == false && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
-              insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
+            // if (ZEALOT.currentTicket.isUnread == false && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
+            //   insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
             $(".jconfirm").remove();
             $.confirm({
               theme: "material",
@@ -985,14 +990,14 @@
         ZEALOT.idTicketCurrent = idT;
         var ticketHtml = `
           <div class="title-fixed oswald-blue-semibold">
-            Tiket ` + idT + `
+            <span id="title-fixed-ticket-number" data-toggle="collapse" data-target="#title-fixed-ticket-subject" aria-expanded="false" aria-controls="title-fixed-ticket-subject">Tiket ` + idT + `</span>
             <div class="title-bar"></div>
             <img class="ticket-loaded-helper" src="img/Z white.svg" onload="$ZEALOT.ticketLoaded(this);">
             <div class="ticket-options-container">
               <div class="toc-selection">
                 <input id="selection-select-ticket" type="search" list="select-selection-ticket" placeholder="Podešavanje" onfocus="this.placeholder=''" onblur="this.placeholder='Podešavanje'" oninput="$ZEALOT.ticketSelectionSelect(this)">
                 <datalist id="select-selection-ticket">
-                    ` + ((completed == false && ZEALOT.currentTicket.idOperator != null && ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.isUnread == false) ? `<option value="Status i tip"><div value="1" id="val"></div></option>` : ``) + `
+                    ` + (((completed == false && ZEALOT.currentTicket.idOperator != null && ZEALOT.currentTicket.idSector != null && ZEALOT.currentTicket.isUnread == false) || true) ? `<option value="Status i tip"><div value="1" id="val"></div></option>` : ``) + `
                     <option value="Kompanija i klijent"><div value="2" id="val"></div></option>
                     <option value="Tagovi"><div value="5" id="val"></div></option>
                     ` + ((ZEALOT.adminPrivilegesGranted) ? (`
@@ -1072,6 +1077,9 @@
             </div>
           </div>
           <input class="to-tags gone">
+          <div id="title-fixed-ticket-subject" class="collapse show open-sans-light-normal">
+            <span>` + ZEALOT.currentTicket.eMailSubject + `</span>
+          </div>
           <div class="main-panel-ticket scrollable-hotfix conversation-container">
         `;
         ccI = -1;
@@ -1930,6 +1938,10 @@
         </div>
       </div>
     `);
+    new ResizeSensor($(".sidebar-popup"), function() {
+      ZEALOT.lgPopupWidth = $(".sidebar-popup").width();
+      ZEALOT.mainLoaded(null);
+    });
   };
 
   ZEALOT.signIn = function() {
@@ -1983,7 +1995,6 @@
           ZEALOT.signature = `
             <br>
             <br>
-            <br>
             S poštovanjem / Best regards
             <br>
             <br>
@@ -1993,8 +2004,8 @@
             <br>Mobile: <a href="tel:+` + ZEALOT.userInfo.phone.replace(/\./g, '') + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.phone + `</a>
             ` : ``) + `
             <br>E-mail: <a href="mailto:` + ZEALOT.userInfo.username + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.username + `</a>
-            <br><img style='width: 11em; margin-top: 0.3em' src='/img/DBS logo.gif'></img>
-            <br>Tošin Bunar 274v
+            <br><img style='display: block; max-width: 150px; width: auto; height: auto; margin-top: 0.3em' src='/img/DBS logo.gif'></img>
+            Tošin Bunar 274v
             <br>11070 Novi Beograd, Srbija
             <br>
             <br>T <a href="tel:+381112086106" target="_blank" rel="noopener noreferrer" style="display: inline">381.11.20.86.106</a>
@@ -2182,8 +2193,79 @@
         <div class="` + ((ZEALOT.allTicketTypes[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-type" value=` + ZEALOT.allTicketTypes[i].idTtp + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketTypes[i].ttpn + `<div class="num">` + ((ZEALOT.allTicketTypes[i].unread > 0) ? ZEALOT.allTicketTypes[i].unread : `0`) + `/` + ZEALOT.allTicketTypes[i].all + `</div><div class="fa fa-caret-right hidden"></div></div>
       `;
     }
-    popupTicketsHtml += `</div>`;
+    popupTicketsHtml += `</div><button id="new-ticket-button" class="popup-button" onclick="$ZEALOT.newInternalTicket();"><i class="fa fa-plus"></i></button>`;
     insertHtml(".sidebar-popup-content", popupTicketsHtml);
+  };
+
+  ZEALOT.nitInputChanged = function() {
+    ZEALOT.nitSubject = $("#nit-subject").val();
+    ZEALOT.nitBody = $("#nit-body").val();
+    if (ZEALOT.nitSubject == "" || ZEALOT.nitBody == "")
+      $(".btn-green").prop("disabled", true);
+    else if (ZEALOT.nitSubject != "" && ZEALOT.nitBody != "")
+      $(".btn-green").prop("disabled", false);
+  };
+
+  ZEALOT.newInternalTicket = function() {
+    ZEALOT.nitSubject = "";
+    ZEALOT.nitBody = "";
+    $.confirm({
+      theme: "material",
+      title: "Novi interni tiket",
+      content: `<input id='nit-subject' type='text' oninput='$ZEALOT.nitInputChanged();' placeholder='Subject' onfocus='this.placeholder = ""' onblur='this.placeholder = "Subject"'><br><textarea id='nit-body' rows='6' oninput='$ZEALOT.nitInputChanged();' placeholder='Body' onfocus='this.placeholder = ""' onblur='this.placeholder = "Body"'>`,
+      type: "green",
+      typeAnimated: true,
+      buttons: {
+        cancel: {
+          text: "Cancel",
+          action: function() {}
+        },
+        ok: {
+          text: "OK",
+          btnClass: "btn-green",
+          action: function() {
+            $.confirm({
+              theme: 'material',
+              title: 'Molimo sačekajte',
+              content: 'Obrada Vašeg zahteva je u toku...',
+              type: 'green',
+              typeAnimated: true,
+              buttons: {
+                ok: {
+                  text: 'ОК',
+                  btnClass: 'gone',
+                  action: function() {}
+                }
+              }
+            });
+            $ajaxUtils.sendPostRequest(
+              ZEALOT.apiRoot + "newInternalTicket" + "?subject=" + encodeURIComponent(ZEALOT.nitSubject) + "&body=" + encodeURIComponent(ZEALOT.nitBody),
+              function(responseArray, status) {
+                $(".jconfirm").remove();
+                $.confirm({
+                  theme: "material",
+                  title: "Potvrda akcije",
+                  content: "Interni tiket poslat.",
+                  type: "green",
+                  typeAnimated: true,
+                  buttons: {
+                    ok: {
+                      text: "OK",
+                      btnClass: "btn-green",
+                      action: function() {}
+                    }
+                  }
+                });
+              },
+              true /*, ZEALOT.bearer*/
+            );
+          }
+        }
+      }
+    });
+    setTimeout(function() {
+      $(".btn-green").prop("disabled", true);
+    }, 10);
   };
 
   ZEALOT.loadSidebarContacts = function() {
