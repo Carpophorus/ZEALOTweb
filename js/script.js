@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  ZEALOT.apiRoot = "http://localhost:50358/api/";
-  // ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
+  // ZEALOT.apiRoot = "http://localhost:50358/api/";
+  ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
   ZEALOT.allOperators = "";
@@ -51,6 +51,8 @@
   ZEALOT.filesForAttach = null;
 
   ZEALOT.lgPopupWidth = 333;
+
+  ZEALOT.refreshT = 180000;
 
   ZEALOT.nitSubject = "";
   ZEALOT.nitBody = "";
@@ -243,7 +245,7 @@
   ZEALOT.statsLoaded = function(e) {
     $(".stats-progress-bar").animate({
         width: $(".stats-progress-bar").parent().width() + 15
-      }, 180 * 1000, "linear",
+      }, ZEALOT.refreshT, "linear",
       function() {
         if ($(".statistics-button").hasClass("active") && $(".stats-progress-bar").width() > $(".stats-progress-bar").parent().width() + 14)
           ZEALOT.statsSearch();
@@ -2193,8 +2195,18 @@
         <div class="` + ((ZEALOT.allTicketTypes[i].unread > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-type" value=` + ZEALOT.allTicketTypes[i].idTtp + ` onclick="$ZEALOT.categoryClicked(this);">` + ZEALOT.allTicketTypes[i].ttpn + `<div class="num">` + ((ZEALOT.allTicketTypes[i].unread > 0) ? ZEALOT.allTicketTypes[i].unread : `0`) + `/` + ZEALOT.allTicketTypes[i].all + `</div><div class="fa fa-caret-right hidden"></div></div>
       `;
     }
-    popupTicketsHtml += `</div><button id="new-ticket-button" class="popup-button" onclick="$ZEALOT.newInternalTicket();"><i class="fa fa-plus"></i></button>`;
+    popupTicketsHtml += `</div><button id="new-ticket-button" class="popup-button" onclick="$ZEALOT.newInternalTicket();"><i class="fa fa-plus"></i></button><button id="refresh-tickets-button" class="popup-button" onclick="$ZEALOT.loadSidebarTickets();"><i class="fa fa-refresh fa-spin"></i></button><div class="refresh-tickets-progress"></div>`;
     insertHtml(".sidebar-popup-content", popupTicketsHtml);
+    setTimeout(function() {
+      $("#refresh-tickets-button i").removeClass("fa-spin");
+    }, 3000);
+    $(".refresh-tickets-progress").animate({
+        width: 200
+      }, ZEALOT.refreshT, "linear",
+      function() {
+        if ($(".inbox-button").hasClass("active") && $(".refresh-tickets-progress").width() > 199)
+          ZEALOT.loadSidebarTickets();
+      });
   };
 
   ZEALOT.nitInputChanged = function() {

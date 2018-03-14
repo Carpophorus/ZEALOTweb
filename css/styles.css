@@ -55,7 +55,7 @@ button {
   transition: background-color .5s ease, color .5s ease;
 }
 
-button:hover {
+button:hover, button:active, button:focus {
   margin: 0;
   padding: 0;
   cursor: pointer;
@@ -466,7 +466,7 @@ h3 {
   background-color: #00b3b3;
 }
 
-#new-ticket-button {
+#new-ticket-button, #refresh-tickets-button {
   position: absolute;
   bottom: 5vh;
   left: 0;
@@ -481,14 +481,23 @@ h3 {
   background-color: #00b3b3;
 }
 
-.sidebar-popup-content>div>.popup-bar>button:hover {
+#refresh-tickets-button {
+  bottom: 12vh;
+  padding-top: .5vh;
+}
+
+.sidebar-popup-content>div>.popup-bar>button:hover, #new-ticket-button:hover, #refresh-tickets-button:hover {
   color: #f9fdfd;
   background-color: #003d3d;
 }
 
-#new-ticket-button:hover {
-  color: #f9fdfd;
-  background-color: #003d3d;
+.refresh-tickets-progress {
+  position: absolute;
+  bottom: 0;
+  height: 3vh;
+  width: 0;
+  background: red;
+  visibility: hidden;
 }
 
 #nit-subject, #nit-body {
