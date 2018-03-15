@@ -1012,7 +1012,7 @@
                 <input id="status-select-ticket" type="search" list="select-status-ticket" placeholder="Status" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Status'" oninput="$ZEALOT.ticketStatusSelect(this)">
                 <datalist id="select-status-ticket">
         `;
-        for (var i = 0; i < ZEALOT.allTicketStatuses.length; i++)
+        for (var i = 3; i < ZEALOT.allTicketStatuses.length; i++)
           if (Number(ZEALOT.allTicketStatuses[i].idSt) <= 4 || Number(ZEALOT.allTicketStatuses[i].idSt) > 4 && ZEALOT.adminPrivilegesGranted)
             ticketHtml += `<option value="` + ZEALOT.allTicketStatuses[i].stn + `"><div value="` + ZEALOT.allTicketStatuses[i].idSt + `" id="val"></div></option>`;
         ticketHtml += `
@@ -1410,6 +1410,10 @@
         case 5:
           sectorSign = "🅕";
           sectorName = "FINANSIJE";
+          break;
+        case 6:
+          sectorSign = "🅢";
+          sectorName = "SOFTVER";
           break;
         default:
           break;
@@ -2251,7 +2255,7 @@
               }
             });
             $ajaxUtils.sendPostRequest(
-              ZEALOT.apiRoot + "newInternalTicket" + "?subject=" + encodeURIComponent(ZEALOT.nitSubject) + "&body=" + encodeURIComponent(ZEALOT.nitBody),
+              ZEALOT.apiRoot + "newInternalTicket" + "?subject=" + encodeURIComponent(ZEALOT.userInfo.operatorName + ' - ' + ZEALOT.nitSubject) + "&body=" + encodeURIComponent(ZEALOT.nitBody),
               function(responseArray, status) {
                 $(".jconfirm").remove();
                 $.confirm({
@@ -2641,7 +2645,7 @@
         </div>
       `;
     } else {
-      statsSearchHtml += `<div class="special-stat col-md-1 d-none d-md-block"></div>`;
+      statsSearchHtml += ` `; /*`<div class="special-stat col-md-1 d-none d-md-block"></div>`;*/
       for (var i = 0; i < ZEALOT.allSectors.length; i++) {
         var sum = 0;
         for (var j = 0; j < specialCounters['s' + i].length; j++) sum += specialCounters['s' + i][j].cnt;
@@ -2718,6 +2722,15 @@
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[4].idSc + "&nc=" + ZEALOT.nc,
         function(responseArray, status) {
           specialCounters['s' + 4] = responseArray;
+          sync = sync + 1;
+          if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
+        },
+        true /*, ZEALOT.bearer*/
+      );
+      $ajaxUtils.sendGetRequest(
+        ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[5].idSc + "&nc=" + ZEALOT.nc,
+        function(responseArray, status) {
+          specialCounters['s' + 5] = responseArray;
           sync = sync + 1;
           if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
         },

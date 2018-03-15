@@ -942,7 +942,7 @@ input:checked+.slider:before {
   line-height: 5vh !important;
   width: 15vh;
   height: 5vh;
-  padding-top: .4vh;
+  padding-top: .6vh;
   color: #003d3d;
   background-color: #00b3b3;
 }
@@ -959,7 +959,7 @@ input:checked+.slider:before {
 }
 
 .ticket-button:hover {
-  padding-top: .4vh;
+  padding-top: .6vh;
   color: #f9fdfd;
   background-color: #003d3d;
 }
