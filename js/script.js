@@ -2010,7 +2010,7 @@
             <br>Mobile: <a href="tel:+` + ZEALOT.userInfo.phone.replace(/\./g, '') + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.phone + `</a>
             ` : ``) + `
             <br>E-mail: <a href="mailto:` + ZEALOT.userInfo.username + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.username + `</a>
-            <br><img style='display: block; max-width: 150px; width: auto; height: auto; margin-top: 0.3em' src='/img/DBS logo.gif'></img>
+            <br><img style='display: block; width: 150px; height: 85px; max-width: 150px; max-height: 85px; margin-top: 0.3em' src='/img/DBS logo.gif'></img>
             Tošin Bunar 274v
             <br>11070 Novi Beograd, Srbija
             <br>
