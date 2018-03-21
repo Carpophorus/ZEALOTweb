@@ -739,6 +739,26 @@
     });
     switch (ZEALOT.idSelectionForTicket) {
       case 1, "1": //status & type
+        if (ZEALOT.currentTicket.idSector == null || ZEALOT.currentTicket.idOperator == null) {
+          setTimeout(function() {
+            $(".jconfirm").remove();
+            $.confirm({
+              theme: "material",
+              title: "Greška",
+              content: "Morate da barem delegirate tiket pre nego što mu promenite status.",
+              type: "red",
+              typeAnimated: true,
+              buttons: {
+                ok: {
+                  text: "OK",
+                  btnClass: "btn-red",
+                  action: function() {}
+                }
+              }
+            });
+          }, 10);
+          break;
+        }
         $ajaxUtils.sendPostRequest(
           ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
           "&idTs=" + ZEALOT.idStatusForTicket +
@@ -1505,19 +1525,19 @@
       setTimeout(ZEALOT.thumbClick, 750);
     if ($(e).hasClass("t-visible")) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=false",
+        ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=false" + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
-          var responseArrayModified = [];
-          for (var i = 0; i < responseArray.length; i++)
-            if (Number(responseArray[i].idStatus) < 4)
-              responseArrayModified.push(responseArray[i]);
-          ZEALOT.ccAux(responseArrayModified);
+          // var responseArrayModified = [];
+          // for (var i = 0; i < responseArray.length; i++)
+          //   if (Number(responseArray[i].idStatus) < 4)
+          //     responseArrayModified.push(responseArray[i]);
+          ZEALOT.ccAux(responseArray); //responseArrayModified
         },
         true /*, ZEALOT.bearer*/
       );
     } else if ($(e).hasClass("t-hidden")) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=true",
+        ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=true" + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
           ZEALOT.ccAux(responseArray);
         },
@@ -1525,19 +1545,19 @@
       );
     } else if ($(e).hasClass("t-unassigned")) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=false",
+        ZEALOT.apiRoot + "allTickets" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&hidden=false" + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
-          var responseArrayModified = [];
-          for (var i = 0; i < responseArray.length; i++)
-            if ((Number(responseArray[i].idOperator) == 0 || Number(responseArray[i].idSector) == 0) && Number(responseArray[i].idStatus) < 4)
-              responseArrayModified.push(responseArray[i]);
-          ZEALOT.ccAux(responseArrayModified);
+          // var responseArrayModified = [];
+          // for (var i = 0; i < responseArray.length; i++)
+          //   if ((Number(responseArray[i].idOperator) == 0 || Number(responseArray[i].idSector) == 0) && Number(responseArray[i].idStatus) < 4)
+          //     responseArrayModified.push(responseArray[i]);
+          ZEALOT.ccAux(responseArray); //responseArrayModified
         },
         true /*, ZEALOT.bearer*/
       );
     } else if ($(e).hasClass("t-priority")) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allTicketsByPriority" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idP=" + $(e).attr("value"),
+        ZEALOT.apiRoot + "allTicketsByPriority" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idP=" + $(e).attr("value") + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
           ZEALOT.ccAux(responseArray);
         },
@@ -1545,7 +1565,7 @@
       );
     } else if ($(e).hasClass("t-status")) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allTicketsByStatus" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idS=" + $(e).attr("value"),
+        ZEALOT.apiRoot + "allTicketsByStatus" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idS=" + $(e).attr("value") + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
           ZEALOT.ccAux(responseArray);
         },
@@ -1553,7 +1573,7 @@
       );
     } else if ($(e).hasClass("t-type")) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allTicketsByType" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idT=" + $(e).attr("value"),
+        ZEALOT.apiRoot + "allTicketsByType" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idT=" + $(e).attr("value") + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
           ZEALOT.ccAux(responseArray);
         },
@@ -2091,7 +2111,7 @@
     var syncs = 0;
     var synct = 0;
     $ajaxUtils.sendGetRequest(
-      ZEALOT.apiRoot + "allUnreadTicketsCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator),
+      ZEALOT.apiRoot + "allUnreadTicketsCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
       function(responseArray, status) {
         ZEALOT.allUnreadTicketsCount = responseArray[0].allUnreadTicketsCount;
         ZEALOT.allUncompletedTicketsCount = responseArray[0].allUncompletedTicketsCount;
@@ -2103,7 +2123,7 @@
     );
     for (var i = 0; i < ZEALOT.allTicketPriorities.length; i++) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allUnreadTicketsByPriorityCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idP=" + ZEALOT.allTicketPriorities[i].idP + "&i=" + i,
+        ZEALOT.apiRoot + "allUnreadTicketsByPriorityCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idP=" + ZEALOT.allTicketPriorities[i].idP + "&i=" + i + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
           ZEALOT.allTicketPriorities[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByPriorityCount;
           ZEALOT.allTicketPriorities[responseArray[0].i].all = responseArray[0].allTicketsByPriorityCount;
@@ -2118,7 +2138,7 @@
     }
     for (var i = 0; i < ZEALOT.allTicketStatuses.length; i++) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allUnreadTicketsByStatusCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idS=" + ZEALOT.allTicketStatuses[i].idSt + "&i=" + i,
+        ZEALOT.apiRoot + "allUnreadTicketsByStatusCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idS=" + ZEALOT.allTicketStatuses[i].idSt + "&i=" + i + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
           ZEALOT.allTicketStatuses[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByStatusCount;
           ZEALOT.allTicketStatuses[responseArray[0].i].all = responseArray[0].allTicketsByStatusCount;
@@ -2133,7 +2153,7 @@
     }
     for (var i = 0; i < ZEALOT.allTicketTypes.length; i++) {
       $ajaxUtils.sendGetRequest(
-        ZEALOT.apiRoot + "allUnreadTicketsByTypeCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idT=" + ZEALOT.allTicketTypes[i].idTtp + "&i=" + i,
+        ZEALOT.apiRoot + "allUnreadTicketsByTypeCount" + "?idO=" + ((ZEALOT.adminPrivilegesGranted) ? 0 : ZEALOT.userInfo.idOperator) + "&idT=" + ZEALOT.allTicketTypes[i].idTtp + "&i=" + i + ((ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.isAdmin && ZEALOT.userInfo.adminSector != 0) ? "&idSc=" + ZEALOT.userInfo.adminSector : ""),
         function(responseArray, status) {
           ZEALOT.allTicketTypes[responseArray[0].i].unread = responseArray[0].allUnreadTicketsByTypeCount;
           ZEALOT.allTicketTypes[responseArray[0].i].all = responseArray[0].allTicketsByTypeCount;
@@ -2351,10 +2371,10 @@
         <select id="user-role" onchange="$ZEALOT.selectColorChange(this);">
           <option value="0" disabled selected hidden>rola</option>
           <option value="1">Operater</option>
+          <option value="2">Administrator</option>
     `;
     if (ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.adminSector == 0)
       adminUsersHtml += `
-          <option value="2">Administrator</option>
           <option value="3">Superadministrator</option>
       `;
     adminUsersHtml += `
