@@ -321,14 +321,59 @@
           $.confirm({
             theme: "material",
             title: "Greška",
-            content: "Ne možete odgovoriti na tiket koji nije prosleđen.",
+            content: "Ne možete odgovoriti na tiket koji nije prosleđen.<br><br>Da li želite da ovaj tiket dodelite sebi?",
             type: "red",
             typeAnimated: true,
             buttons: {
-              ok: {
-                text: "OK",
-                btnClass: "btn-red",
+              no: {
+                text: "NE",
                 action: function() {}
+              },
+              yes: {
+                text: "DA",
+                btnClass: "btn-red",
+                action: function() {
+                  $.confirm({
+                    theme: 'material',
+                    title: 'Molimo sačekajte',
+                    content: 'Obrada Vašeg zahteva je u toku...',
+                    type: 'green',
+                    typeAnimated: true,
+                    buttons: {
+                      ok: {
+                        text: 'ОК',
+                        btnClass: 'gone',
+                        action: function() {}
+                      }
+                    }
+                  });
+                  $ajaxUtils.sendPostRequest(
+                    ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
+                    "&idS=" + ZEALOT.userInfo.idSector +
+                    "&idO=" + ZEALOT.userInfo.idOperator,
+                    function(responseArray, status) {
+                      ZEALOT.loadSidebarTickets();
+                      ZEALOT.currentTicket.idSector = ZEALOT.idSectorForTicket;
+                      ZEALOT.currentTicket.idOperator = ZEALOT.idOperatorForTicket;
+                      $(".jconfirm").remove();
+                      $.confirm({
+                        theme: "material",
+                        title: "Potvrda akcije",
+                        content: "Podaci sačuvani.",
+                        type: "green",
+                        typeAnimated: true,
+                        buttons: {
+                          ok: {
+                            text: "OK",
+                            btnClass: "btn-green",
+                            action: function() {}
+                          }
+                        }
+                      });
+                    },
+                    true /*, ZEALOT.bearer*/
+                  );
+                }
               }
             }
           });
@@ -829,14 +874,46 @@
             $.confirm({
               theme: "material",
               title: "Greška",
-              content: "Morate da barem delegirate tiket pre nego što mu promenite status.",
+              content: "Morate da barem delegirate tiket pre nego što mu promenite status.<br><br>Da li želite da ovaj tiket dodelite sebi i da mu promenite status?",
               type: "red",
               typeAnimated: true,
               buttons: {
-                ok: {
-                  text: "OK",
-                  btnClass: "btn-red",
+                no: {
+                  text: "NE",
                   action: function() {}
+                },
+                yes: {
+                  text: "DA",
+                  btnClass: "btn-red",
+                  action: function() {
+                    $.confirm({
+                      theme: 'material',
+                      title: 'Molimo sačekajte',
+                      content: 'Obrada Vašeg zahteva je u toku...',
+                      type: 'green',
+                      typeAnimated: true,
+                      buttons: {
+                        ok: {
+                          text: 'ОК',
+                          btnClass: 'gone',
+                          action: function() {}
+                        }
+                      }
+                    });
+                    $ajaxUtils.sendPostRequest(
+                      ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
+                      "&idS=" + ZEALOT.userInfo.idSector +
+                      "&idO=" + ZEALOT.userInfo.idOperator,
+                      function(responseArray, status) {
+                        ZEALOT.loadSidebarTickets();
+                        ZEALOT.currentTicket.idSector = ZEALOT.idSectorForTicket;
+                        ZEALOT.currentTicket.idOperator = ZEALOT.idOperatorForTicket;
+                        $(".jconfirm").remove();
+                        ZEALOT.saveTicketInfo();
+                      },
+                      true /*, ZEALOT.bearer*/
+                    );
+                  }
                 }
               }
             });
