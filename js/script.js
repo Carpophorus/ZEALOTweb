@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  // ZEALOT.apiRoot = "http://localhost:50358/api/";
-  ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
+  ZEALOT.apiRoot = "http://localhost:50358/api/";
+  // ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
   ZEALOT.allOperators = "";
@@ -1536,17 +1536,177 @@
     }
   };
 
+  ZEALOT.pagerSelectChanged = function() {
+    var messagesArray = ZEALOT.currentTicketsArray;
+    var mainTicketsHtml = ``;
+    for (var i = ($('#pager-select option:selected').val() - 1)*15; i < ((messagesArray.length < $('#pager-select option:selected').val()*15) ? messagesArray.length : $('#pager-select option:selected').val()*15); i++) {
+      var statusIcon = "";
+      switch (messagesArray[i].idType) {
+        case 1:
+          statusIcon = "fa-question-circle";
+          break;
+        case 2:
+          statusIcon = "fa-exclamation-triangle";
+          break;
+        case 3:
+          statusIcon = "fa-exclamation-circle";
+          break;
+        case 4:
+          statusIcon = "fa-check-circle";
+          break;
+        case 5:
+          statusIcon = "fa-flag";
+          break;
+        default:
+          break;
+      }
+      var assignedOperator = Number(messagesArray[i].idOperator);
+      var assignedSector = Number(messagesArray[i].idSector);
+      var sectorSign = "";
+      var sectorName = "";
+      switch (assignedSector) {
+        case 1:
+          sectorSign = "🅞";
+          sectorName = "OPERATIVA";
+          break;
+        case 2:
+          sectorSign = "🅧";
+          sectorName = "PODRŠKA";
+          break;
+        case 3:
+          sectorSign = "🅟";
+          sectorName = "PRODAJA";
+          break;
+        case 4:
+          sectorSign = "🅗";
+          sectorName = "HARDVER";
+          break;
+        case 5:
+          sectorSign = "🅕";
+          sectorName = "FINANSIJE";
+          break;
+        case 6:
+          sectorSign = "🅢";
+          sectorName = "SOFTVER";
+          break;
+        default:
+          break;
+      }
+      var now = new Date();
+      var lcmt = new Date(messagesArray[i].lcmt);
+      var startIndex = (messagesArray[i].clientMail.lastIndexOf('<') == -1) ? 0 : messagesArray[i].clientMail.lastIndexOf('<') + 1;
+      var addressLength = (messagesArray[i].clientMail.lastIndexOf('>') == -1) ? messagesArray[i].clientMail.length - startIndex : messagesArray[i].clientMail.lastIndexOf('>') - startIndex;
+      var mail = messagesArray[i].clientMail.substr(startIndex, addressLength);
+      var operator = "NEDODELJEN";
+      if (messagesArray[i].idOperator != null) {
+        for (var j = 0; j < ZEALOT.allOperators.length; j++)
+          if (ZEALOT.allOperators[j].idO == messagesArray[i].idOperator) {
+            operator = ZEALOT.allOperators[j].onm;
+            break;
+          }
+      }
+      mainTicketsHtml += `
+        <div class="ticket-container row` + ((messagesArray[i].isUnread) ? ` open-sans-dark-bold` : ``) + `" data-toggle="collapse" data-target="#tc-info-` + messagesArray[i].idTicket + `" onclick="$ZEALOT.ticketExpand(` + messagesArray[i].idTicket + `, this);">
+          <div class="col-1 tc-priority tc-priority-` + messagesArray[i].idPriority + ` fa fa-circle ` + ((lcmt.getTime() < now.getTime() - 48 * 60 * 60 * 1000 && Number(messagesArray[i].idPriority) == 2) ? `pulse` : ``) + `" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
+          <div class="col-8 col-md-2 tc-id-len">` + messagesArray[i].idTicket + ` (` + messagesArray[i].conversationLength + `)</div>
+          <div class="col-3 d-none d-md-block tc-sender" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].clientName + `, ` + messagesArray[i].companyName + `">` + mail + `</div>
+          <div class="col-3 d-none d-md-block tc-subject">` + messagesArray[i].eMailSubject + `</div>
+          <div class="col-1 tc-status" data-toggle="tooltip" data-placement="left" title="` + messagesArray[i].statusName + `">&#` + (10101 + messagesArray[i].idStatus) + `;</div>
+          <div class="col-1 tc-type fa ` + statusIcon + `" data-toggle="tooltip" data-placement="left" title="` + messagesArray[i].typeName + `"></div>
+          <div class="col-1 tc-assign" data-toggle="tooltip" data-placement="left" title="` + ((sectorName != "") ? sectorName : "NEDODELJEN") + `">` + sectorSign + `</div>
+          <div class="col-12 tc-info collapse" id="tc-info-` + messagesArray[i].idTicket + `">
+            <div class="tc-info-data-container row">
+              <div class="col-12 col-md-6">
+                <div class="tc-info-label d-block d-md-none">From:</div>
+                <div class="tc-info-info d-block d-md-none">` + mail + `</div>
+                <div class="tc-info-label d-block d-md-none">Subject:</div>
+                <div class="tc-info-info d-block d-md-none">` + messagesArray[i].eMailSubject + `</div>
+                <div class="tc-info-label">Datum otvaranja tiketa:</div>
+                <div class="tc-info-info">` + ZEALOT.formatDate(messagesArray[i].ticketCreated) + `</div>
+                <div class="tc-info-label">Datum poslednje izmene:</div>
+                <div class="tc-info-info">` + ZEALOT.formatDate(messagesArray[i].lcmt) + `</div>
+                <button class="ticket-button ticket-button-abs d-none d-md-block" onclick="$ZEALOT.ticketClicked(` + messagesArray[i].idTicket + `, ` + ((Number(messagesArray[i].idStatus) < 4) ? `false` : `true`) + `);"><i class="fa fa-eye"></i></button>
+              </div>
+                <div class="col-12 col-md-6">
+                <div class="tc-info-label">Prioritet:</div>
+                <div class="tc-info-info">` + messagesArray[i].priorityName + `</div>
+                <div class="tc-info-label">Status:</div>
+                <div class="tc-info-info">` + messagesArray[i].statusName + `</div>
+                <div class="tc-info-label">Tip:</div>
+                <div class="tc-info-info">` + messagesArray[i].typeName + `</div>
+                <div class="tc-info-label">Sektor:</div>
+                <div class="tc-info-info">` + ((sectorName != "") ? sectorName : "NEDODELJEN") + `</div>
+                <div class="tc-info-label">Operater:</div>
+                <div class="tc-info-info">` + operator + `</div>
+              </div>
+            </div>
+            <button class="ticket-button ticket-button-regular d-block d-md-none" onclick="$ZEALOT.ticketClicked(` + messagesArray[i].idTicket + `, ` + ((Number(messagesArray[i].idStatus) < 4) ? `false` : `true`) + `);"><i class="fa fa-eye"></i></button>
+          </div>
+        </div>
+      `;
+      /*
+      <div class="` + ((messagesArray[i].isHidden) ? `tc-show` : `tc-hide`) + ` col-1 fa fa-trash ` + ((messagesArray[i].isUnread) ? `hidden` : ``) + `" data-toggle="tooltip" data-placement="left" title="` + ((messagesArray[i].isHidden) ? `OTKRIJ TIKET` : `SAKRIJ TIKET`) + `" onclick="$ZEALOT.hideOrShowTicket(this, ` + messagesArray[i].idTicket + `, ` + messagesArray[i].isUnread + `)"></div>
+      */
+    }
+    insertHtml('.main-panel-tickets', mainTicketsHtml);
+  };
+
+  ZEALOT.pagerFirst = function() {
+    var selector = $('#pager-select option:selected');
+    if ($(selector).is('#pager-select option:nth-child(1)')) return;
+    $(selector).attr('selected', false);
+    $('#pager-select option:nth-child(1)').attr('selected', true);
+    ZEALOT.pagerSelectChanged();
+  };
+
+  ZEALOT.pagerPrev = function() {
+    var selector = $('#pager-select option:selected');
+    if ($(selector).is('#pager-select option:nth-child(1)')) return;
+    $(selector).attr('selected', false);
+    $(selector).prev().attr('selected', true);
+    ZEALOT.pagerSelectChanged();
+  };
+
+  ZEALOT.pagerNext = function() {
+    var selector = $('#pager-select option:selected');
+    if ($(selector).is('#pager-select option:nth-last-child(1)')) return;
+    $(selector).attr('selected', false);
+    $(selector).next().attr('selected', true);
+    ZEALOT.pagerSelectChanged();
+  };
+
+  ZEALOT.pagerLast = function() {
+    var selector = $('#pager-select option:selected');
+    if ($(selector).is('#pager-select option:nth-last-child(1)')) return;
+    $(selector).attr('selected', false);
+    $('#pager-select option:nth-last-child(1)').attr('selected', true);
+    ZEALOT.pagerSelectChanged();
+  };
+
   ZEALOT.ccAux = function(messagesArray) {
     ZEALOT.currentTicketsArray = messagesArray;
     var mainTicketsHtml = `
       <div class="title-fixed oswald-blue-semibold">
         Tiketi
+        <div class="title-pager">
+          <button class="to-button pager-button" onclick="$ZEALOT.pagerFirst();"><i class="fa fa-angle-double-left"></i></button>
+          <button class="to-button pager-button" onclick="$ZEALOT.pagerPrev();"><i class="fa fa-angle-left"></i></button>
+          <select id="pager-select" onchange="$ZEALOT.pagerSelectChanged();">
+    `;
+    for (var i = 0; i < Math.ceil(messagesArray.length / 15); i++) {
+      mainTicketsHtml += `<option ` + ((i == 0) ? `selected="selected"` : ``) + `>` + (i + 1) + `</option>`;
+    }
+    mainTicketsHtml += `
+          </select>
+          <button class="to-button pager-button" onclick="$ZEALOT.pagerNext();"><i class="fa fa-angle-right"></i></button>
+          <button class="to-button pager-button" onclick="$ZEALOT.pagerLast();"><i class="fa fa-angle-double-right"></i></button>
+        </div>
         <div class="title-bar"></div>
         <img class="tickets-loaded-helper" src="img/Z white.svg" onload="$ZEALOT.ticketsLoaded(this);">
       </div>
       <div class="main-panel-tickets scrollable container open-sans-dark-normal">
     `;
-    for (var i = 0; i < messagesArray.length; i++) {
+    for (var i = 0; i < ((messagesArray.length < 15) ? messagesArray.length : 15); i++) {
       var statusIcon = "";
       switch (messagesArray[i].idType) {
         case 1:

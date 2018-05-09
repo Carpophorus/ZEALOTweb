@@ -399,7 +399,7 @@ h3 {
   background-color: inherit;
 }
 
-.sidebar-popup-content>div>.popup-bar>input, .ticket-options-container>div>input {
+.sidebar-popup-content>div>.popup-bar>input, .ticket-options-container>div>input, #pager-select {
   line-height: 4.5vh !important;
   width: 70%;
   margin-top: 3.5vh;
@@ -796,7 +796,7 @@ input:checked+.slider:before {
 }
 
 .main-panel-tickets {
-  padding: 5vh;
+  padding: 4vh 5vh;
   position: relative;
 }
 
@@ -1010,6 +1010,30 @@ input:checked+.slider:before {
   background-color: #00b3b3;
 }
 
+.pager-button {
+  width: 7vh;
+  margin-top: 1.5vh !important;
+  padding-top: .5vh !important;
+}
+
+.pager-button:hover, .pager-button:active {
+  margin-top: 1.5vh !important;
+  padding-top: .5vh !important;
+}
+
+#pager-select {
+  width: 9vh;
+  height: 5vh;
+  margin: 0;
+  font-size: 2vh;
+}
+
+.title-pager {
+  position: absolute;
+  top: 0;
+  left: 5vh !important;
+}
+
 .to-button:hover {
   margin-top: 3.3vh;
   padding-top: .5vh;
@@ -1117,12 +1141,10 @@ input:checked+.slider:before {
   line-height: 7vh;
   font-size: 3vh !important;
   text-align: center;
-  display: inline-block;
   float: left;
 }
 
 .attachmentBox>span {
-  display: inline-block;
   float: left;
 }
 
@@ -1306,7 +1328,7 @@ input:checked+.slider:before {
   padding: 0;
 }
 
-.trumbowyg-editor>#mail-signature>#mail-signature-logo, .operator-message.>#mail-signature>#mail-signature-logo {
+.trumbowyg-editor>#mail-signature>#mail-signature-logo, .operator-message>#mail-signature>#mail-signature-logo {
   width: 20vh;
   height: 10vh;
 }
