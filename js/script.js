@@ -1107,7 +1107,7 @@
       var startIndex = (mailsArray[i].lastIndexOf('<') == -1) ? 0 : mailsArray[i].lastIndexOf('<') + 1;
       var addressLength = (mailsArray[i].lastIndexOf('>') == -1) ? mailsArray[i].length - startIndex : mailsArray[i].lastIndexOf('>') - startIndex;
       mailsArray[i] = (mailsArray[i].substr(startIndex, addressLength)).trim();
-      if (mailsArray[i][0] == "'" && mailsArray[i][str.length-1] == "'") {
+      if (mailsArray[i][0] == "'" && mailsArray[i][mailsArray[i].length-1] == "'") {
         mailsArray[i] = mailsArray[i].slice(1, mailsArray[i].length-1);
         mailsArray[i] = mailsArray[i].slice(0, mailsArray[i].length);
       }
