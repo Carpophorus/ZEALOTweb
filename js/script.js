@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  ZEALOT.apiRoot = "http://localhost:50358/api/";
-  // ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
+  // ZEALOT.apiRoot = "http://localhost:50358/api/";
+  ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
   ZEALOT.allOperators = "";
@@ -1107,6 +1107,10 @@
       var startIndex = (mailsArray[i].lastIndexOf('<') == -1) ? 0 : mailsArray[i].lastIndexOf('<') + 1;
       var addressLength = (mailsArray[i].lastIndexOf('>') == -1) ? mailsArray[i].length - startIndex : mailsArray[i].lastIndexOf('>') - startIndex;
       mailsArray[i] = (mailsArray[i].substr(startIndex, addressLength)).trim();
+      if (mailsArray[i][0] == "'" && mailsArray[i][str.length-1] == "'") {
+        mailsArray[i] = mailsArray[i].slice(1, mailsArray[i].length-1);
+        mailsArray[i] = mailsArray[i].slice(0, mailsArray[i].length);
+      }
     }
     return mailsArray;
   };
