@@ -539,6 +539,11 @@ h3 {
   color: #00b3b3;
 }
 
+.popup-bar>.fa-caret-right {
+  left: -.2vh !important;
+  top: 4vh;
+}
+
 .popup-contacts, .popup-stats {
   padding-top: 9.3vh;
 }
@@ -871,6 +876,10 @@ input:checked+.slider:before {
 .pulse {
   animation: pulsing 1s alternate infinite;
   -webkit-animation: pulsing 1s alternate infinite;
+}
+
+.ongoing {
+  color: #FF7400 !important;
 }
 
 @keyframes pulsing {

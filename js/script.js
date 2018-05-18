@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  // ZEALOT.apiRoot = "http://localhost:50358/api/";
-  ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
+  ZEALOT.apiRoot = "http://localhost:50358/api/";
+  // ZEALOT.apiRoot = "http://10.0.66.2:8083/api/";
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
   ZEALOT.allOperators = "";
@@ -56,6 +56,8 @@
 
   ZEALOT.nitSubject = "";
   ZEALOT.nitBody = "";
+
+  ZEALOT.reverse = false;
 
   $.trumbowyg.svgPath = 'wyg/ui/icons.svg';
 
@@ -1197,8 +1199,8 @@
                 <input id="status-select-ticket" type="search" list="select-status-ticket" placeholder="Status" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Status'" oninput="$ZEALOT.ticketStatusSelect(this)">
                 <datalist id="select-status-ticket">
         `;
-        for (var i = 3; i < ZEALOT.allTicketStatuses.length; i++)
-          if (Number(ZEALOT.allTicketStatuses[i].idSt) <= 4 || Number(ZEALOT.allTicketStatuses[i].idSt) > 4 && ZEALOT.adminPrivilegesGranted)
+        for (var i = 2; i < ZEALOT.allTicketStatuses.length; i++)
+          if (Number(ZEALOT.allTicketStatuses[i].idSt) == 3 || Number(ZEALOT.allTicketStatuses[i].idSt) == 4 || Number(ZEALOT.allTicketStatuses[i].idSt) > 4 && ZEALOT.adminPrivilegesGranted)
             ticketHtml += `<option value="` + ZEALOT.allTicketStatuses[i].stn + `"><div value="` + ZEALOT.allTicketStatuses[i].idSt + `" id="val"></div></option>`;
         ticketHtml += `
                 </datalist>
@@ -1543,7 +1545,7 @@
   ZEALOT.pagerSelectChanged = function() {
     var messagesArray = ZEALOT.currentTicketsArray;
     var mainTicketsHtml = ``;
-    for (var i = ($('#pager-select option:selected').val() - 1)*15; i < ((messagesArray.length < $('#pager-select option:selected').val()*15) ? messagesArray.length : $('#pager-select option:selected').val()*15); i++) {
+    for (var i = ((ZEALOT.reverse == false) ? (($('#pager-select option:selected').val() - 1)*15) : (messagesArray.length - 1 - ($('#pager-select option:selected').val() - 1)*15)); ((ZEALOT.reverse == false) ? (i < ((messagesArray.length < $('#pager-select option:selected').val()*15) ? messagesArray.length : $('#pager-select option:selected').val()*15)) : (i > ((messagesArray.length < $('#pager-select option:selected').val()*15) ? -1 : (messagesArray.length - 1 - $('#pager-select option:selected').val()*15)))); ((ZEALOT.reverse == false) ? i++ : i--)) {
       var statusIcon = "";
       switch (messagesArray[i].idType) {
         case 1:
@@ -1611,7 +1613,7 @@
       }
       mainTicketsHtml += `
         <div class="ticket-container row` + ((messagesArray[i].isUnread) ? ` open-sans-dark-bold` : ``) + `" data-toggle="collapse" data-target="#tc-info-` + messagesArray[i].idTicket + `" onclick="$ZEALOT.ticketExpand(` + messagesArray[i].idTicket + `, this);">
-          <div class="col-1 tc-priority tc-priority-` + messagesArray[i].idPriority + ` fa fa-circle ` + ((lcmt.getTime() < now.getTime() - 48 * 60 * 60 * 1000 && Number(messagesArray[i].idPriority) == 2) ? `pulse` : ``) + `" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
+          <div class="col-1 tc-priority tc-priority-` + messagesArray[i].idPriority + ` fa fa-circle ` + ((Number(messagesArray[i].idStatus) == 3) ? `ongoing` : ((lcmt.getTime() < now.getTime() - 48 * 60 * 60 * 1000 && Number(messagesArray[i].idPriority) == 2) ? `pulse` : ``)) + `" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
           <div class="col-8 col-md-2 tc-id-len">` + messagesArray[i].idTicket + ` (` + messagesArray[i].conversationLength + `)</div>
           <div class="col-3 d-none d-md-block tc-sender" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].clientName + `, ` + messagesArray[i].companyName + `">` + mail + `</div>
           <div class="col-3 d-none d-md-block tc-subject">` + messagesArray[i].eMailSubject + `</div>
@@ -1710,7 +1712,10 @@
       </div>
       <div class="main-panel-tickets scrollable container open-sans-dark-normal">
     `;
-    for (var i = 0; i < ((messagesArray.length < 15) ? messagesArray.length : 15); i++) {
+    ZEALOT.reverse = ($(".popup-ticket .t-status:nth-child(9) .fa-caret-right").hasClass("hidden") == false
+                      || $(".popup-ticket .t-status:nth-child(10) .fa-caret-right").hasClass("hidden") == false
+                      || $(".popup-ticket .t-status:nth-child(11) .fa-caret-right").hasClass("hidden") == false) ? true : false;
+    for (var i = ((ZEALOT.reverse == false) ? 0 : messagesArray.length - 1); ((ZEALOT.reverse == false) ? (i < ((messagesArray.length < 15) ? messagesArray.length : 15)) : (i > ((messagesArray.length < 15) ? -1 : messagesArray.length - 1 - 15))); ((ZEALOT.reverse == false) ? i++ : i--)) {
       var statusIcon = "";
       switch (messagesArray[i].idType) {
         case 1:
@@ -1778,7 +1783,7 @@
       }
       mainTicketsHtml += `
         <div class="ticket-container row` + ((messagesArray[i].isUnread) ? ` open-sans-dark-bold` : ``) + `" data-toggle="collapse" data-target="#tc-info-` + messagesArray[i].idTicket + `" onclick="$ZEALOT.ticketExpand(` + messagesArray[i].idTicket + `, this);">
-          <div class="col-1 tc-priority tc-priority-` + messagesArray[i].idPriority + ` fa fa-circle ` + ((lcmt.getTime() < now.getTime() - 48 * 60 * 60 * 1000 && Number(messagesArray[i].idPriority) == 2) ? `pulse` : ``) + `" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
+          <div class="col-1 tc-priority tc-priority-` + messagesArray[i].idPriority + ` fa fa-circle ` + ((Number(messagesArray[i].idStatus) == 3) ? `ongoing` : ((lcmt.getTime() < now.getTime() - 48 * 60 * 60 * 1000 && Number(messagesArray[i].idPriority) == 2) ? `pulse` : ``)) + `" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].priorityName + ` PRIORITET"></div>
           <div class="col-8 col-md-2 tc-id-len">` + messagesArray[i].idTicket + ` (` + messagesArray[i].conversationLength + `)</div>
           <div class="col-3 d-none d-md-block tc-sender" data-toggle="tooltip" data-placement="right" title="` + messagesArray[i].clientName + `, ` + messagesArray[i].companyName + `">` + mail + `</div>
           <div class="col-3 d-none d-md-block tc-subject">` + messagesArray[i].eMailSubject + `</div>
@@ -1844,7 +1849,7 @@
 
   ZEALOT.categoryClicked = function(e) {
     ZEALOT.currentTicket = "";
-    $(".category .fa-caret-right").addClass("hidden");
+    $(".category .fa-caret-right, .popup-bar .fa-caret-right").addClass("hidden");
     $(e).find(".fa-caret-right").removeClass("hidden");
     if (ZEALOT.browserWidth < 991.5)
       setTimeout(ZEALOT.thumbClick, 750);
@@ -2497,6 +2502,7 @@
     var words = $("#search-terms").val();
     if (words == "") return;
     $(".category .fa-caret-right").addClass("hidden");
+    $(".popup-bar .fa-caret-right").removeClass("hidden");
     if (ZEALOT.browserWidth < 991.5)
       setTimeout(ZEALOT.thumbClick, 750);
     $ajaxUtils.sendGetRequest(
@@ -2514,7 +2520,8 @@
         <div class="popup-bar">
           <input type="text" onkeydown="if (event.keyCode == 13) $ZEALOT.searchTickets();" id="search-terms" class="open-sans-dark-normal bump" placeholder="Pretraga" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Pretraga'"></input>
           <button class="popup-button" onclick="$ZEALOT.searchTickets();"><i class="fa fa-search"></i></button>
-        </div>
+          <div class="fa fa-caret-right hidden"></div>
+          </div>
         <h2 class="oswald-dark-blue-normal">Svi tiketi</h2>
         <div class="` + ((ZEALOT.allUnreadTicketsCount > 0) ? `open-sans-dark-bold` : `open-sans-dark-normal`) + ` bump tabbed category t-visible" onclick="$ZEALOT.categoryClicked(this);">NEKOMPLETIRANI<div class="num">` + ((ZEALOT.allUnreadTicketsCount > 0) ? ZEALOT.allUnreadTicketsCount : `0`) + `/` + ZEALOT.allUncompletedTicketsCount + `</div><div class="fa fa-caret-right hidden"></div></div>` +
       ((ZEALOT.adminPrivilegesGranted == true && ZEALOT.userInfo.adminSector == 0) ? `
@@ -2545,7 +2552,15 @@
       `;
     }
     popupTicketsHtml += `</div><button id="new-ticket-button" class="popup-button" onclick="$ZEALOT.newInternalTicket();"><i class="fa fa-plus"></i></button><button id="refresh-tickets-button" class="popup-button" onclick="$ZEALOT.loadSidebarTickets();"><i class="fa fa-refresh fa-spin"></i></button><div class="refresh-tickets-progress"></div>`;
+    var x = 0;
+    for (var i = 1; i <= $(".popup-ticket>div").length; i++) {
+      if ($(".popup-ticket>div:nth-of-type(" + i + ")").find(".fa-caret-right").hasClass("hidden") == false) {
+        x = i;
+        break;
+      }
+    }
     insertHtml(".sidebar-popup-content", popupTicketsHtml);
+    if (x != 0) $(".popup-ticket>div:nth-of-type(" + x + ")").find(".fa-caret-right").removeClass("hidden");
     setTimeout(function() {
       $("#refresh-tickets-button i").removeClass("fa-spin");
     }, 3000);
