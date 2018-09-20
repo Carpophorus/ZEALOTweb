@@ -21,9 +21,9 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  // ZEALOT.apiRoot = "http://localhost:50358/api/";   // test
+  ZEALOT.apiRoot = "http://localhost:50358/api/";   // test
   // ZEALOT.apiRoot = "http://10.0.66.2:8083/api/"; // local
-  ZEALOT.apiRoot = "http://93.87.40.29:8083/api/"; // external
+  // ZEALOT.apiRoot = "http://93.87.40.29:8083/api/"; // external
 
   ZEALOT.userInfo = "";
   ZEALOT.signature = "";
@@ -2350,7 +2350,7 @@
         } else {
           ZEALOT.userInfo = responseArray[0];
           ZEALOT.adminPrivilegesGranted = ZEALOT.userInfo.isAdmin;
-          ZEALOT.signature = `
+          /* ZEALOT.signature = `
             <br>
             <br>
             S poštovanjem / Best regards
@@ -2371,6 +2371,31 @@
             <br><a href="https://www.dbs.rs/" target="_blank" rel="noopener noreferrer" style="display: inline">www.dbs.rs</a>
             <br>
             <br><span style="color: #4BA524; font-size: 0.5em; line-height: 1.5">
+              Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
+              <br>Please print this e-mail only if necessary.
+            </span>
+          `; */
+          ZEALOT.signature = `
+            <br>
+            <br>
+            S poštovanjem / Best regards
+            <br>
+            <br>
+            <br><span style="font-size: 12pt !important; font-weight: bold">` + ZEALOT.userInfo.operatorName + `</span>
+            <br><span style="font-size: 8pt !important; font-style: italic">` + ZEALOT.userInfo.position + `</span>
+            <br> ` + ((ZEALOT.userInfo.phone != null) ? `
+            <br>Mobile: <a href="tel:+` + ZEALOT.userInfo.phone.replace(/\./g, '') + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.phone + `</a>
+            ` : ``) + `
+            <br>E-mail: <a href="mailto:` + ZEALOT.userInfo.username + `" target="_blank" rel="noopener noreferrer" style="display: inline">` + ZEALOT.userInfo.username + `</a>
+            <br><img style='display: inline; width: 150px; height: 85px; max-width: 150px; max-height: 85px; margin-top: 0.3em' src='/img/DBS logo.gif'></img>
+            <br>Tošin Bunar 274v
+            <br>11070 Novi Beograd, Srbija
+            <br>
+            <br>T <a href="tel:+381112086106" target="_blank" rel="noopener noreferrer" style="display: inline">381.11.20.86.106</a>
+            <br>F <a href="tel:+381112086107" target="_blank" rel="noopener noreferrer" style="display: inline">381.11.20.86.107</a>
+            <br><a href="https://www.dbs.rs/" target="_blank" rel="noopener noreferrer" style="display: inline">www.dbs.rs</a>
+            <br>
+            <br><span style="color: #4BA524; font-size: 5pt !important; line-height: 1.5">
               Molimo Vas da odštampate ovu poruku samo ukoliko je to neophodno.
               <br>Please print this e-mail only if necessary.
             </span>
