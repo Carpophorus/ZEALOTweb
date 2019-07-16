@@ -1382,6 +1382,25 @@ input:checked+.slider:before {
   z-index: 10;
 }
 
+.jconfirm .typetagscheck, .jconfirm .companycheck {
+  font-size: 2vh !important;
+  line-height: 4.5vh !important;
+  padding-left: 1vh;
+  border: 1px solid #00b3b3;
+  width: 100%;
+}
+
+.jconfirm select.typetagscheck, .jconfirm select.companycheck {
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+
+.jconfirm .bootstrap-tagsinput {
+  position: relative;
+  display: inline-block;
+  top: 0;
+}
+
 /* MEDIA */
 
 @media (min-width: 991.5px) {

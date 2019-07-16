@@ -21,8 +21,8 @@
   ZEALOT.idOperatorForTicket = 0;
   ZEALOT.idPriorityForTicket = 0;
 
-  ZEALOT.apiRoot = "http://localhost:50358/api/";   // test
-  // ZEALOT.apiRoot = "http://10.0.66.2:8083/api/"; // local
+  // ZEALOT.apiRoot = "http://localhost:50358/api/";   // test
+  ZEALOT.apiRoot = "http://10.0.66.2:8083/api/"; // local
   // ZEALOT.apiRoot = "http://93.87.40.29:8083/api/"; // external
 
   ZEALOT.userInfo = "";
@@ -60,6 +60,9 @@
   ZEALOT.nitBody = "";
 
   ZEALOT.reverse = false;
+
+  ZEALOT.fetchedTags = [];
+  ZEALOT.tempCompanyName = null;
 
   $.trumbowyg.svgPath = 'wyg/ui/icons.svg';
 
@@ -489,6 +492,148 @@
     });
   };
 
+  ZEALOT.clientResponseCheckup = function(idStatusForCheckup) {
+    ZEALOT.tempCompanyName = (ZEALOT.currentTicket.companyName != null ? ZEALOT.currentTicket.companyName : null);
+    var typesHtml = '<select class="typetagscheck" onchange="ZEALOT.idTypeForTicket = this.options[this.selectedIndex].value">';
+    for (var i = 0; i < ZEALOT.allTicketTypes.length; i++) {
+      if (ZEALOT.idTypeForTicket != 0)
+        typesHtml += '<option value="' + ZEALOT.allTicketTypes[i].idTtp + '" ' + (ZEALOT.idTypeForTicket == ZEALOT.allTicketTypes[i].idTtp ? 'selected' : '') + '>' + ZEALOT.allTicketTypes[i].ttpn + '</option>';
+      else
+        typesHtml += '<option value="' + ZEALOT.allTicketTypes[i].idTtp + '" ' + (ZEALOT.currentTicket.idType == ZEALOT.allTicketTypes[i].idTtp ? 'selected' : '') + '>' + ZEALOT.allTicketTypes[i].ttpn + '</option>';
+    }
+    typesHtml += '</select>';
+    var companyInputHtml = '<select class="companycheck" onchange="ZEALOT.idCompanyForTicket = this.options[this.selectedIndex].value; ZEALOT.tempCompanyName = this.options[this.selectedIndex].text"><option disabled value="0" hidden ' + (ZEALOT.currentTicket.companyName == null ? 'selected' : '') + '></option>';
+    for (i = 0; i < ZEALOT.allCompanies.length; i++) {
+      if (ZEALOT.idCompanyForTicket != 0)
+        companyInputHtml += '<option value="' + ZEALOT.allCompanies[i].idCompany + '" ' + (ZEALOT.idCompanyForTicket == ZEALOT.allCompanies[i].idCompany ? 'selected' : '') + '>' + ZEALOT.allCompanies[i].companyName + '</option>';
+      else
+        companyInputHtml += '<option value="' + ZEALOT.allCompanies[i].idCompany + '" ' + (ZEALOT.currentTicket.companyName == ZEALOT.allCompanies[i].companyName ? 'selected' : '') + '>' + ZEALOT.allCompanies[i].companyName + '</option>';
+    }
+    companyInputHtml += '</select>';
+    $ajaxUtils.sendGetRequest(
+      ZEALOT.apiRoot + "getTags" + "?idT=" + ZEALOT.idTicketCurrent,
+      function(responseArray, status) {
+        ZEALOT.fetchedTags = [];
+        for (var l = 0; l < responseArray.length; l++) 
+          ZEALOT.fetchedTags[l] = responseArray[l].tagName;
+        $.confirm({
+          theme: 'material',
+          title: 'Tip i tagovi',
+          content: 'Proverite ' + (ZEALOT.idTypeForTicket == 0 ? 'tip i ' : '') + 'tagove tiketa i polje klijentske kompanije (tiket mora imati barem jedan tag i odabranu kompaniju iz koje je zahtev došao; za dodavanje nove kompanije, kao i dodeljivanje imena i broja telefona kontakt osobe, potrebno je otvoriti podešavanja tiketa).' + (ZEALOT.idTypeForTicket == 0 ? '<br><br>Tip:<br>' + typesHtml : '') + '<br><br>Tagovi:<br><input class="typetagscheck" id="tagscheck" type="text"><br><br>Kompanija:<br>' + companyInputHtml,
+          type: 'red',
+          typeAnimated: true,
+          buttons: {
+            cancel: {
+              text: 'Otkaži',
+              action: function() {
+                $(".jconfirm").remove();
+              }
+            },
+            ok: {
+              text: 'ОК',
+              btnClass: 'btn-red',
+              action: function() {
+                if ($("#tagscheck").tagsinput("items").length == 0 || $(".companycheck option:selected").attr("value") == 0) {
+                  $(".jconfirm").remove();
+                  ZEALOT.clientResponseCheckup(idStatusForCheckup);
+                } else {
+                  var checkcnt = 0;
+                  $ajaxUtils.sendGetRequest(
+                    ZEALOT.apiRoot + "clearTags" + "?idT=" + ZEALOT.idTicketCurrent,
+                    function(responseArray, status) {
+                      var chksync = 0;
+                      var chksyncmax = ZEALOT.fetchedTags.length;
+                      for (var k = 0; k < chksyncmax; k++)
+                        $ajaxUtils.sendGetRequest(
+                          ZEALOT.apiRoot + "addTag" + "?idT=" + ZEALOT.idTicketCurrent + "&tag=" + encodeURIComponent(ZEALOT.fetchedTags[k]),
+                          function(responseArray, status) {
+                            chksync = chksync + 1;
+                            if (chksync == chksyncmax) {
+                              checkcnt = checkcnt + 1;
+                              if (checkcnt == 2) {
+                                ZEALOT.loadSidebarTickets();
+                                $(".jconfirm").remove();
+                                $.confirm({
+                                  theme: "material",
+                                  title: "Potvrda akcije",
+                                  content: "Podaci sačuvani.",
+                                  type: "green",
+                                  typeAnimated: true,
+                                  buttons: {
+                                    ok: {
+                                      text: "OK",
+                                      btnClass: "btn-green",
+                                      action: function() {}
+                                    }
+                                  }
+                                });
+                              }
+                            }
+                          },
+                          true /*, ZEALOT.bearer*/
+                        );
+                    },
+                    true /*, ZEALOT.bearer*/
+                  );
+                  $ajaxUtils.sendPostRequest(
+                    ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
+                    (idStatusForCheckup != 0 ? "&idTs=" + idStatusForCheckup : "") + (ZEALOT.idTypeForTicket != 0 ? "&idTt=" + ZEALOT.idTypeForTicket : "") +
+                    (ZEALOT.idCompanyForTicket != 0 ? "&idCo=" + ZEALOT.idCompanyForTicket : ""),
+                    function(responseArray, status) {
+                      if (idStatusForCheckup != 0)
+                        ZEALOT.currentTicket.idStatus = idStatusForCheckup;
+                      if (ZEALOT.idTypeForTicket != 0)
+                        ZEALOT.currentTicket.idType = ZEALOT.idTypeForTicket;
+                      if (ZEALOT.idCompanyForTicket != 0)
+                        ZEALOT.currentTicket.companyName = ZEALOT.tempCompanyName;
+                      checkcnt = checkcnt + 1;
+                      if (checkcnt == 2) {
+                        ZEALOT.loadSidebarTickets();
+                        $(".jconfirm").remove();
+                        $.confirm({
+                          theme: "material",
+                          title: "Potvrda akcije",
+                          content: "Podaci sačuvani.",
+                          type: "green",
+                          typeAnimated: true,
+                          buttons: {
+                            ok: {
+                              text: "OK",
+                              btnClass: "btn-green",
+                              action: function() {}
+                            }
+                          }
+                        });
+                      }
+                    },
+                    true /*, ZEALOT.bearer */
+                  );
+                }
+              }
+            }
+          }
+        });
+        setTimeout(function() {
+          $("#tagscheck").tagsinput({
+            trimValue: true
+          });
+          for (var j = 0; j < ZEALOT.fetchedTags.length; j++)
+            $("#tagscheck").tagsinput("add", ZEALOT.fetchedTags[j]);
+          $(".bootstrap-tagsinput input").on("input", function() {
+            ZEALOT.fetchedTags = $("#tagscheck").tagsinput("items");
+          });
+          $(".bootstrap-tagsinput input").on("click", function() {
+            ZEALOT.fetchedTags = $("#tagscheck").tagsinput("items");
+          });
+          $(".bootstrap-tagsinput input").on("blur", function() {
+            ZEALOT.fetchedTags = $("#tagscheck").tagsinput("items");
+          });
+        }, 500);
+      },
+      true /*, ZEALOT.bearer */
+    );
+  };
+
   ZEALOT.sendMailAux = function(ccbcc, incConv) {
     $.confirm({
       theme: 'material',
@@ -653,6 +798,8 @@
                     }
                   }
                 });
+                ZEALOT.clientResponseCheckup(4);
+                /*
                 $ajaxUtils.sendPostRequest(
                   ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=4",
                   function(responseArray, status) {
@@ -673,8 +820,9 @@
                     });
                     ZEALOT.loadSidebarTickets();
                   },
-                  true /*, ZEALOT.bearer*/
+                  true /*, ZEALOT.bearer
                 );
+                */
               }
             },
             five: {
@@ -695,6 +843,8 @@
                     }
                   }
                 });
+                ZEALOT.clientResponseCheckup(5);
+                /*
                 $ajaxUtils.sendPostRequest(
                   ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=5",
                   function(responseArray, status) {
@@ -715,8 +865,9 @@
                     });
                     ZEALOT.loadSidebarTickets();
                   },
-                  true /*, ZEALOT.bearer*/
+                  true /*, ZEALOT.bearer
                 );
+                */
               }
             },
             six: {
@@ -737,6 +888,8 @@
                     }
                   }
                 });
+                ZEALOT.clientResponseCheckup(6);
+                /*
                 $ajaxUtils.sendPostRequest(
                   ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent + "&idTs=6",
                   function(responseArray, status) {
@@ -757,8 +910,9 @@
                     });
                     ZEALOT.loadSidebarTickets();
                   },
-                  true /*, ZEALOT.bearer*/
+                  true /*, ZEALOT.bearer
                 );
+                */
               }
             }
           }
@@ -924,30 +1078,147 @@
           }, 10);
           break;
         }
-        $ajaxUtils.sendPostRequest(
-          ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
-          "&idTs=" + ZEALOT.idStatusForTicket +
-          "&idTt=" + ZEALOT.idTypeForTicket,
+        ////////////////////////////////////////////////////////////////////////////
+        ZEALOT.tempCompanyName = (ZEALOT.currentTicket.companyName != null ? ZEALOT.currentTicket.companyName : null);
+        var typesHtml = '<select class="typetagscheck" onchange="ZEALOT.idTypeForTicket = this.options[this.selectedIndex].value">';
+        for (var i = 0; i < ZEALOT.allTicketTypes.length; i++) {
+          if (ZEALOT.idTypeForTicket != 0)
+            typesHtml += '<option value="' + ZEALOT.allTicketTypes[i].idTtp + '" ' + (ZEALOT.idTypeForTicket == ZEALOT.allTicketTypes[i].idTtp ? 'selected' : '') + '>' + ZEALOT.allTicketTypes[i].ttpn + '</option>';
+          else
+            typesHtml += '<option value="' + ZEALOT.allTicketTypes[i].idTtp + '" ' + (ZEALOT.currentTicket.idType == ZEALOT.allTicketTypes[i].idTtp ? 'selected' : '') + '>' + ZEALOT.allTicketTypes[i].ttpn + '</option>';
+        }
+        typesHtml += '</select>';
+        var companyInputHtml = '<select class="companycheck" onchange="ZEALOT.idCompanyForTicket = this.options[this.selectedIndex].value; ZEALOT.tempCompanyName = this.options[this.selectedIndex].text"><option disabled value="0" hidden ' + (ZEALOT.currentTicket.companyName == null ? 'selected' : '') + '></option>';
+        for (i = 0; i < ZEALOT.allCompanies.length; i++) {
+          if (ZEALOT.idCompanyForTicket != 0)
+            companyInputHtml += '<option value="' + ZEALOT.allCompanies[i].idCompany + '" ' + (ZEALOT.idCompanyForTicket == ZEALOT.allCompanies[i].idCompany ? 'selected' : '') + '>' + ZEALOT.allCompanies[i].companyName + '</option>';
+          else
+            companyInputHtml += '<option value="' + ZEALOT.allCompanies[i].idCompany + '" ' + (ZEALOT.currentTicket.companyName == ZEALOT.allCompanies[i].companyName ? 'selected' : '') + '>' + ZEALOT.allCompanies[i].companyName + '</option>';
+        }
+        companyInputHtml += '</select>';
+        $ajaxUtils.sendGetRequest(
+          ZEALOT.apiRoot + "getTags" + "?idT=" + ZEALOT.idTicketCurrent,
           function(responseArray, status) {
-            ZEALOT.loadSidebarTickets();
-            $(".jconfirm").remove();
+            ZEALOT.fetchedTags = [];
+            for (var l = 0; l < responseArray.length; l++) 
+              ZEALOT.fetchedTags[l] = responseArray[l].tagName;
             $.confirm({
-              theme: "material",
-              title: "Potvrda akcije",
-              content: "Podaci sačuvani.",
-              type: "green",
+              theme: 'material',
+              title: 'Tip i tagovi',
+              content: 'Proverite ' + (ZEALOT.idTypeForTicket == 0 ? 'tip i ' : '') + 'tagove tiketa i polje klijentske kompanije (tiket mora imati barem jedan tag i odabranu kompaniju iz koje je zahtev došao; za dodavanje nove kompanije, kao i dodeljivanje imena i broja telefona kontakt osobe, potrebno je otvoriti podešavanja tiketa).' + (ZEALOT.idTypeForTicket == 0 ? '<br><br>Tip:<br>' + typesHtml : '') + '<br><br>Tagovi:<br><input class="typetagscheck" id="tagscheck" type="text"><br><br>Kompanija:<br>' + companyInputHtml,
+              type: 'red',
               typeAnimated: true,
               buttons: {
+                cancel: {
+                  text: 'Otkaži',
+                  action: function() {
+                    $(".jconfirm").remove();
+                  }
+                },
                 ok: {
-                  text: "OK",
-                  btnClass: "btn-green",
-                  action: function() {}
+                  text: 'ОК',
+                  btnClass: 'btn-red',
+                  action: function() {
+                    if ($("#tagscheck").tagsinput("items").length == 0 || $(".companycheck option:selected").attr("value") == 0) {
+                      $(".jconfirm").remove();
+                      ZEALOT.saveTicketInfo();
+                    } else {
+                      var checkcnt = 0;
+                      $ajaxUtils.sendGetRequest(
+                        ZEALOT.apiRoot + "clearTags" + "?idT=" + ZEALOT.idTicketCurrent,
+                        function(responseArray, status) {
+                          var chksync = 0;
+                          var chksyncmax = ZEALOT.fetchedTags.length;
+                          for (var k = 0; k < chksyncmax; k++)
+                            $ajaxUtils.sendGetRequest(
+                              ZEALOT.apiRoot + "addTag" + "?idT=" + ZEALOT.idTicketCurrent + "&tag=" + encodeURIComponent(ZEALOT.fetchedTags[k]),
+                              function(responseArray, status) {
+                                chksync = chksync + 1;
+                                if (chksync == chksyncmax) {
+                                  checkcnt = checkcnt + 1;
+                                  if (checkcnt == 2) {
+                                    ZEALOT.loadSidebarTickets();
+                                    $(".jconfirm").remove();
+                                    $.confirm({
+                                      theme: "material",
+                                      title: "Potvrda akcije",
+                                      content: "Podaci sačuvani.",
+                                      type: "green",
+                                      typeAnimated: true,
+                                      buttons: {
+                                        ok: {
+                                          text: "OK",
+                                          btnClass: "btn-green",
+                                          action: function() {}
+                                        }
+                                      }
+                                    });
+                                  }
+                                }
+                              },
+                              true /*, ZEALOT.bearer*/
+                            );
+                        },
+                        true /*, ZEALOT.bearer*/
+                      );
+                      $ajaxUtils.sendPostRequest(
+                        ZEALOT.apiRoot + "editTicket" + "?idT=" + ZEALOT.idTicketCurrent +
+                        (ZEALOT.idStatusForTicket != 0 ? "&idTs=" + ZEALOT.idStatusForTicket : "") + (ZEALOT.idTypeForTicket != 0 ? "&idTt=" + ZEALOT.idTypeForTicket : "") +
+                        (ZEALOT.idCompanyForTicket != 0 ? "&idCo=" + ZEALOT.idCompanyForTicket : ""),
+                        function(responseArray, status) {
+                          if (ZEALOT.idStatusForTicket != 0)
+                            ZEALOT.currentTicket.idStatus = ZEALOT.idStatusForTicket;
+                          if (ZEALOT.idTypeForTicket != 0)
+                            ZEALOT.currentTicket.idType = ZEALOT.idTypeForTicket;
+                          if (ZEALOT.idCompanyForTicket != 0)
+                            ZEALOT.currentTicket.companyName = ZEALOT.tempCompanyName;
+                          checkcnt = checkcnt + 1;
+                          if (checkcnt == 2) {
+                            ZEALOT.loadSidebarTickets();
+                            $(".jconfirm").remove();
+                            $.confirm({
+                              theme: "material",
+                              title: "Potvrda akcije",
+                              content: "Podaci sačuvani.",
+                              type: "green",
+                              typeAnimated: true,
+                              buttons: {
+                                ok: {
+                                  text: "OK",
+                                  btnClass: "btn-green",
+                                  action: function() {}
+                                }
+                              }
+                            });
+                          }
+                        },
+                        true /*, ZEALOT.bearer */
+                      );
+                    }
+                  }
                 }
               }
             });
+            setTimeout(function() {
+              $("#tagscheck").tagsinput({
+                trimValue: true
+              });
+              for (var j = 0; j < ZEALOT.fetchedTags.length; j++)
+                $("#tagscheck").tagsinput("add", ZEALOT.fetchedTags[j]);
+              $(".bootstrap-tagsinput input").on("input", function() {
+                ZEALOT.fetchedTags = $("#tagscheck").tagsinput("items");
+              });
+              $(".bootstrap-tagsinput input").on("click", function() {
+                ZEALOT.fetchedTags = $("#tagscheck").tagsinput("items");
+              });
+              $(".bootstrap-tagsinput input").on("blur", function() {
+                ZEALOT.fetchedTags = $("#tagscheck").tagsinput("items");
+              });
+            }, 500);
           },
-          true /*, ZEALOT.bearer*/
+          true /*, ZEALOT.bearer */
         );
+        ////////////////////////////////////////////////////////////////////////////
         break;
       case 2, "2": //company & client
         $ajaxUtils.sendPostRequest(
@@ -1028,6 +1299,7 @@
           "&idTp=" + ZEALOT.idPriorityForTicket,
           function(responseArray, status) {
             $(".jconfirm").remove();
+            ZEALOT.currentTicket.idPriority = ZEALOT.idCompanyForTicket;
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
@@ -1053,6 +1325,24 @@
             var sync = 0;
             var array = $(".to-tags").tagsinput("items");
             var syncmax = array.length;
+            if (syncmax < 1) {
+              $(".jconfirm").remove();
+              $.confirm({
+                theme: "material",
+                title: "Greška",
+                content: "Tiket mora imati barem jedan tag.",
+                type: "red",
+                typeAnimated: true,
+                buttons: {
+                  ok: {
+                    text: "OK",
+                    btnClass: "btn-red",
+                    action: function() {}
+                  }
+                }
+              });
+              return;
+            }
             for (var i = 0; i < syncmax; i++)
               $ajaxUtils.sendGetRequest(
                 ZEALOT.apiRoot + "addTag" + "?idT=" + ZEALOT.idTicketCurrent + "&tag=" + encodeURIComponent(array[i]),
