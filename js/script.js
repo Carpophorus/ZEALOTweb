@@ -64,6 +64,13 @@
   ZEALOT.fetchedTags = [];
   ZEALOT.tempCompanyName = null;
 
+  ZEALOT.queryTotalCountArray = [];
+  ZEALOT.queryTotalAverageArray = [];
+  ZEALOT.queryTotalTagsArray = [];
+  ZEALOT.queryTagsCountAndAverageArray = [];
+  ZEALOT.queryTypeCountAndAverageArray = [];
+  ZEALOT.queryStatusCountAndAverageArray = [];
+
   $.trumbowyg.svgPath = 'wyg/ui/icons.svg';
 
   var insertHtml = function(selector, html) {
@@ -3506,7 +3513,240 @@
     popupStatsHtml += `
       </div>
     `;
+    if (ZEALOT.adminPrivilegesGranted && ZEALOT.userInfo.adminSector == 0)
+      popupStatsHtml += `<button id="detailed-search-button" class="popup-button" onclick="$ZEALOT.showDetailedSearch();"><i class="fa fa-list"></i></button>`;
     insertHtml(".sidebar-popup-content", popupStatsHtml);
+  };
+
+  ZEALOT.showDetailedSearch = function() {
+    var detailedSearchHtml = `
+      <div class="title-fixed oswald-blue-semibold">
+        <div class="title-bar" style="margin-top: 8vh"></div>
+        <div class="detailed-search-options-container">
+          <input id="detailed-search-date-from" class="date-from" type="text" placeholder="Datum od" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Datum od'" onkeydown="return false" onchange="$ZEALOT.dateFromChanged(this);">
+          <input id="detailed-search-date-to" class="date-to" type="text" placeholder="Datum do" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Datum do'" onkeydown="return false" onchange="$ZEALOT.dateToChanged(this);">
+          <select id="detailed-search-sector-select">
+            <option value="0" selected>- SVI SEKTORI -</option>
+    `;
+    for (var i = 0; i < ZEALOT.allSectors.length; i++)
+      detailedSearchHtml += `<option value="` + ZEALOT.allSectors[i].idSc + `">` + ZEALOT.allSectors[i].scn + `</option>`;
+    detailedSearchHtml += `
+          </select>
+          <select id="detailed-search-company-select">
+            <option value="0" selected>- SVE KOMPANIJE -</option>
+    `;
+    for (var i = 0; i < ZEALOT.allCompanies.length; i++)
+      detailedSearchHtml += `<option value="` + ZEALOT.allCompanies[i].idCompany + `">` + ZEALOT.allCompanies[i].companyName + `</option>`
+    detailedSearchHtml += `
+          </select>		
+          <div class="to-button-container">
+            <button class="to-button" onclick="ZEALOT.runDetailedSearch();"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="main-panel-detailed-search scrollable container open-sans-dark-normal">
+      </div>
+    `;
+    
+    insertHtml(".main-panel", detailedSearchHtml);
+
+    $(".date-from, .date-to").datepicker({
+      format: "dd.mm.yyyy.",
+      todayHighlight: true,
+      todayBtn: "linked",
+      language: "sr-latin",
+      endDate: "0d"
+    });
+
+    if (ZEALOT.browserWidth < 991.5)
+      setTimeout(ZEALOT.thumbClick, 750);
+  };
+
+  ZEALOT.dateFromChanged = function(e) {
+    if ($(e).val() != "")
+      $(".date-to").datepicker('setStartDate', $(e).val());
+  };
+  
+  ZEALOT.dateToChanged = function(e) {
+    if ($(e).val() != "")
+      $(".date-from").datepicker('setEndDate', $(e).val());
+  };
+
+  ZEALOT.runDetailedSearch = function() {
+    if ($(".date-from").val() == "" || $(".date-to").val() == "") {
+      $.confirm({
+        theme: "material",
+        title: "Greška",
+        content: "Morate odabrati barem polazni i krajnji datum kako bi se ovaj izveštaj generisao.",
+        type: "red",
+        typeAnimated: true,
+        buttons: {
+          ok: {
+            text: "OK",
+            btnClass: "btn-red",
+            action: function() {}
+          }
+        }
+      });
+      return;
+    }
+    var dateFrom = '';
+    var dateTo = '';
+    var idS = 0;
+    var idC = 0;
+    dateFrom = $('#detailed-search-date-from').datepicker('getDate');
+    dateFrom = dateFrom.getFullYear() + '-' + (dateFrom.getMonth() + 1) + '-' + dateFrom.getDate();
+    dateTo = $('#detailed-search-date-to').datepicker('getDate');
+    dateTo = dateTo.getFullYear() + '-' + (dateTo.getMonth() + 1) + '-' + dateTo.getDate();
+    idS = $("#detailed-search-sector-select option:selected").attr("value");
+    idC = $("#detailed-search-company-select option:selected").attr("value");
+    var sixcnt = 0;
+    ZEALOT.queryTotalCountArray = [];
+    ZEALOT.queryTotalAverageArray = [];
+    ZEALOT.queryTotalTagsArray = [];
+    ZEALOT.queryTagsCountAndAverageArray = [];
+    ZEALOT.queryTypeCountAndAverageArray = [];
+    ZEALOT.queryStatusCountAndAverageArray = [];
+    $ajaxUtils.sendGetRequest(
+      ZEALOT.apiRoot + "queryTotalCount" + "?dateFrom=" + encodeURIComponent(dateFrom) + '&dateTo=' + encodeURIComponent(dateTo) + '&idS=' + idS + '&idC=' + idC,
+      function(responseArray, status) {
+        ZEALOT.queryTotalCountArray = responseArray;
+        sixcnt = sixcnt + 1;
+        if (sixcnt == 6)
+          ZEALOT.rdsAux();
+      },
+      true /*, ZEALOT.bearer*/
+    );
+    $ajaxUtils.sendGetRequest(
+      ZEALOT.apiRoot + "queryTotalAverage" + "?dateFrom=" + encodeURIComponent(dateFrom) + '&dateTo=' + encodeURIComponent(dateTo) + '&idS=' + idS + '&idC=' + idC,
+      function(responseArray, status) {
+        ZEALOT.queryTotalAverageArray = responseArray;
+        sixcnt = sixcnt + 1;
+        if (sixcnt == 6)
+          ZEALOT.rdsAux();
+      },
+      true /*, ZEALOT.bearer*/
+    );
+    $ajaxUtils.sendGetRequest(
+      ZEALOT.apiRoot + "queryTotalTags" + "?dateFrom=" + encodeURIComponent(dateFrom) + '&dateTo=' + encodeURIComponent(dateTo) + '&idS=' + idS + '&idC=' + idC,
+      function(responseArray, status) {
+        ZEALOT.queryTotalTagsArray = responseArray;
+        sixcnt = sixcnt + 1;
+        if (sixcnt == 6)
+          ZEALOT.rdsAux();
+      },
+      true /*, ZEALOT.bearer*/
+    );
+    $ajaxUtils.sendGetRequest(
+      ZEALOT.apiRoot + "queryTagsCountAndAverage" + "?dateFrom=" + encodeURIComponent(dateFrom) + '&dateTo=' + encodeURIComponent(dateTo) + '&idS=' + idS + '&idC=' + idC,
+      function(responseArray, status) {
+        ZEALOT.queryTagsCountAndAverageArray = responseArray;
+        sixcnt = sixcnt + 1;
+        if (sixcnt == 6)
+          ZEALOT.rdsAux();
+      },
+      true /*, ZEALOT.bearer*/
+    );
+    $ajaxUtils.sendGetRequest(
+      ZEALOT.apiRoot + "queryTypeCountAndAverage" + "?dateFrom=" + encodeURIComponent(dateFrom) + '&dateTo=' + encodeURIComponent(dateTo) + '&idS=' + idS + '&idC=' + idC,
+      function(responseArray, status) {
+        ZEALOT.queryTypeCountAndAverageArray = responseArray;
+        sixcnt = sixcnt + 1;
+        if (sixcnt == 6)
+          ZEALOT.rdsAux();
+      },
+      true /*, ZEALOT.bearer*/
+    );
+    $ajaxUtils.sendGetRequest(
+      ZEALOT.apiRoot + "queryStatusCountAndAverage" + "?dateFrom=" + encodeURIComponent(dateFrom) + '&dateTo=' + encodeURIComponent(dateTo) + '&idS=' + idS + '&idC=' + idC,
+      function(responseArray, status) {
+        ZEALOT.queryStatusCountAndAverageArray = responseArray;
+        sixcnt = sixcnt + 1;
+        if (sixcnt == 6)
+          ZEALOT.rdsAux();
+      },
+      true /*, ZEALOT.bearer*/
+    );
+  };
+
+  var convertMinutes = function(n) {
+    var days = 0;
+    var hours = 0;
+    var minutes = 0;
+    var temp = n;
+    days = Math.floor(temp / 1440);
+    temp = temp - days * 1440;
+    hours = Math.floor(temp / 60);
+    temp = temp - hours * 60;
+    minutes = temp;
+    return '' + (days > 0 ? days + 'd ' : '') + (hours > 0 ? hours + 'h ' : '') + minutes + 'min';
+  };
+
+  ZEALOT.rdsAux = function() {
+    insertHtml('.main-panel-detailed-search', '');
+    var detailedSearchResultsHtml = `
+      <div class='detailed-search-header oswald-blue-semibold'>Zbirna statistika:</div>
+      <div>
+        UKUPNO TIKETA: <strong>` + ZEALOT.queryTotalCountArray[0].TOTAL + `</strong>
+        <br>UKUPNO TAGOVA: <strong>` + ZEALOT.queryTotalTagsArray[0]['NUMBER OF TAGS'] + `</strong>
+        <br>PROSEČNO VREME ODGOVORA: <strong>` + convertMinutes(ZEALOT.queryTotalAverageArray[0].AVG) + `</strong>
+      </div>
+      <div class='detailed-search-header oswald-blue-semibold'>Po statusu:</div>
+      <div class='detailed-search-table'>
+        <div class='detailed-search-table-header'>
+          <div>naziv:</div>
+          <div>ukupno tiketa:</div>
+          <div>prosečno vreme:</div>
+        </div>
+    `;
+    for (var i = 0; i < ZEALOT.queryStatusCountAndAverageArray.length; i++)
+      detailedSearchResultsHtml += `
+        <div class='detailed-search-table-entry'>
+          <div>` + ZEALOT.queryStatusCountAndAverageArray[i].statusName + `</div>
+          <div>` + ZEALOT.queryStatusCountAndAverageArray[i].COUNT + `</div>
+          <div>` + (ZEALOT.queryStatusCountAndAverageArray[i].AVG != null ? convertMinutes(ZEALOT.queryStatusCountAndAverageArray[i].AVG) : 'N/A') + `</div>
+        </div>
+      `;
+    detailedSearchResultsHtml += `
+      </div>
+      <div class='detailed-search-header oswald-blue-semibold'>Po tipu:</div>
+      <div class='detailed-search-table'>
+        <div class='detailed-search-table-header'>
+          <div>naziv:</div>
+          <div>ukupno tiketa:</div>
+          <div>prosečno vreme:</div>
+        </div>
+    `;
+    for (var i = 0; i < ZEALOT.queryTypeCountAndAverageArray.length; i++)
+      detailedSearchResultsHtml += `
+        <div class='detailed-search-table-entry'>
+          <div>` + ZEALOT.queryTypeCountAndAverageArray[i].typeName + `</div>
+          <div>` + ZEALOT.queryTypeCountAndAverageArray[i].COUNT + `</div>
+          <div>` + (ZEALOT.queryTypeCountAndAverageArray[i].AVG != null ? convertMinutes(ZEALOT.queryTypeCountAndAverageArray[i].AVG) : 'N/A') + `</div>
+        </div>
+    `;
+    detailedSearchResultsHtml += `
+      </div>
+      <div class='detailed-search-header oswald-blue-semibold'>Tagovi:</div>
+      <div class='detailed-search-table'>
+        <div class='detailed-search-table-header'>
+          <div>naziv:</div>
+          <div>ukupno tiketa:</div>
+          <div>prosečno vreme:</div>
+        </div>
+    `;
+    for (var i = 0; i < ZEALOT.queryTagsCountAndAverageArray.length; i++)
+      detailedSearchResultsHtml += `
+        <div class='detailed-search-table-entry'>
+          <div>` + ZEALOT.queryTagsCountAndAverageArray[i].tagName + `</div>
+          <div>` + ZEALOT.queryTagsCountAndAverageArray[i].COUNT + `</div>
+          <div>` + (ZEALOT.queryTagsCountAndAverageArray[i].AVG != null ? convertMinutes(ZEALOT.queryTagsCountAndAverageArray[i].AVG) : 'N/A') + `</div>
+        </div>
+    `;
+    detailedSearchResultsHtml += `
+      </div>
+    `;
+    insertHtml('.main-panel-detailed-search', detailedSearchResultsHtml);
   };
 
   global.$ZEALOT = ZEALOT;

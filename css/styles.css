@@ -399,7 +399,7 @@ h3 {
   background-color: inherit;
 }
 
-.sidebar-popup-content>div>.popup-bar>input, .ticket-options-container>div>input, #pager-select {
+.sidebar-popup-content>div>.popup-bar>input, .ticket-options-container>div>input, .detailed-search-options-container>input, .detailed-search-options-container>select, #pager-select {
   line-height: 4.5vh !important;
   width: 70%;
   margin-top: 3.5vh;
@@ -444,14 +444,18 @@ h3 {
   margin: 5vh auto;
 }
 
-.ticket-options-container>div {
+.ticket-options-container>div, .detailed-search-options-container>input, .detailed-search-options-container>select, .detailed-search-options-container>.to-button-container {
   float: left;
 }
 
-.ticket-options-container {
+.ticket-options-container, .detailed-search-options-container {
   position: absolute;
   top: -2vh;
   text-align: left;
+}
+
+.detailed-search-options-container>select {
+  height: 4.8vh;
 }
 
 .sidebar-popup-content>div>.popup-bar>button {
@@ -466,7 +470,7 @@ h3 {
   background-color: #00b3b3;
 }
 
-#new-ticket-button, #refresh-tickets-button {
+#new-ticket-button, #refresh-tickets-button, #detailed-search-button {
   position: absolute;
   bottom: 5vh;
   left: 0;
@@ -486,7 +490,7 @@ h3 {
   padding-top: .5vh;
 }
 
-.sidebar-popup-content>div>.popup-bar>button:hover, #new-ticket-button:hover, #refresh-tickets-button:hover {
+.sidebar-popup-content>div>.popup-bar>button:hover, #new-ticket-button:hover, #refresh-tickets-button:hover, #detailed-search-button:hover {
   color: #f9fdfd;
   background-color: #003d3d;
 }
@@ -998,14 +1002,54 @@ input:checked+.slider:before {
   margin-left: 2vh;
 }
 
-.ticket-options-container>div>input {
+.detailed-search-options-container>input, .detailed-search-options-container>select {
+  width: 21vh !important;
+  margin-left: 2vh;
+}
+
+.ticket-options-container>div>input, .detailed-search-options-container>input, .detailed-search-options-container>select {
   font-size: 2vh !important;
   font-family: 'Open Sans', sans-serif;
   width: 100%;
 }
 
-.ticket-options-container .to-button-container {
+.ticket-options-container .to-button-container, .detailed-search-options-container .to-button-container {
   width: 9vh;
+  margin-left: 2vh;
+}
+
+.detailed-search-header {
+  margin-top: 4vh;
+  margin-bottom: 2vh;
+  font-size: 2.5vh;
+}
+
+.detailed-search-table {
+  width: 100%;
+  position: relative;
+}
+
+.detailed-search-table>div>div {
+  width: 25%;
+  text-align: right;
+  display: inline-block;
+}
+
+.detailed-search-table>div>div:nth-child(1) {
+  width: 40%;
+  text-align: left;
+}
+
+.detailed-search-table-entry:nth-child(2n) {
+  background: #7fd9d9;
+}
+
+.detailed-search-table-entry:nth-child(2n+1) {
+  background: #ccefef;
+}
+
+.main-panel-detailed-search {
+  padding-bottom: 5vh;
 }
 
 .to-button {
@@ -1013,8 +1057,8 @@ input:checked+.slider:before {
   line-height: 5vh;
   width: 9vh;
   height: 5vh;
-  margin-top: 3.3vh;
-  padding-top: .5vh;
+  margin-top: 3.3vh !important;
+  padding-top: .5vh !important;
   color: #003d3d;
   background-color: #00b3b3;
 }
