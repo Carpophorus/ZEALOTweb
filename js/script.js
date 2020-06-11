@@ -23,6 +23,7 @@
 
   // ZEALOT.apiRoot = "http://localhost:50358/api/";   // test
   ZEALOT.apiRoot = "http://10.0.66.2:8083/api/"; // local
+  // ZEALOT.apiRoot = "http://10.0.66.2:8782/api/"; // local test
   // ZEALOT.apiRoot = "http://93.87.40.29:8083/api/"; // external
 
   ZEALOT.userInfo = "";
@@ -1883,17 +1884,17 @@
           sectorName = "PRODAJA";
           break;
         case 4:
-          sectorSign = "🅗";
-          sectorName = "HARDVER";
+          sectorSign = "🅡";
+          sectorName = "RAZVOJ";
           break;
         case 5:
           sectorSign = "🅕";
           sectorName = "FINANSIJE";
           break;
-        case 6:
+        /*case 6:
           sectorSign = "🅢";
           sectorName = "SOFTVER";
-          break;
+          break;*/
         default:
           break;
       }
@@ -2053,17 +2054,17 @@
           sectorName = "PRODAJA";
           break;
         case 4:
-          sectorSign = "🅗";
-          sectorName = "HARDVER";
+          sectorSign = "🅡";
+          sectorName = "RAZVOJ";
           break;
         case 5:
           sectorSign = "🅕";
           sectorName = "FINANSIJE";
           break;
-        case 6:
+        /*case 6:
           sectorSign = "🅢";
           sectorName = "SOFTVER";
-          break;
+          break;*/
         default:
           break;
       }
@@ -3411,15 +3412,15 @@
         },
         true /*, ZEALOT.bearer*/
       );
-      $ajaxUtils.sendGetRequest(
+      /*$ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.allSectors[5].idSc + "&nc=" + ZEALOT.nc,
         function(responseArray, status) {
           specialCounters['s' + 5] = responseArray;
           sync = sync + 1;
           if (sync == ZEALOT.allSectors.length) ZEALOT.ssAux(true, ZEALOT.nc);
         },
-        true /*, ZEALOT.bearer*/
-      );
+        true /*, ZEALOT.bearer
+      );*/
     } else {
       $ajaxUtils.sendGetRequest(
         ZEALOT.apiRoot + "countTickets" + "?t=0" + "&idO=" + ZEALOT.idOperatorForStats + "&idS=" + ZEALOT.idSectorForStats + "&nc=" + ZEALOT.nc,

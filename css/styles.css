@@ -726,6 +726,8 @@ input:checked+.slider:before {
 .special-stat {
   height: 100%;
   padding-top: 20vh;
+  flex: 0 0 20% !important;
+  max-width: 20% !important;
 }
 
 .main-panel-contacts {
@@ -1466,6 +1468,10 @@ input:checked+.slider:before {
   }
   .contact-email, .contact-phone {
     padding-left: 9vh !important;
+  }
+  .special-stat {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
   }
 }
 
