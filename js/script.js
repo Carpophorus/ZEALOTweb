@@ -1283,6 +1283,21 @@
             // if (ZEALOT.currentTicket.isUnread == false && Number($("#select-selection-ticket option:first-child div").attr("value")) != 1)
             //   insertHtml("#select-selection-ticket", `<option value="Status i tip"><div value="1" id="val"></div></option>` + $("#select-selection-ticket").html());
             $(".jconfirm").remove();
+            $ajaxUtils.sendPostRequest(
+              ZEALOT.apiRoot + "newOperatorMessage" + "?idT=" + ZEALOT.idTicketCurrent + "&iI=true" + "&body=" + encodeURIComponent(ZEALOT.userInfo.operatorName + ` → ` + $('#operator-select-ticket').val()) + "&idO=" + ZEALOT.userInfo.idOperator,
+              function(responseArray, status) {
+                $(".main-panel-ticket").html($(".main-panel-ticket").html() + `
+                    <div class="internal-message">
+                    ` + (ZEALOT.userInfo.operatorName + ` → ` + $('#operator-select-ticket').val()) + `
+                    <div class="timestamp">` + ZEALOT.userInfo.operatorName + ` &bull; just now</div>
+                    </div>
+                `);
+                $(".scrollable-hotfix").animate({
+                    scrollTop: $(".scrollable-hotfix")[0].scrollHeight
+                }, 1000);
+              },
+              true /*, ZEALOT.bearer*/
+            );
             $.confirm({
               theme: "material",
               title: "Potvrda akcije",
